@@ -1,0 +1,114 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Role {
+  role String @id
+
+  Participants Participant[]
+
+  @@map("roles")
+}
+
+model Fleet {
+  fleet String @id
+
+  Participants Participant[]
+  Races Race[]
+
+  @@map("fleets")
+}
+
+model Sailor {
+  id   String @id @default(cuid())
+  name String
+
+  Participations Participant[]
+
+  @@map("sailors")
+}
+
+model Participant {
+  id   String @id @default(cuid())
+  
+  sailorId String @map("sailor_id")
+  Sailor Sailor @relation(fields: [sailorId], references: [id])
+
+  role String
+  Role Role @relation(fields: [role], references: [role])
+
+  fleet String?
+  Fleet Fleet? @relation(fields: [fleet], references: [fleet])
+
+  racedayId String @map("raceday_id")
+  Raceday Raceday @relation(fields: [racedayId], references: [id])
+
+  Finishes Finish[]
+
+  details Json
+
+  @@map("participants")
+}
+
+model Finish {
+  id String @id @default(cuid())
+  
+  participantId String @map("participant_id")
+  Participant Participant @relation(fields: [participantId], references: [id])
+
+  finishedAt DateTime @map("finished_at")
+
+  failure String?
+
+  Races Race[] @relation("races_finishers")
+
+  note String?
+
+  @@map("finishes")
+}
+
+model Race {
+  id String @id @default(cuid())
+
+  racedayId String @map("raceday_id")
+  Raceday Raceday @relation(fields: [racedayId], references: [id])
+
+  fleet String?
+  Fleet Fleet? @relation(fields: [fleet], references: [fleet])
+
+  startedAt DateTime @map("started_at")
+
+  Finishers Finish[] @relation("races_finishers")
+
+  notes String[]
+
+  @@map("races")
+}
+
+model Raceday {
+  id   String @id @default(cuid())
+
+  date DateTime @default(now())
+
+  races Race[]
+
+  weather Json?
+  fleets String[]
+  config Json?
+
+  Participants Participant[]
+
+  @@map("racedays")
+}
