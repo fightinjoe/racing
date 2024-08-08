@@ -1,3 +1,11 @@
+/**
+ * Sailor class represents an individual sailor by tracking their name and their
+ * unique ID. NOTE: this does not track their participation in a race day. For that,
+ *   
+ * 
+ * @example
+ *   const mySailor = new Sailor( 1, 'Aaron Wheeler' )
+ */
 export class Sailor {
   id: string
   name: string
@@ -8,6 +16,17 @@ export class Sailor {
   }
 }
 
+/**
+ * The Participant class tracks the role of an individual sailor (and metadata) for
+ * a single RaceDay.
+ * 
+ * @example
+ *   const myParticipant = new Participant({
+ *     sailor: mySailor,
+ *     role: 'Racer',
+ *     fleet: 'A'
+ *   })
+ */
 export class Participant {
   rawData: ParticipantSchema
 
@@ -23,6 +42,13 @@ export class Participant {
   get id() { return this.sailor.id }
 }
 
+/**
+ * A single race on a given day. This is not typically created directly, but
+ * is instead created from RaceDay.startRace()
+ * 
+ * @example
+ *   const myRace = myRaceDay.startRace('A')
+ */
 export class Race {
   rawData: RaceSchema
   finishers: Finisher[]
