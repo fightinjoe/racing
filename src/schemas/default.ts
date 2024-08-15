@@ -32,6 +32,7 @@ export const participantSchema = z.object({
   // The fleet is only required for role: 'racer'
   fleet: fleetSchema.optional(),
   role: roleSchema,
+  isGuest: z.boolean(),
 
   // If racing, the participant's sail number
   sailNumber: z.string().optional(),
@@ -85,7 +86,7 @@ export const raceSchema = z.object({
   finishers: z.array(finisherSchema),
 
   // Freeform array of string notes
-  note: z.array(z.string()).optional(),
+  notes: z.array(z.string()).optional(),
 })
 
 /**
