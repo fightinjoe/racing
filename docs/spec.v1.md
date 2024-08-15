@@ -4,7 +4,7 @@ This outlines the product requires for the inital version of the Racing app
 
 ## Goals
 The goals of the v1 version are:
-1. Race committee can easily register a racer
+1. ✅ Race committee can easily register a racer
 2. Race committee can easily run a race (start, log finishers)
 2. Quickly tabulate the scores at the end of the race day
 

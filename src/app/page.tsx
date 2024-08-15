@@ -1,7 +1,10 @@
+import Link from 'next/link'
+
 export default function Home() {
   return (
     <main>
-      Main
+      <Link href="/racers">Racers</Link>
+      <Link href="/races">Races</Link>
     </main>
   );
 }
