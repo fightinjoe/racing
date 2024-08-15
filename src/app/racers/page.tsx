@@ -3,10 +3,10 @@ import AddPartial from "./_add"
 
 export default function RacersPage() {
   return (
-    <h1>
-      Racers
+    <div>
+      <h1 className="font-bold text-xl">Racers</h1>
       <AddPartial />
       <ListPartial />
-    </h1>
+    </div>
   )
 }

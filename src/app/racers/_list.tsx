@@ -1,15 +1,14 @@
 'use client'
 
-import { RacersContext } from "@/state/racersContext"
 import { useContext } from "react"
+import { useRacersStore } from "@/stores/racersStore"
 
 export default function ListPartial() {
-  const { racersState } = useContext(RacersContext)
+  const racers = useRacersStore(s=>s.racers)
 
   return (
-    <ul className="list-disc">
-      <li>Racers</li>
-      { racersState.map( (r, i) => <li key={i}>{r.sailor.name}</li>)}
-    </ul>
+    <ol className="list-disc ml-6">
+      { racers.map( (r, i) => <li key={i}>{r.sailor.name}</li>)}
+    </ol>
   )
 }
