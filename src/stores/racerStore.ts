@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
-interface RacersState {
+interface RacerState {
   racers: ParticipantSchema[],
   
   isReadyToRace: boolean,
@@ -11,7 +11,7 @@ interface RacersState {
 
 const MIN_RACERS = 5
 
-export const useRacersStore = create<RacersState>()( devtools( persist(
+export const useRacerStore = create<RacerState>()( devtools( persist(
   (set) => ({
     racers: [],
 
@@ -26,6 +26,6 @@ export const useRacersStore = create<RacersState>()( devtools( persist(
     }),
   }),
   {
-    name: 'racers-storage',
+    name: 'racer-storage',
   },
 )))

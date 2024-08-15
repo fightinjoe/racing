@@ -1,10 +1,10 @@
 'use client'
 
 import { useContext } from "react"
-import { useRacersStore } from "@/stores/racersStore"
+import { useRacerStore } from "@/stores/racerStore"
 
 export default function ListPartial() {
-  const racers = useRacersStore(s=>s.racers)
+  const racers = useRacerStore(s=>s.racers)
 
   return (
     <ol className="list-disc ml-6">

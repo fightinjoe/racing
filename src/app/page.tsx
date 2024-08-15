@@ -1,9 +1,9 @@
 'use client'
 
-import { useRacersStore } from "@/stores/racersStore"
+import { useRacerStore } from "@/stores/racerStore"
 
 export default function Home() {
-  const racers = useRacersStore(s=>s.racers)
+  const racers = useRacerStore(s=>s.racers)
 
   return (
     <main>

@@ -2,11 +2,11 @@
 
 import { ChangeEventHandler, MouseEventHandler, useState } from "react"
 import { Racer } from "@/models/helpers"
-import { useRacersStore } from "@/stores/racersStore"
+import { useRacerStore } from "@/stores/racerStore"
 
 export default function AddPartial() {
   const [name, setName] = useState('')
-  const addRacer = useRacersStore(s=>s.addRacer)
+  const addRacer = useRacerStore(s=>s.addRacer)
 
   const handleNameChange: ChangeEventHandler = (e:any) => {
     setName( e.target.value )
