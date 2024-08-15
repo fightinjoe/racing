@@ -1,10 +1,14 @@
-import Link from 'next/link'
+'use client'
+
+import { useRacersStore } from "@/stores/racersStore"
 
 export default function Home() {
+  const racers = useRacersStore(s=>s.racers)
+
   return (
     <main>
-      <Link href="/racers">Racers</Link>
-      <Link href="/races">Races</Link>
+      <h1>Racers: { racers.length }</h1>
+      <h1>Races: 0</h1>
     </main>
   );
 }

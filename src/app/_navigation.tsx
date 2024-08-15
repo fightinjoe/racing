@@ -8,6 +8,7 @@ export default function NavigationPartial() {
 
   return (
     <nav>
+      <Link href="/">Home</Link>
       <Link href="/racers">Racers</Link>
       { isReadyToRace && <Link href="/races">Races</Link> }
     </nav>
