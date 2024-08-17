@@ -7,13 +7,21 @@
  *   const mySailor = new Sailor( 1, 'Aaron Wheeler' )
  */
 export class Sailor {
-  id: string
-  name: string
+  rawData: SailorSchema
 
-  constructor(id: string, name: string) {
-    this.id = id
-    this.name = name
+  static create(name: string) {
+    const id = name + Date.now()
+    return new Sailor({id, name})
   }
+
+  constructor(rawData: SailorSchema) {
+    this.rawData = rawData
+  }
+
+  get id() { return this.rawData.id }
+  get name() { return this.rawData.name }
+
+  toJSON() { return this.rawData }
 }
 
 /**
@@ -29,17 +37,30 @@ export class Sailor {
  */
 export class Participant {
   rawData: ParticipantSchema
+  sailor: Sailor
+
+  static createRacer(name: string) {
+    const sailor = Sailor.create(name)
+
+    return new Participant({
+      sailor: sailor.toJSON(),
+      role: 'Racer',
+      isGuest: false
+    })
+  }
 
   constructor(rawData: ParticipantSchema) {
     this.rawData = rawData
+    this.sailor = new Sailor( this.rawData.sailor )
   }
 
-  get sailor() { return this.rawData.sailor }
   get role() { return this.rawData.role }
   get fleet() { return this.rawData.fleet }
 
   get name() { return this.sailor.name }
   get id() { return this.sailor.id }
+
+  toJSON() { return this.rawData }
 }
 
 /**

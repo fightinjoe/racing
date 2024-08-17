@@ -1,7 +1,7 @@
 'use client'
 
 import { ChangeEventHandler, MouseEventHandler, useState } from "react"
-import { Racer } from "@/models/helpers"
+import { Participant } from "@/models/default"
 import { useRacerStore } from "@/stores/racerStore"
 
 export default function AddPartial() {
@@ -13,7 +13,7 @@ export default function AddPartial() {
   }
 
   const handleSubmit: MouseEventHandler = () => {
-    const racer = Racer.create(name)
+    const racer = Participant.createRacer(name)
     addRacer(racer)
     setName('')
   }
