@@ -8,7 +8,7 @@ declare global {
 
   type SailorSchema = z.infer<typeof Schemas.sailorSchema>
   type ParticipantSchema = z.infer<typeof Schemas.participantSchema>
-  type FinishSchema = z.infer<typeof Schemas.finisherSchema>
+  type FinisherSchema = z.infer<typeof Schemas.finisherSchema>
   type RaceSchema = z.infer<typeof Schemas.raceSchema>
   type RaceDaySchema = z.infer<typeof Schemas.raceDaySchema>
 
