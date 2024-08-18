@@ -11,6 +11,11 @@ interface RaceDayState {
   addSailor: (name: string) => SailorSchema,
   addRacer: (name: string) => void,
   startRace: (fleet: FleetSchema) => RaceSchema,
+  findRace: (id: string) => RaceSchema,
+  getRaceDetails: (race: RaceSchema) => {
+    racers: Map<string, ParticipantSchema>,
+    finishers: FinisherSchema[]
+  }
   getCurrentRace: (fleet: FleetSchema) => RaceSchema | undefined,
 
   findSailor: (id: string) => SailorSchema
@@ -78,7 +83,8 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
       const racer: ParticipantSchema = {
         sailorId: sailor.id,
         role: 'Racer',
-        isGuest: false
+        isGuest: false,
+        fleet: 'A'
       }
 
       const racers = new Map<string, ParticipantSchema>( get().racers )
@@ -113,6 +119,25 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
       })
 
       return race
+    },
+
+    findRace: (id: string) => {
+      const race = get().races.find( r => r.id === id )
+      if (!race) throw new Error(`Could not find race ${id}`)
+
+      return race
+    },
+
+    getRaceDetails: (race: RaceSchema) => {
+      const racers = new Map<string, ParticipantSchema>(
+        Array.from(get().racers.entries())
+          .filter( ([_, racer]) => racer.fleet === race.fleet )
+      )
+
+      const finishers = get().finishers
+        .filter( f => f.raceId === race.id )
+
+      return { racers, finishers }
     },
 
     getCurrentRace: (fleet: FleetSchema) => {
