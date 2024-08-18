@@ -52,7 +52,9 @@ export const participantSchema = z.object({
  */
 export const finisherSchema = z.object({
   // The participant whose finish is being recorded
-  participant: participantSchema,
+  participantId: z.string(),
+
+  raceId: z.string(),
 
   // Finishing datetime (if .failure is empty)
   finishedAt: z.date().optional(),
@@ -75,15 +77,13 @@ export const finisherSchema = z.object({
  * A single race for a given race day
  */
 export const raceSchema = z.object({
+  id: z.string(),
+
   // The fleet that is racing
   fleet: fleetSchema,
 
   // The time the race starts
-  startTime: z.date(),
-
-  // The array of all who participated in the race, including their
-  // finishing status
-  finishers: z.array(finisherSchema),
+  startTime: z.number(),
 
   // Freeform array of string notes
   notes: z.array(z.string()).optional(),
