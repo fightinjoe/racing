@@ -2,8 +2,8 @@ import { create } from 'zustand'
 import { devtools, persist, PersistStorage } from 'zustand/middleware'
 
 interface RaceDayState {
-  sailors: Map<string, SailorSchema>,
-  racers: Map<string, ParticipantSchema>,
+  sailors: SailorSchema[],
+  racers: ParticipantSchema[],
   races: RaceSchema[],
   currentRaces: {[key: string]: string},
   finishers: FinisherSchema[],
@@ -13,53 +13,24 @@ interface RaceDayState {
   startRace: (fleet: FleetSchema) => RaceSchema,
   findRace: (id: string) => RaceSchema,
   getRaceDetails: (race: RaceSchema) => {
-    racers: Map<string, ParticipantSchema>,
+    allRacers: ParticipantSchema[],
+    racers: ParticipantSchema[],
     finishers: FinisherSchema[]
-  }
+  },
   getCurrentRace: (fleet: FleetSchema) => RaceSchema | undefined,
 
-  findSailor: (id: string) => SailorSchema
+  findSailor: (id: string) => SailorSchema,
+  finishRacer: (race: RaceSchema, racer: ParticipantSchema) => FinisherSchema
 }
 
 /** State variables **/
 const name = 'race-day-storage'
 
-const storage: PersistStorage<RaceDayState> = {
-  getItem: (name) => {
-    const json = localStorage.getItem(name)
-    if (!json) return null
-
-    const {state} = JSON.parse(json)
-
-    return ({
-      state: {
-        ...state,
-        sailors: new Map(state.sailors),
-        racers: new Map(state.racers),
-      }
-    })
-  },
-
-  setItem: (name, newValue) => {
-    const json = JSON.stringify({
-      ...newValue,
-      state: {
-        ...newValue.state,
-        sailors: Array.from(newValue.state.sailors.entries()),
-        racers: Array.from(newValue.state.racers.entries())
-      }
-    })
-    localStorage.setItem(name, json)
-  },
-
-  removeItem: (name) => localStorage.removeItem(name),
-}
-
 /** State hook **/
 export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
   (set, get) => ({
-    sailors: new Map(),
-    racers: new Map(),
+    sailors: [],
+    racers: [],
     races: [],
     currentRaces: {},
     finishers: [],
@@ -68,8 +39,10 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
       const id = name.replace(' ','') + Date.now()
       const sailor: SailorSchema = {id, name}
       
-      const sailors = new Map<string, SailorSchema>(get().sailors)
-      sailors.set(id, sailor)
+      const sailors = [
+        ...get().sailors,
+        sailor
+      ]
 
       // Update the state
       set({ sailors })
@@ -87,8 +60,10 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
         fleet: 'A'
       }
 
-      const racers = new Map<string, ParticipantSchema>( get().racers )
-      racers.set( sailor.id, racer )
+      const racers = [
+        ...get().racers,
+        racer
+      ]
 
       set({ racers })
       
@@ -96,7 +71,7 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
     },
 
     findSailor: (id: string) => {
-      const sailor = get().sailors.get(id)
+      const sailor = get().sailors.find( s => s.id===id )
       if (!sailor) throw new Error(`Unknown sailor ${id}`)
       
       return sailor
@@ -129,15 +104,14 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
     },
 
     getRaceDetails: (race: RaceSchema) => {
-      const racers = new Map<string, ParticipantSchema>(
-        Array.from(get().racers.entries())
-          .filter( ([_, racer]) => racer.fleet === race.fleet )
-      )
+      const allRacers = get().racers.filter( r => r.fleet === race.fleet )
 
       const finishers = get().finishers
         .filter( f => f.raceId === race.id )
 
-      return { racers, finishers }
+      const racers = allRacers.filter( r => !(finishers.find(f => f.participantId===r.sailorId)) )
+
+      return { allRacers, racers, finishers }
     },
 
     getCurrentRace: (fleet: FleetSchema) => {
@@ -148,7 +122,30 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
       if( !race ) throw new Error(`Could not locate race ${raceId}`)
 
       return race
-    }
+    },
+
+    finishRacer: (race, racer) => {
+      // Create the new finisher
+      const finisher: FinisherSchema = {
+        participantId: racer.sailorId,
+        raceId: race.id,
+        finishedAt: Date.now()
+      }
+
+      // Update the finishers for the cache
+      const finishers = [...get().finishers, finisher]
+
+      // Check to see if all of the racers have finished
+      const racerCount = get().racers.filter(r => r.fleet === race.fleet).length
+      const finishersCount = finishers.filter(f => f.raceId === race.id).length
+
+      const currentRaces = {...get().currentRaces}
+      if (racerCount === finishersCount) delete currentRaces[race.fleet]
+
+      set({finishers, currentRaces})
+
+      return finisher
+    },
   }),
-  { name, storage },
+  { name },
 )))

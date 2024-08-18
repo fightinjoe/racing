@@ -57,7 +57,7 @@ export const finisherSchema = z.object({
   raceId: z.string(),
 
   // Finishing datetime (if .failure is empty)
-  finishedAt: z.date().optional(),
+  finishedAt: z.number().optional(),
 
   // Details about the participant's failure to finish the race (if .finishedAt is empty)
   failure: failureSchema.optional(),

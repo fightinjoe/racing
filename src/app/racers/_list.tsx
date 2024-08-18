@@ -8,7 +8,7 @@ export default function ListPartial() {
   
   return (
     <ol className="list-disc ml-6">
-      { Array.from(racers.entries()).map(([id, r], i) => <li key={id}>{ findSailor(id).name }</li> ) }
+      { racers.map((r, i) => <li key={i}>{ findSailor(r.sailorId).name }</li> ) }
     </ol>
   )
 }
