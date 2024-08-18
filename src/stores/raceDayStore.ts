@@ -4,9 +4,14 @@ import { devtools, persist, PersistStorage } from 'zustand/middleware'
 interface RaceDayState {
   sailors: Map<string, SailorSchema>,
   racers: Map<string, ParticipantSchema>,
+  races: RaceSchema[],
+  currentRaces: {[key: string]: string},
+  finishers: FinisherSchema[],
 
   addSailor: (name: string) => SailorSchema,
   addRacer: (name: string) => void,
+  startRace: (fleet: FleetSchema) => RaceSchema,
+  getCurrentRace: (fleet: FleetSchema) => RaceSchema | undefined,
 
   findSailor: (id: string) => SailorSchema
 }
@@ -50,6 +55,9 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
   (set, get) => ({
     sailors: new Map(),
     racers: new Map(),
+    races: [],
+    currentRaces: {},
+    finishers: [],
 
     addSailor: (name: string) => {
       const id = name.replace(' ','') + Date.now()
@@ -86,6 +94,35 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
       if (!sailor) throw new Error(`Unknown sailor ${id}`)
       
       return sailor
+    },
+
+    startRace: (fleet: FleetSchema) => {
+      // TODO: Check to make sure no current race has already been started for the fleet
+      const count = get().races.filter( r => r.fleet === fleet ).length
+      const id = `${ count+1 }${ fleet }`
+
+      const race: RaceSchema = {
+        id,
+        fleet,
+        startTime: Date.now()
+      }
+
+      set({
+        races: [...get().races, race],
+        currentRaces: { ...get().currentRaces, [fleet]: id }
+      })
+
+      return race
+    },
+
+    getCurrentRace: (fleet: FleetSchema) => {
+      const raceId = get().currentRaces[fleet]
+      if( !raceId ) return undefined
+
+      const race = get().races.find( r => r.id === raceId )
+      if( !race ) throw new Error(`Could not locate race ${raceId}`)
+
+      return race
     }
   }),
   { name, storage },
