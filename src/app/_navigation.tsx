@@ -1,10 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { useRacerStore } from '@/stores/racerStore'
+import { useRaceDayStore } from '@/stores/raceDayStore'
 
 export default function NavigationPartial() {
-  const isReadyToRace = useRacerStore(s=>s.isReadyToRace)
+  const isReadyToRace = true // useRaceDayStore(s=>s.isReadyToRace)
 
   return (
     <nav>

@@ -1,13 +1,14 @@
 'use client'
 
-import { useRacerStore } from "@/stores/racerStore"
+import { useRaceDayStore } from "@/stores/raceDayStore"
 
 export default function ListPartial() {
-  const racers = useRacerStore(s=>s.racers)
+  const racers = useRaceDayStore(s=>s.racers)
+  const findSailor = useRaceDayStore(s=>s.findSailor)
   
   return (
     <ol className="list-disc ml-6">
-      { racers.map( (r, i) => <li key={i}>{r.name}</li>)}
+      { Array.from(racers.entries()).map(([id, r], i) => <li key={id}>{ findSailor(id).name }</li> ) }
     </ol>
   )
 }

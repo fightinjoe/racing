@@ -29,12 +29,31 @@ v1 will only provide the bare level of features for running a race day.
 * **Calculate the score**
   Present the score in an easy to digest fashion
 
-## Data and storage
-The app needs to work offline. The expectation should be that the app only
-exchanges data with the server at the beginning and end of a race day
+## Data and state
+The app needs to work offline. The expectation should be that the app only exchanges data with the server at the beginning and end of a race day.
 
-### Structure
-The structure of the data that needs to be stored looks like:
+**Zustand** will be used for state management as well as caching in `localStorage` of the data. Because (1) changes to the data  need to be cached, and (2) the caching methods are exposed via a hook that must be called in a functional component, we *should not create custom classes for our domain objects.* Instead, methods that update cached data should be methods within the Zustand store.
+
+Much of the data model is relational, and we capture this in a normalized structure where different stores reference one anothers objects. Doing so adds in the possiblity of inefficiencies due to re-renders, but as most of the data is created serially (e.g. all sailors are created first, then a single race is created, and then a list of finishers is created) and most views are only showing a slice of the data, many of the inefficiencies should be avoided.
+
+### State and structure
+Zustand recommends breaking apart stores for different sets of data to minimize re-renders and complexity.
+
+```
+RacerStore
+- racers: ParticipantSchema[]
+- addRacer: (name: string) => ParticipantSchema
+
+RaceStore
+- races: RaceSchema[]
+- startRace: (fleet: FleetSchema) => RaceSchema
+
+FinisherStore
+- finishRacer: (racerId: string, raceId: string) => FinisherSchema
+- failRacer: (racerId: string, raceId: string, failure: FailureSchema)
+```
+
+
 ```
 Racer
 |- Sailor
@@ -44,36 +63,20 @@ Racer
 |- sailNumber
 |- note
 
-RaceDay
-|- date
-|
-|- races[]
-|  |- fleet
-|  |- startTime
-|  |- finishers: Racer[]
-|  |- notes[]
-|
-|- config
-|  |- combinedFleets
-|  |- sailSize
+Race
+|- ID
+|- fleet
+|- startTime
+|- notes[]
+
+Finisher
+|- Racer.Sailor.ID
+|- Race.ID
+|- finishedAt
+|- failure
+
 ```
 
-### Data location
-The data created (e.g. registration of users) needs to be available throughout the app. The data will also need to be easy to manipulate
-throughout the app. This will be achieved with Context and Reducers:
-1. **racersReducer()**
-  Dispatches actions:
-    1. **add** - add a new racer
-2. **racesReducer()**
-  Dispatches actions:
-    1. **start** - starts a race
-    2. **recordFinish** - records the finish of a racer
-    3. **end** - ends the race
-3. **RacersContext**
-  Exposes Racers state, which is an array of all active racers, and racersDispatch()
-4. **RacesContext**
-  Exposes Races state, which is an array of all races, and racesDispatch()
-  
 ### Initial data
 Races are initially empty, and racers are loaded from a hard coded config file
 * ```const races = []```

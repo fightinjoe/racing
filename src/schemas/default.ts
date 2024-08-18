@@ -27,7 +27,7 @@ export const sailorSchema = z.object({
  * A single sailor participating in a single race day
  */
 export const participantSchema = z.object({
-  sailor: sailorSchema,
+  sailorId: z.string(),
 
   // The fleet is only required for role: 'racer'
   fleet: fleetSchema.optional(),
