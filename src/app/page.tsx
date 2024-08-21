@@ -1,5 +1,7 @@
 'use client'
 
+import { NavTile } from "@/components/tile"
+
 import { useRaceDayStore } from "@/stores/raceDayStore"
 
 export default function Home() {
@@ -8,8 +10,17 @@ export default function Home() {
 
   return (
     <main>
-      <h1>Racers: { racers.length }</h1>
-      <h1>Races: { races.length }</h1>
+      <NavTile
+        title="Racers"
+        subtitle={ racers.length+'' }
+        href="/racers"
+      />
+      
+      <NavTile
+        title="Races"
+        subtitle={ races.length+'' }
+        href="/races"
+      />
     </main>
   );
 }
