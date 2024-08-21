@@ -1,11 +1,12 @@
 import { create } from 'zustand'
 import { devtools, persist, PersistStorage } from 'zustand/middleware'
+import { RaceDay } from '@/models/default'
 
 interface RaceDayState {
   sailors: SailorSchema[],
   racers: ParticipantSchema[],
   races: RaceSchema[],
-  currentRaces: {[key: string]: string},
+  currentRaces: {[key in FleetSchema]: string|null},
   finishers: FinisherSchema[],
 
   addSailor: (name: string) => SailorSchema,
@@ -20,7 +21,9 @@ interface RaceDayState {
   getCurrentRace: (fleet: FleetSchema) => RaceSchema | undefined,
 
   findSailor: (id: string) => SailorSchema,
-  finishRacer: (race: RaceSchema, racer: ParticipantSchema) => FinisherSchema
+  finishRacer: (race: RaceSchema, racer: ParticipantSchema) => FinisherSchema,
+
+  raceDay: () => RaceDay
 }
 
 /** State variables **/
@@ -32,7 +35,7 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
     sailors: [],
     racers: [],
     races: [],
-    currentRaces: {},
+    currentRaces: {A: null, B: null, AB: null},
     finishers: [],
 
     addSailor: (name: string) => {
@@ -146,6 +149,16 @@ export const useRaceDayStore = create<RaceDayState>()( devtools( persist(
 
       return finisher
     },
+
+    raceDay: () => (
+      new RaceDay({
+        sailors: get().sailors,
+        racers: get().racers,
+        races: get().races,
+        currentRaces: get().currentRaces,
+        finishers: get().finishers
+      })
+    )
   }),
   { name },
 )))

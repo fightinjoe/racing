@@ -37,21 +37,12 @@ export class Sailor {
  */
 export class Participant {
   rawData: ParticipantSchema
-  sailor: Sailor
+  sailor: SailorSchema
 
-  static createRacer(name: string) {
-    const sailor = Sailor.create(name)
-
-    return new Participant({
-      sailor: sailor.toJSON(),
-      role: 'Racer',
-      isGuest: false
-    })
-  }
-
-  constructor(rawData: ParticipantSchema) {
+  constructor(rawData: ParticipantSchema, sailor: SailorSchema|undefined) {
+    if (!sailor) throw new Error(`Missing sailor data in Participant instantiation`)
     this.rawData = rawData
-    this.sailor = new Sailor( this.rawData.sailor )
+    this.sailor = sailor
   }
 
   get role() { return this.rawData.role }
@@ -72,72 +63,80 @@ export class Participant {
  */
 export class Race {
   rawData: RaceSchema
-  finishers: Finisher[]
-  finished: Boolean = false
-  participants: Participant[]
 
-  /**
-   * Static method for starting a race
-   * @param fleet The sailing fleet for the race
-   * @param participants The array of participants for the race
-   * @returns 
-   * @example Race.start(fleet, participants)
-   */
-  static start(fleet: FleetSchema, participants: Participant[]) {
-    const finishers: FinishSchema[] = []
-    const startTime = new Date()
-    return new Race({ fleet, finishers, startTime }, participants)
-  }
-
-  constructor(rawData: RaceSchema, participants: Participant[]) {
+  constructor(rawData: RaceSchema) {
     this.rawData = rawData
-    this.finishers = this.rawData.finishers.map( f => new Finisher(f) )
-    this.participants = participants
-
-    this._checkIfFinished()
   }
 
   get fleet() { return this.rawData.fleet }
 
-  /**
-   * Logs the finish of a single participant in the race
-   * @param participant
-   * @param failure - Optional - failure code for when not finishing the race
-   */
-  logFinish(participant: Participant, failure?: FailureSchema): Finisher {
-    // Throw an error if the participant has already finished
-    if( this.finishers.find( f => f.participant.id === participant.id ) )
-      throw new Error(`Sailor "${participant.name}" has already finished`)
-
-    const finisher = new Finisher({
-      participant: participant.rawData,
-      finishedAt: failure ? undefined : new Date(),
-      failure: failure
-    })
-
-    this.finishers.push( finisher )
-
-    this._checkIfFinished()
-
-    return finisher
-  }
-
-  private _checkIfFinished() {
-    // Once the last finisher is logged, flag the race as "finished"
-    if( this.finishers.length === this.participants.length )
-      this.finished = true
-  }
 }
 
 export class Finisher {
-  rawData: FinishSchema
+  rawData: FinisherSchema
   participant: Participant
+  race: Race
 
-  constructor(rawData: FinishSchema) {
+  constructor(rawData: FinisherSchema, participant: Participant, race: Race) {
     this.rawData = rawData
-    this.participant = new Participant(rawData.participant)
+    this.participant = participant
+    this.race = race
   }
 
   get finishedAt() { return this.rawData.finishedAt }
   get failure() { return this.rawData.failure }
+}
+
+interface Filters {
+  fleet?: FleetSchema,
+  role: RoleSchema
+}
+
+interface RaceDayParams {
+  sailors: SailorSchema[],
+  racers: ParticipantSchema[],
+  races: RaceSchema[],
+  currentRaces: {[key in FleetSchema]: string|null},
+  finishers: FinisherSchema[]
+}
+
+export class RaceDay {
+  rawSailors: SailorSchema[]
+  rawRacers: ParticipantSchema[]
+  rawRaces: RaceSchema[]
+  rawCurrentRaces: {[key in FleetSchema]: string|null}
+  rawFinishers: FinisherSchema[]
+
+  // Map object of all the participants in the race day, keyed by their ID
+  // for easy lookup
+  participants: Map<string, Participant>
+  
+  constructor({sailors, racers, races, currentRaces, finishers}: RaceDayParams) {
+    this.rawSailors = sailors
+    this.rawRacers = racers
+    this.rawRaces = races
+    this.rawCurrentRaces = currentRaces
+    this.rawFinishers = finishers
+
+    this.participants = new Map<string, Participant>(
+      this.rawRacers.map( racerJSON => {
+        const id = racerJSON.sailorId
+        const racer = new Participant(racerJSON, sailors.find(s => s.id===id))
+        return [id, racer]
+      })
+    )
+  }
+
+  racers(params: Filters = {role:'Racer'}): Participant[] {
+    const { fleet, role } = params;
+  
+    let out = Array.from(this.participants.entries())
+      .map(([_, participant]) => participant)
+  
+    if (fleet) out = out.filter(p => p.fleet === fleet)
+    if (role) out = out.filter(p => p.role === role)
+  
+    return out
+  }
+
 }

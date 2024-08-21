@@ -3,12 +3,13 @@
 import { useRaceDayStore } from "@/stores/raceDayStore"
 
 export default function ListPartial() {
-  const racers = useRaceDayStore(s=>s.racers)
-  const findSailor = useRaceDayStore(s=>s.findSailor)
+  // Force refresh when the racers state changes
+  useRaceDayStore(s=>s.racers)
+  const raceDay = useRaceDayStore(s=>s.raceDay)()
   
   return (
     <ol className="list-disc ml-6">
-      { racers.map((r, i) => <li key={i}>{ findSailor(r.sailorId).name }</li> ) }
+      { raceDay.racers().map( (r,i) => <li key={i}>{ r.name }</li> )}
     </ol>
   )
 }
