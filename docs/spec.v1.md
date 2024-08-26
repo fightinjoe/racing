@@ -9,13 +9,23 @@ The goals of the v1 version are:
 2. Quickly tabulate the scores at the end of the race day
 
 Non-goals include
-- Persisting data. It's okay if the data is emailed or uploaded as a JSON blob
+- Exporting data. It's okay if the data is emailed or uploaded as a JSON blob
 - Providing an interface for sailors
 - Reviewing data from previous race days
 
-## Features
-v1 will only provide the bare level of features for running a race day.
+## Features / pages
+v1 will only provide the bare level of features for running a race day. It doesn't allow management of any data across multiple race days (i.e. sailors).
 
+### Pages
+
+| Path  | Name          | State variables |
+|-------|---------------|-------------|
+| **/** | Dashboard     | *Shows scores when racing is complete* |
+| **/racers**     | List and add new racers      | racers |
+| **/races**      | List races, start a new race | races |
+| **/races/{id}** | Specific race, finish racers | races and racers, filter  by {id} |
+
+### Behavior
 * **Register users**
   Record a sailor, their sail number, and their fleet. Assign new racers a unique ID
 * **Run a race**
@@ -30,11 +40,43 @@ v1 will only provide the bare level of features for running a race day.
   Present the score in an easy to digest fashion
 
 ## Data and state
-The app needs to work offline. The expectation should be that the app only exchanges data with the server at the beginning and end of a race day.
+The app needs to work offline. The expectation should be that the app only exchanges data with the server at the beginning and end of a race day. All other data lives in memory and is cached whenever the state changes.
 
-**Zustand** will be used for state management as well as caching in `localStorage` of the data. Because (1) changes to the data  need to be cached, and (2) the caching methods are exposed via a hook that must be called in a functional component, we *should not create custom classes for our domain objects.* Instead, methods that update cached data should be methods within the Zustand store.
+**Zustand** will be used for state management and caching in `localStorage` of the data. Because (1) changes to the data  need to be cached, and (2) the caching methods are exposed via a hook that must be called in a functional component, we *should not create custom classes for our domain objects.* Instead, methods that update cached data should be methods within the Zustand store.
 
-Much of the data model is relational, and we capture this in a normalized structure where different stores reference one anothers objects. Doing so adds in the possiblity of inefficiencies due to re-renders, but as most of the data is created serially (e.g. all sailors are created first, then a single race is created, and then a list of finishers is created) and most views are only showing a slice of the data, many of the inefficiencies should be avoided.
+Much of the data model is **relational**. At the point of usage, the data needs to be denormalized (i.e. in the state store), but for storage it should be normalized. To help manage this, there are several paradigms that we'll use:
+1. **Types**
+   Different types are necessary for normalized and denormalized objects. Since normalized objects most closely map to database tables, they will be suffixed with `*Row`, like `SailorRow`. Denormalized objects will be suffixed with `*Schema`. Types are defined and validated with `Zug`.
+2. **Helper methods**
+   To ease normalizing / denormalizing the data, there are a few helper functions
+   * ```
+     participantsFromRows(
+       sailorRows: SailorRow[], participantRows: ParticipantRow[]
+     ): ParticipantSchema[]
+   * ```
+     participantsToRows(
+      participants: ParticipantSchema[]
+     ): { sailors: SailorRow[], participants: ParticipantRow[] }
+   * ```
+     racesFromRows(
+      raceRows: RaceRow[],
+      finisherRows: FinisherRow[],
+      participantRows: ParticipantRow[],
+      sailorRows: SailorRow[]
+     ): Map<RaceSchema>
+   * ```
+     // Assumes that there aren't any changes to participants
+     // or sailors.
+     racesToRows(races: Map<RaceSchema>):
+       { races: RaceRow[], finishers: FinisherRow[] }
+3. **Re-rendering**
+
+
+
+ To help with this, the following methods will be provided:
+* `makeRacers: (SailorSchema[], participants) => Racer[]`
+
+
 
 ### State and structure
 Zustand recommends breaking apart stores for different sets of data to minimize re-renders and complexity.
@@ -45,41 +87,15 @@ RacerStore
 - addRacer: (name: string) => ParticipantSchema
 
 RaceStore
-- races: RaceSchema[]
+- races: Map<RaceSchema>
 - startRace: (fleet: FleetSchema) => RaceSchema
-
-FinisherStore
-- finishRacer: (racerId: string, raceId: string) => FinisherSchema
-- failRacer: (racerId: string, raceId: string, failure: FailureSchema)
-```
-
-
-```
-Racer
-|- Sailor
-|  |- id
-|  |- name
-|- fleet
-|- sailNumber
-|- note
-
-Race
-|- ID
-|- fleet
-|- startTime
-|- notes[]
-
-Finisher
-|- Racer.Sailor.ID
-|- Race.ID
-|- finishedAt
-|- failure
-
+- finishRacer: (racer: ParticipantSchema) => void
+- failRacer: (racer: ParticipantSchema) => void
 ```
 
 ### Initial data
 Races are initially empty, and racers are loaded from a hard coded config file
-* ```const races = []```
+* ```const races = new Map()```
 * ```const racers = CONFIG.racers```
 
 ### Data changes
