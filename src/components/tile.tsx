@@ -50,11 +50,12 @@ export function NavTile(
   )
 }
 
-export function RacerTile({racer}: {racer: RacerSchema}) {
+export function RacerTile({racer, onClick}: {racer: RacerSchema, onClick?: () => void}) {
   return (
     <Tile
       title={ racer.sailNumber || '?' }
       subtitle={ racer.name }
+      onClick={ onClick }
     />
   )
 }

@@ -4,7 +4,7 @@ import { useRaceStore } from "@/stores/raceStore"
 import { useRacerStore } from "@/stores/racerStore"
 import FinishRacerPartial from "./_finishRacer"
 
-import Tile from "@/components/tile"
+import { RacerTile } from "@/components/tile"
 
 export default function RacePage({params}: {params: {id: string}}) {
   const race = useRaceStore(s=>s.races).find(r=>r.id===params.id)
@@ -27,7 +27,7 @@ export default function RacePage({params}: {params: {id: string}}) {
       <h2><strong>Finshers</strong></h2>
       <div>
         { race.finishers.map( (f,i) => (
-          <Tile key={i} title={ f.name } subtitle="" /> 
+          <RacerTile key={i} racer={ f } /> 
         )) }
       </div>
     </div>
