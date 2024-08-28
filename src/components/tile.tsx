@@ -49,3 +49,12 @@ export function NavTile(
     />
   )
 }
+
+export function RacerTile({racer}: {racer: RacerSchema}) {
+  return (
+    <Tile
+      title={ racer.sailNumber || '?' }
+      subtitle={ racer.name }
+    />
+  )
+}
