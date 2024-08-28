@@ -47,31 +47,31 @@ export const mockSailorRC: SailorSchema = {
   name: 'Rex Comstock'
 }
 
-export const mockRacerA1: ParticipantSchema = {
+export const mockRacerA1: ParticipantRow = {
   sailor: mockSailorA1,
   fleet: 'A',
   role: 'Racer'
 }
 
-export const mockRacerA2: ParticipantSchema = {
+export const mockRacerA2: ParticipantRow = {
   sailor: mockSailorA2,
   fleet: 'A',
   role: 'Racer'
 }
 
-export const mockRacerB1: ParticipantSchema = {
+export const mockRacerB1: ParticipantRow = {
   sailor: mockSailorB1,
   fleet: 'B',
   role: 'Racer'
 }
 
-export const mockRacerB2: ParticipantSchema = {
+export const mockRacerB2: ParticipantRow = {
   sailor: mockSailorB2,
   fleet: 'B',
   role: 'Racer'
 }
 
-export const mockRaceCommittee: ParticipantSchema = {
+export const mockRaceCommittee: ParticipantRow = {
   sailor: mockSailorRC,
   role: 'Race committee'
 }

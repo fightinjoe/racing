@@ -17,20 +17,20 @@ export const failureSchema = z.enum(['DSQ', 'DNF', 'DNS', 'TLE', 'RCS'])
 /**
  * A single sailor and member of the fleet. Can be a volunteer or a racer
  */
-export const sailorSchema = z.object({
+export const sailorRow = z.object({
   // Unique ID that can be used to track a sailor across multiple race days
   id: z.string(),
   name: z.string()
 })
 
+export const sailorSchema = sailorRow
+
 /**
  * A single sailor participating in a single race day
  */
-export const participantSchema = z.object({
-  sailorId: z.string(),
-
+const participantBase = z.object({
   // The fleet is only required for role: 'racer'
-  fleet: fleetSchema.optional(),
+  fleet: fleetSchema,
   role: roleSchema,
   isGuest: z.boolean(),
 
@@ -47,15 +47,14 @@ export const participantSchema = z.object({
   note: z.string().optional()
 })
 
+export const participantRow = participantBase.merge( z.object({ sailorId: z.number() }) )
+
+export const racerSchema = participantBase.merge( sailorRow )
+
 /**
  * A single finish for a single sailor for a single race
  */
-export const finisherSchema = z.object({
-  // The participant whose finish is being recorded
-  participantId: z.string(),
-
-  raceId: z.string(),
-
+const finisherBase = z.object({
   // Finishing datetime (if .failure is empty)
   finishedAt: z.number().optional(),
 
@@ -73,10 +72,18 @@ export const finisherSchema = z.object({
   note: z.string().optional(),
 })
 
+export const finisherRow = finisherBase.merge( z.object({
+  participantId: z.string(),
+  raceId: z.string()
+}))
+
+export const finisherSchema = finisherBase
+  .merge( racerSchema )
+
 /**
  * A single race for a given race day
  */
-export const raceSchema = z.object({
+export const raceRow = z.object({
   id: z.string(),
 
   // The fleet that is racing
@@ -88,6 +95,10 @@ export const raceSchema = z.object({
   // Freeform array of string notes
   notes: z.array(z.string()).optional(),
 })
+
+export const raceSchema = raceRow.merge( z.object({
+  finishers: z.array( finisherSchema )
+}))
 
 /**
  * Configuration settings for the race day
@@ -124,14 +135,14 @@ export const raceDaySchema = z.object({
   date: z.date(),
 
   // Array of races that were conducted. Filter race.fleet to find races for a single fleet
-  races: z.array(raceSchema),
+  races: z.array(raceRow),
 
   // Optionally, ame of the regatta being raced
   regatta: z.string().optional(),
 
   // Array of all sailors participating. This is both volunteers and racers and determines who receives
   // participation credit
-  participants: z.array(participantSchema),
+  participants: z.array(participantRow),
 
   config: raceDayConfigSchema,
   weather: weatherSchema,

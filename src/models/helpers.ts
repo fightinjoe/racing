@@ -4,13 +4,13 @@ export const Racer = {
   extend: extendRacer
 }
 
-function createRacer(name: string): ParticipantSchema {
+function createRacer(name: string): ParticipantRow {
   const sailor: SailorSchema = {
     id: name + Date.now(),
     name
   }
 
-  const participant: ParticipantSchema = {
+  const participant: ParticipantRow = {
     sailor,
     role: 'Racer',
     isGuest: false
@@ -19,6 +19,6 @@ function createRacer(name: string): ParticipantSchema {
   return extendRacer(participant)
 }
 
-function extendRacer( racer: ParticipantSchema ): ParticipantSchema {
+function extendRacer( racer: ParticipantRow ): ParticipantRow {
   return racer
 }

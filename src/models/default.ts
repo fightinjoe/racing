@@ -36,10 +36,10 @@ export class Sailor {
  *   })
  */
 export class Participant {
-  rawData: ParticipantSchema
+  rawData: ParticipantRow
   sailor: SailorSchema
 
-  constructor(rawData: ParticipantSchema, sailor: SailorSchema|undefined) {
+  constructor(rawData: ParticipantRow, sailor: SailorSchema|undefined) {
     if (!sailor) throw new Error(`Missing sailor data in Participant instantiation`)
     this.rawData = rawData
     this.sailor = sailor
@@ -94,7 +94,7 @@ interface Filters {
 
 interface RaceDayParams {
   sailors: SailorSchema[],
-  racers: ParticipantSchema[],
+  racers: ParticipantRow[],
   races: RaceSchema[],
   currentRaces: {[key in FleetSchema]: string|null},
   finishers: FinisherSchema[]
@@ -102,7 +102,7 @@ interface RaceDayParams {
 
 export class RaceDay {
   rawSailors: SailorSchema[]
-  rawRacers: ParticipantSchema[]
+  rawRacers: ParticipantRow[]
   rawRaces: RaceSchema[]
   rawCurrentRaces: {[key in FleetSchema]: string|null}
   rawFinishers: FinisherSchema[]
