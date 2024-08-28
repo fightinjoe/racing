@@ -1,3 +1,5 @@
+const RACER_FLOOR = 5
+
 export class RaceDay {
   _racers: RacerSchema[]
   _races: RaceSchema[]
@@ -61,5 +63,9 @@ export class RaceDay {
     if (!fleet) return finishedRaces
 
     return finishedRaces.filter( r => r.fleet === fleet )
+  }
+
+  canRace(): Boolean {
+    return this._racers.length >= RACER_FLOOR
   }
 }

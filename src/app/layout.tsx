@@ -19,9 +19,13 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={inter.className}>
-        <NavigationPartial />
-        {children}
+      <body className={ `${inter.className} bg-gray-100`}>
+
+        <div className="mx-auto w-[390px] bg-white shadow">
+          <NavigationPartial />
+          {children}
+        </div>
+
       </body>
     </html>
   );
