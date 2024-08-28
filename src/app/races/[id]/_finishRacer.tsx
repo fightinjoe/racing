@@ -1,17 +1,16 @@
-import { useRaceDayStore } from "@/stores/raceDayStore"
+import { useRaceStore } from "@/stores/raceStore"
 
-export default function FinishRacerPartial({race, racer}: {race: RaceSchema, racer:ParticipantSchema}) {
-  const findSailor = useRaceDayStore(s=>s.findSailor)
-  const finishRacer = useRaceDayStore(s=>s.finishRacer)
+export default function FinishRacerPartial({race, racer}: {race: RaceSchema, racer:RacerSchema}) {
+  const finishRacer = useRaceStore(s=>s.finishRacer)
 
   const handleFinishClick = () => {
-    finishRacer(race, racer)
+    finishRacer(racer, race)
   }
 
   return (
-    <li key={racer.sailorId}>
+    <li key={racer.id}>
       <button onClick={ handleFinishClick }>
-        { findSailor(racer.sailorId).name}
+        { racer.name}
       </button>
       </li>
   )

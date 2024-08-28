@@ -1,13 +1,15 @@
 'use client'
 
-import { useRaceDayStore } from "@/stores/raceDayStore"
+import { useRaceStore } from "@/stores/raceStore"
+import { useRacerStore } from "@/stores/racerStore"
 import FinishRacerPartial from "./_finishRacer"
 
 export default function RacePage({params}: {params: {id: string}}) {
-  const race = useRaceDayStore(s=>s.findRace)(params.id)
-  const { allRacers, racers } = useRaceDayStore(s=>s.getRaceDetails)(race)
-  const findSailor = useRaceDayStore(s=>s.findSailor)
-  const finishers = useRaceDayStore(s=>s.finishers)
+  const race = useRaceStore(s=>s.races).find(r=>r.id===params.id)
+  const finisherIds = race?.finishers.map(f=>f.id) || []
+  const racers = useRacerStore(s=>s.racers).filter(r=>!finisherIds.includes(r.id))
+
+  if (!race) return (<strong>404: Race not found</strong>)
 
   return (
     <div>
@@ -23,11 +25,7 @@ export default function RacePage({params}: {params: {id: string}}) {
       <h2><strong>Finshers</strong></h2>
       <ul>
         {
-          finishers
-          .filter( f => f.raceId === race.id )
-          .map( (f,i) => 
-            <li key={i}>{ findSailor(f.participantId).name }</li>
-          )
+          race.finishers.map( (f,i) => <li key={i}>{ f.name }</li> )
         }
       </ul>
     </div>

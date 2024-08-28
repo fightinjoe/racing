@@ -1,11 +1,11 @@
 'use client'
 
+import { useRacerStore } from "@/stores/racerStore"
 import { ChangeEventHandler, MouseEventHandler, useState } from "react"
-import { useRaceDayStore } from "@/stores/raceDayStore"
 
 export default function AddPartial() {
   const [name, setName] = useState('')
-  const addRacer = useRaceDayStore(s=>s.addRacer)
+  const addRacer = useRacerStore(s=>s.addRacer)
   // const addSailor = useSailorStore(s=>s.addSailor)
 
   const handleNameChange: ChangeEventHandler = (e:any) => {

@@ -2,11 +2,12 @@
 
 import { NavTile } from "@/components/tile"
 
-import { useRaceDayStore } from "@/stores/raceDayStore"
+import { useRaceStore } from "@/stores/raceStore"
+import { useRacerStore } from "@/stores/racerStore"
 
 export default function Home() {
-  const racers = useRaceDayStore(s=>s.racers)
-  const races = useRaceDayStore(s=>s.races)
+  const racers = useRacerStore(s=>s.racers)
+  const races = useRaceStore(s=>s.races)
 
   return (
     <main>

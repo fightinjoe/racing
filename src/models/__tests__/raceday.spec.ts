@@ -36,9 +36,9 @@ describe('RaceDay', () => {
 
   describe('instance method startRace', () => {
     it('should start the race', () => {
-      expect(raceDay.races.length).toBe( races.length )
+      expect(raceDay._races.length).toBe( races.length )
       raceDay.startRace('A')
-      expect(raceDay.races.length).toBe( races.length + 1 )
+      expect(raceDay._races.length).toBe( races.length + 1 )
     })
 
     it('should fail if there is already a race', () => {
