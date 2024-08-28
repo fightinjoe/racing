@@ -1,4 +1,5 @@
 import { useRaceStore } from "@/stores/raceStore"
+import Tile from "@/components/tile"
 
 export default function FinishRacerPartial({race, racer}: {race: RaceSchema, racer:RacerSchema}) {
   const finishRacer = useRaceStore(s=>s.finishRacer)
@@ -8,10 +9,10 @@ export default function FinishRacerPartial({race, racer}: {race: RaceSchema, rac
   }
 
   return (
-    <li key={racer.id}>
-      <button onClick={ handleFinishClick }>
-        { racer.name}
-      </button>
-      </li>
+    <Tile
+      title={ racer.name }
+      subtitle=""
+      onClick={ handleFinishClick }
+    />
   )
 }
