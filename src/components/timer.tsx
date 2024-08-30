@@ -15,6 +15,6 @@ export function Timer({ start = Date.now() }: {start: number}) {
   }
 
   return (
-    <div>Time: { time }</div>
+    <div>{ time }</div>
   )
 }

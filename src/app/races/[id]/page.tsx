@@ -5,6 +5,8 @@ import { useRacerStore } from "@/stores/racerStore"
 import FinishRacerPartial from "./_finishRacer"
 
 import { FinisherTile } from "@/components/tile"
+import { Timer } from "@/components/timer"
+import HTML from "@/components/html"
 
 export default function RacePage({params}: {params: {id: string}}) {
   const race = useRaceStore(s=>s.races).find(r=>r.id===params.id)
@@ -13,9 +15,21 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   if (!race) return (<strong>404: Race not found</strong>)
 
+  function _Banner() {
+    return (
+      <div>
+        <Timer start={ race!.startTime } />
+      </div>
+    )
+  }
+
   return (
     <div>
-      Single race { race.id }
+      <header>
+        <HTML.back /> Single race { race.id }
+      </header>
+
+      <_Banner />
 
       <h2><strong>Still racing</strong></h2>
       <div className="flex flex-row flex-wrap gap-2">

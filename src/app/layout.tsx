@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
-import NavigationPartial from "./_navigation";
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -22,7 +21,6 @@ export default function RootLayout({
       <body className={ `${inter.className} bg-gray-100`}>
 
         <div className="mx-auto w-[390px] bg-white shadow">
-          <NavigationPartial />
           {children}
         </div>
 
