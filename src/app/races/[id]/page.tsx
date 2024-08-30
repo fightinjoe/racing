@@ -4,7 +4,7 @@ import { useRaceStore } from "@/stores/raceStore"
 import { useRacerStore } from "@/stores/racerStore"
 import FinishRacerPartial from "./_finishRacer"
 
-import { RacerTile } from "@/components/tile"
+import { FinisherTile } from "@/components/tile"
 
 export default function RacePage({params}: {params: {id: string}}) {
   const race = useRaceStore(s=>s.races).find(r=>r.id===params.id)
@@ -18,16 +18,16 @@ export default function RacePage({params}: {params: {id: string}}) {
       Single race { race.id }
 
       <h2><strong>Still racing</strong></h2>
-      <ul>
+      <div className="flex flex-row flex-wrap gap-2">
         { racers.map( (r,i) => (
           <FinishRacerPartial key={i} race={race} racer={r} />
         )) }
-      </ul>
+      </div>
 
       <h2><strong>Finshers</strong></h2>
-      <div>
+      <div className="flex flex-row flex-wrap gap-2">
         { race.finishers.map( (f,i) => (
-          <RacerTile key={i} racer={ f } /> 
+          <FinisherTile key={i} position={i} racer={ f } /> 
         )) }
       </div>
     </div>

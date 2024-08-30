@@ -5,30 +5,32 @@ import { useRouter } from "next/navigation"
 interface TileProps {
   title: string,
   subtitle: string,
-  onClick?: () => void
+  onClick?: () => void,
+  children?: React.ReactNode
 }
 
-export default function Tile({ title, subtitle, onClick }: TileProps) {
-  const ClickablePartial = ({children}: {children: React.ReactNode}) => (
+export default function Tile({ title, subtitle, onClick, children }: TileProps) {
+  const _ClickWrapper = ({children}: {children: React.ReactNode}) => (
     <button onClick={ onClick }>
-      { children }
+      {children}
     </button>
   )
 
-  const ContentPartial = () => (
-    <>
+  const _Content = ({children}: {children: React.ReactNode}) => (
+    <div>
       <p>{ title }</p>
       <small>{ subtitle }</small>
-    </>
+      {children}
+    </div>
   )
 
   return (
     <div
-      className="border border-black text-center w-[109px]"
+      className="relative border border-black text-center w-[109px]"
     >
       { onClick
-        ? <ClickablePartial><ContentPartial /></ClickablePartial>
-        : <ContentPartial />
+        ? <_ClickWrapper><_Content>{children}</_Content></_ClickWrapper>
+        : <_Content>{children}</_Content>
       }
       
     </div>
@@ -57,5 +59,25 @@ export function RacerTile({racer, onClick}: {racer: RacerSchema, onClick?: () =>
       subtitle={ racer.name }
       onClick={ onClick }
     />
+  )
+}
+
+export function FinisherTile({racer, position}:{racer: RacerSchema, position: number}) {
+  const pos =
+    position === 0 ? '1st' :
+    position === 1 ? '2nd' :
+    position === 2 ? '3rd' :
+    `${position+1}th`
+
+  return (
+    <Tile
+      title={ racer.sailNumber || '?' }
+      subtitle={ racer.name }
+    >
+      {/* Position badge */}
+      <div className="absolute bg-blue-800 text-white top-[-6px] left-[-6px] rounded text-[10px] p-1">
+        { pos }
+      </div>
+    </Tile>
   )
 }
