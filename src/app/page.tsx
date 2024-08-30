@@ -50,13 +50,14 @@ function RacesPartial({ raceDay }: { raceDay: RaceDay}) {
   const unfinishedRaces = raceDay.unfinishedRaces()
   const finishedRaces = raceDay.finishedRaces()
 
+  // Print either the current race, or the option to start a race
+  const CurrentRacePartial = () => unfinishedRaces.length
+    ? <Race.run race={unfinishedRaces[0]} />
+    : <Race.start /> 
+
   return (
     <>
-      <div>{
-        unfinishedRaces.length
-        ? <Race.run race={unfinishedRaces[0]} />
-        : <Race.start />  
-      }</div>
+      <div><CurrentRacePartial /></div>
 
       <div>
         { finishedRaces.map( r => <Race.show race={r} key={r.id} /> )}

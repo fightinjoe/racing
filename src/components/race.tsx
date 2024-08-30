@@ -2,6 +2,7 @@ import { useRouter } from "next/navigation"
 import { useRaceStore } from "@/stores/raceStore"
 
 import Tile, { NavTile } from "@/components/tile"
+import { Timer } from "./timer"
 
 function StartRacePartial({fleet = 'AB'}: {fleet?:FleetSchema}) {
   const router = useRouter()
@@ -26,11 +27,14 @@ function StartRacePartial({fleet = 'AB'}: {fleet?:FleetSchema}) {
 
 function RunRacePartial({race}:{race:RaceSchema}) {
   return (
-    <NavTile 
-      title="Ongoing race"
-      subtitle={ race.id }
-      href={`/races/${ race.id }`}
-    />
+    <div>
+      <Timer start={ race.startTime } />
+      <NavTile 
+        title="Ongoing race"
+        subtitle={ race.id }
+        href={`/races/${ race.id }`}
+      />
+    </div>
   )
 }
 
