@@ -37,7 +37,7 @@ function RunRacePartial({race}:{race:RaceSchema}) {
 
   return (
     <button
-      className="block flex flex-col p-4 bg-aqua-400 hover:bg-aqua-500"
+      className="block flex flex-col p-4 bg-aqua-400 hover:bg-aqua-500 text-ocean-800"
       onClick={ () => router.push(`/races/${race.id}`) }
     >
       <HTML.h1 className="flex flex-row gap-4">
