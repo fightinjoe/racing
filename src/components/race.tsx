@@ -33,15 +33,20 @@ function StartRacePartial({fleet = 'AB'}: {fleet?:FleetSchema}) {
  * @returns 
  */
 function RunRacePartial({race}:{race:RaceSchema}) {
+  const router = useRouter()
+
   return (
-    <div>
-      <Timer start={ race.startTime } />
-      <NavTile 
-        title="Ongoing race"
-        subtitle={ race.id }
-        href={`/races/${ race.id }`}
-      />
-    </div>
+    <button
+      className="block flex flex-col p-4 bg-aqua-400 hover:bg-aqua-500"
+      onClick={ () => router.push(`/races/${race.id}`) }
+    >
+      <HTML.h1 className="flex flex-row gap-4">
+        <Timer start={ race.startTime } />
+        <span>•</span>
+        <span>Race { race.id }</span>
+      </HTML.h1>
+      <HTML.small>Course name</HTML.small>
+    </button>
   )
 }
 
@@ -61,7 +66,7 @@ function ShowRacePartial({race}:{race:RaceSchema}) {
       className="block flex flex-col p-4 bg-ocean-100 hover:bg-ocean-200"
       onClick={ () => router.push(`/races/${race.id}`) }
     >
-      <HTML.h1 title={ `Race ${race.id}` } />
+      <HTML.h1>Race {race.id}</HTML.h1>
       <HTML.small>1st: { first.name } @ { duration }</HTML.small>
     </button>
   )
