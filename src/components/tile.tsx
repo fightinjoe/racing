@@ -9,6 +9,10 @@ interface TileProps {
   children?: React.ReactNode
 }
 
+/**
+ * Generic tile that underlies all of the other tiles
+ * @returns 
+ */
 export default function Tile({ title, subtitle, onClick, children }: TileProps) {
   const _ClickWrapper = ({children}: {children: React.ReactNode}) => (
     <button onClick={ onClick }>
@@ -37,6 +41,10 @@ export default function Tile({ title, subtitle, onClick, children }: TileProps) 
   )
 }
 
+/**
+ * Tile used for navigating to another page
+ * @returns 
+ */
 export function NavTile(
   { title, subtitle, href }:
   { title: string, subtitle: string, href: string }
@@ -52,6 +60,10 @@ export function NavTile(
   )
 }
 
+/**
+ * Tile that displays a racer
+ * @returns 
+ */
 export function RacerTile({racer, onClick}: {racer: RacerSchema, onClick?: () => void}) {
   return (
     <Tile
@@ -62,6 +74,10 @@ export function RacerTile({racer, onClick}: {racer: RacerSchema, onClick?: () =>
   )
 }
 
+/**
+ * Tile that displays a race finisher and their position
+ * @returns 
+ */
 export function FinisherTile({racer, position}:{racer: RacerSchema, position: number}) {
   const pos =
     position === 0 ? '1st' :

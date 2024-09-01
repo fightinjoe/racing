@@ -2,6 +2,8 @@ import { useRouter } from "next/navigation"
 import { useRaceStore } from "@/stores/raceStore"
 
 import Tile, { NavTile } from "@/components/tile"
+import HTML from '@/components/html'
+import { printDuration } from "@/lib/printer"
 import { Timer } from "./timer"
 
 function StartRacePartial({fleet = 'AB'}: {fleet?:FleetSchema}) {
@@ -25,6 +27,11 @@ function StartRacePartial({fleet = 'AB'}: {fleet?:FleetSchema}) {
   )
 }
 
+/**
+ * Used to show a race IN PROGRESS
+ * @param param.race - RaceSchema object to display
+ * @returns 
+ */
 function RunRacePartial({race}:{race:RaceSchema}) {
   return (
     <div>
@@ -38,13 +45,25 @@ function RunRacePartial({race}:{race:RaceSchema}) {
   )
 }
 
+/**
+ * Used to show FINISHED race
+ * @param param.race - RaceSchema object to display
+ * @returns 
+ */
 function ShowRacePartial({race}:{race:RaceSchema}) {
+  const first = race.finishers[0]
+  const duration = printDuration( race.startTime, first.finishedAt )
+
+  const router = useRouter()
+
   return (
-    <NavTile 
-      title="Finished race"
-      subtitle={ race.id }
-      href={`/races/${ race.id }`}
-    />
+    <button
+      className="block flex flex-col p-4 bg-ocean-100 hover:bg-ocean-200"
+      onClick={ () => router.push(`/races/${race.id}`) }
+    >
+      <HTML.h1 title={ `Race ${race.id}` } />
+      <HTML.small>1st: { first.name } @ { duration }</HTML.small>
+    </button>
   )
 }
 

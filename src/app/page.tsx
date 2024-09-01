@@ -18,7 +18,7 @@ export default function Home() {
     <main>
       <img src="/MFA_splash.png" />
 
-      <section className="bg-white px-4">
+      <section className="bg-white p-4">
         { raceDay.canRace()
           ? <RacesPartial {...{raceDay}} />
           : <SetupPartial {...{raceDay}} />
@@ -57,9 +57,11 @@ function RacesPartial({ raceDay }: { raceDay: RaceDay}) {
 
   return (
     <>
+      {/* Either the current race, or the CTA to start a race */}
       <div><CurrentRacePartial /></div>
 
-      <div>
+      {/* All of the finished races */}
+      <div className="flex flex-col gap-2">
         { finishedRaces.map( r => <Race.show race={r} key={r.id} /> )}
       </div>
     </>
