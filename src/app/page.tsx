@@ -56,7 +56,7 @@ function RacesPartial({ raceDay }: { raceDay: RaceDay}) {
     : <Race.start /> 
 
   return (
-    <>
+    <div className="flex flex-col gap-2">
       {/* Either the current race, or the CTA to start a race */}
       <div
         className="flex flex-col gap-2"
@@ -68,7 +68,7 @@ function RacesPartial({ raceDay }: { raceDay: RaceDay}) {
       <div className="flex flex-col gap-2">
         { finishedRaces.map( r => <Race.show race={r} key={r.id} /> )}
       </div>
-    </>
+    </div>
   )
 
   return 

@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation"
 import { useRaceStore } from "@/stores/raceStore"
 
-import Tile, { NavTile } from "@/components/tile"
+import Tile from "@/components/tile"
 import HTML from '@/components/html'
 import { printDuration } from "@/lib/printer"
 import { Timer } from "./timer"
@@ -17,6 +17,15 @@ function StartRacePartial({fleet = 'AB'}: {fleet?:FleetSchema}) {
     // redirect to the race
     router.push(`/races/${race.id}`)
   }
+
+  return (
+    <button
+      className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
+    >
+      <HTML.h1>New AB race</HTML.h1>
+      <HTML.small>Start race #</HTML.small>
+    </button>
+  )
 
   return (
     <Tile

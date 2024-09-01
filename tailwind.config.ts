@@ -13,6 +13,7 @@ const config: Config = {
         'ocean-200': '#E6F4FF',
         'ocean-300': '#B1DCFF',
         'ocean-400': '#2C98F0',
+        'ocean-500': '#0F81DE',
         'ocean-800': '#2451B8',
         'aqua-400': '#2CF0C6',
         'aqua-500': '#04E0B1'
