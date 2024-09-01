@@ -10,7 +10,11 @@ const config: Config = {
     extend: {
       colors: {
         'ocean-100': '#F7FBFE', // light light blue
-        'ocean-200': '#E6F4FF'
+        'ocean-200': '#E6F4FF',
+        'ocean-300': '#B1DCFF',
+        'ocean-400': '#2C98F0',
+        'ocean-800': '#2451B8',
+        'aqua-400': '#2CF0C6'
       },
     },
   },
