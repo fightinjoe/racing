@@ -35,7 +35,7 @@ export default function Home() {
 function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
   return (
     <>
-      <HTML.h1 title="Setup" />
+      <HTML.h1>Setup</HTML.h1>
 
       <NavTile
         title="Racers"
@@ -58,7 +58,11 @@ function RacesPartial({ raceDay }: { raceDay: RaceDay}) {
   return (
     <>
       {/* Either the current race, or the CTA to start a race */}
-      <div><CurrentRacePartial /></div>
+      <div
+        className="flex flex-col gap-2"
+      >
+        <CurrentRacePartial />
+      </div>
 
       {/* All of the finished races */}
       <div className="flex flex-col gap-2">

@@ -9,7 +9,7 @@ export default function RacersPage() {
     <main>
       <header className="flex flex-row p-4">
         <HTML.back />
-        <HTML.h1 title="Racers" />
+        <HTML.h1>Racers</HTML.h1>
       </header>
 
       <div>

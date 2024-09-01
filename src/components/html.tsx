@@ -1,8 +1,13 @@
 import { useRouter } from "next/navigation"
 
-function h1({title}: {title: string}) {
+interface NodeParams {
+  className?: string,
+  children?: React.ReactNode
+}
+
+function h1({className, children}: NodeParams) {
   return (
-    <h1 className="">{ title }</h1>
+    <h1 {...{className}}>{ children }</h1>
   )
 }
 
