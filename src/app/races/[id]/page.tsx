@@ -79,6 +79,21 @@ export default function RacePage({params}: {params: {id: string}}) {
     )
   }
 
+  function _Finishers() {
+    return (
+      <div>
+        <h2><strong>Finshers</strong></h2>
+        <div className="flex flex-row flex-wrap gap-2">
+          { race.finishers.map( (f,i) => (
+            <FinisherTile key={i} position={i} racer={ f } /> 
+          )) }
+        </div>
+      </div>
+    )
+  }
+
+  debugger
+
   return (
     <div>
       <header className="p-4 flex flex-row gap-2">
@@ -88,14 +103,9 @@ export default function RacePage({params}: {params: {id: string}}) {
 
       <_Banner />
 
-      { !race.isFinished && <_StillRacing /> }
+      { race.hasFinishers && <_Finishers /> }
 
-      <h2><strong>Finshers</strong></h2>
-      <div className="flex flex-row flex-wrap gap-2">
-        { race.finishers.map( (f,i) => (
-          <FinisherTile key={i} position={i} racer={ f } /> 
-        )) }
-      </div>
+      { !race.isFinished && <_StillRacing /> }
     </div>
   )
 }

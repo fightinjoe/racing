@@ -39,5 +39,10 @@ export class Race {
     return this.unfinishedRacers.length === 0
   }
 
-
+  /**
+   * Boolean representing whether any racher has finished the race yet
+   */
+  get hasFinishers():boolean {
+    return this.finishers.length > 0
+  }
 }
