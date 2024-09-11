@@ -24,16 +24,7 @@ export default function RacePage({params}: {params: {id: string}}) {
   /*== Local partials ==*/
 
   function _Banner() {
-    return (
-      <div>
-        {
-          race.isFinished
-          ? <_Duration />
-          : <_Timer />
-        }
-        
-      </div>
-    )
+    return race.isFinished ? <_Duration /> : <_Timer />
   }
 
   function _Timer() {
@@ -55,8 +46,8 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   function _Duration() {
     return (
-      <div className="row-2 ">
-        <strong>
+      <div className="row-2 items-center">
+        <strong className="w-[100px] p-4">
           <Duration start={ race.startTime } finish={ race.finishTime! } />
         </strong>
         <small>
