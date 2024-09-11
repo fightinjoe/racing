@@ -2,4 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.ContainerMeat {
+  container-type: inline-size;
+  container-name: meat;
+}
 
+@container meat (min-width: 300px) {
+  .Tile {
+    /* Determine the width and height of a tile relative to the container size */
+    width: calc( (100cqw - 16px*2 - 8px*2) / 3);
+    height: calc( (100cqw - 16px*2 - 8px*2) / 3);
+  }
+}

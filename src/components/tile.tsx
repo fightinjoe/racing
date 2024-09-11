@@ -15,22 +15,22 @@ interface TileProps {
  */
 export default function Tile({ title, subtitle, onClick, children }: TileProps) {
   const _ClickWrapper = ({children}: {children: React.ReactNode}) => (
-    <button onClick={ onClick }>
+    <button onClick={ onClick } className="h-full">
       {children}
     </button>
   )
 
   const _Content = ({children}: {children: React.ReactNode}) => (
-    <div>
-      <p>{ title }</p>
-      <small>{ subtitle }</small>
+    <div className="col-2 h-full p-1 justify-center">
+      <p className="text-xl font-medium">{ title }</p>
+      <small className="">{ subtitle }</small>
       {children}
     </div>
   )
 
   return (
     <div
-      className="relative border border-black text-center w-[109px]"
+      className="Tile relative border border-black text-center rounded"
     >
       { onClick
         ? <_ClickWrapper><_Content>{children}</_Content></_ClickWrapper>
