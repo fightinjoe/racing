@@ -2,19 +2,19 @@ import { useEffect, useState } from "react"
 import { printDuration } from "@/lib/printer"
 
 export function Timer({ start = Date.now() }: {start: number}) {
-  const [time, setTime] = useState<string>('0:00:00')
+  const [time, setTime] = useState<number>( Date.now() )
 
   useEffect(() => {
-    const interval = setInterval( updateTime, 1000 )
+    const interval = setInterval( () => setTime(Date.now()), 1000 )
 
     return () => clearInterval(interval)
   })
 
-  const updateTime = () => {
-    setTime( printDuration(start) )
-  }
+  return <Duration start={start} finish={ time } />
+}
 
+export function Duration({ start, finish = Date.now() }: {start:number, finish:number}) {
   return (
-    <div>{ time }</div>
+    <div>{ printDuration(start, finish) }</div>
   )
 }
