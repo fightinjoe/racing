@@ -38,7 +38,7 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   function _Timer() {
     return (
-      <div className="flex flex-row gap-2 items-center bg-aqua-400 pr-4">
+      <div className="row-2 items-center bg-aqua-400 pr-4">
 
         <strong className="w-[100px] p-4 bg-aqua-300 border border-white border-0 border-r-2">
           <Timer start={ race!.startTime } />
@@ -55,7 +55,7 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   function _Duration() {
     return (
-      <div className="flex flex-row gap-2 ">
+      <div className="row-2 ">
         <strong>
           <Duration start={ race.startTime } finish={ race.finishTime! } />
         </strong>
@@ -68,22 +68,22 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   function _StillRacing() {
     return (
-      <>
+      <div className="p-4 col-2">
         <h2><strong>Still racing</strong></h2>
-        <div className="flex flex-row flex-wrap gap-2">
+        <div className="row-wrap-2">
           { race.unfinishedRacers.map( (r,i) => (
             <FinishRacerPartial key={i} race={_race!} racer={r} />
           )) }
         </div>
-      </>
+      </div>
     )
   }
 
   function _Finishers() {
     return (
-      <div>
+      <div className="p-4 col-2 bg-ocean-200">
         <h2><strong>Finshers</strong></h2>
-        <div className="flex flex-row flex-wrap gap-2">
+        <div className="row-wrap-2">
           { race.finishers.map( (f,i) => (
             <FinisherTile key={i} position={i} racer={ f } /> 
           )) }
@@ -91,8 +91,6 @@ export default function RacePage({params}: {params: {id: string}}) {
       </div>
     )
   }
-
-  debugger
 
   return (
     <div>
