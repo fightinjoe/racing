@@ -1,3 +1,5 @@
+'use client'
+
 import { useRouter } from "next/navigation"
 import { useRaceStore } from "@/stores/raceStore"
 
@@ -21,18 +23,11 @@ function StartRacePartial({fleet = 'AB'}: {fleet?:FleetSchema}) {
   return (
     <button
       className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
+      onClick={ handleClick }
     >
       <HTML.h1>New AB race</HTML.h1>
       <HTML.small>Start race #</HTML.small>
     </button>
-  )
-
-  return (
-    <Tile
-      title="Start race"
-      subtitle="Fleet AB"
-      onClick={ handleClick }
-    />
   )
 }
 

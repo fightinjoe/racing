@@ -21,24 +21,47 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   const race = new Race(_race, _racers)
 
+  /*== Local partials ==*/
+
   function _Banner() {
     return (
       <div>
         {
           race.isFinished
           ? <_Duration />
-          : <Timer start={ race!.startTime } />
+          : <_Timer />
         }
         
       </div>
     )
   }
 
+  function _Timer() {
+    return (
+      <div className="flex flex-row gap-2 items-center bg-aqua-400 pr-4">
+
+        <strong className="w-[100px] p-4 bg-aqua-300 border border-white border-0 border-r-2">
+          <Timer start={ race!.startTime } />
+        </strong>
+
+        <small className="flex-auto">2. Windward Leeward</small>
+
+        <button className="bg-white px-2 py-1 rounded">
+          <small>Cancel race</small>
+        </button>
+      </div>
+    )
+  }
+
   function _Duration() {
     return (
-      <div className="flex flex-row gap-2">
-        <span>Finished: </span>
-        <Duration start={ race.startTime } finish={ race.finishTime! } />
+      <div className="flex flex-row gap-2 ">
+        <strong>
+          <Duration start={ race.startTime } finish={ race.finishTime! } />
+        </strong>
+        <small>
+          Finished • Course Type
+        </small>
       </div>
     )
   }
@@ -58,8 +81,9 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   return (
     <div>
-      <header>
-        <HTML.back /> Single race { _race.id }
+      <header className="p-4 flex flex-row gap-2">
+        <HTML.back />
+        Single race { _race.id }
       </header>
 
       <_Banner />
