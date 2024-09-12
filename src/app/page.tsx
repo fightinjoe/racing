@@ -33,16 +33,30 @@ export default function Home() {
 }
 
 function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
+  function _AddRacers() {
+    const count = raceDay._racers.length
+
+    return count === 0
+    ? <NavTile
+        title="+"
+        subtitle="Add racers"
+        href="/racers"
+        className="border border-dashed border-gray-300 text-gray-400"
+      />
+    : <NavTile
+        title="Racers"
+        subtitle={ raceDay.racers().length+'' }
+        href="/racers"
+        className={ count < 5 ? "bg-yellow-100" : "bg-sky-50"}
+      />
+  }
+
   return (
     <div className="p-4 col-2">
       <HTML.h1>Setup</HTML.h1>
 
       <div className="row-2">
-        <NavTile
-          title="Racers"
-          subtitle={ raceDay.racers().length+'' }
-          href="/racers"
-        />
+        <_AddRacers />
 
         <NavTile
           title="Reset"

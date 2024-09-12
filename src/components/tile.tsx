@@ -47,8 +47,8 @@ export default function Tile({ title, subtitle, className, onClick, children }: 
  * @returns 
  */
 export function NavTile(
-  { title, subtitle, href }:
-  { title: string, subtitle: string, href: string }
+  { title, subtitle, href, className }:
+  { title: string, subtitle: string, href: string, className?: string }
 ) {
   const router = useRouter()
 
@@ -56,7 +56,7 @@ export function NavTile(
     <Tile
       title={title}
       subtitle={subtitle}
-      className="bg-white"
+      className={`bg-white ${className}`}
       onClick={ () => router.push(href) }
     />
   )
