@@ -3,6 +3,7 @@
 import { NavTile } from "@/components/tile"
 import HTML from "@/components/html"
 import Race from "@/components/race"
+import NextStep from "@/components/nextStep"
 
 import { useRaceStore } from "@/stores/raceStore"
 import { useRacerStore } from "@/stores/racerStore"
@@ -17,6 +18,8 @@ export default function Home() {
   return (
     <main>
       <img src="/MFA_splash.png" />
+
+      <NextStep />
 
       <section className="bg-white p-4">
         { raceDay.canRace()
