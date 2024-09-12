@@ -7,7 +7,7 @@ import HTML from "@/components/html"
 export default function RacersPage() {
   return (
     <main>
-      <header className="flex flex-row p-4">
+      <header className="p-4 row-2">
         <HTML.back />
         <HTML.h1>Racers</HTML.h1>
       </header>

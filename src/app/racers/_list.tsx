@@ -8,7 +8,7 @@ export default function ListPartial() {
   const racers = useRacerStore(s=>s.racers)
 
   return (
-    <div>
+    <div className="row-wrap-2 p-4">
       { racers.map( (r,i) => <RacerTile racer={r} /> )}
     </div>
   )

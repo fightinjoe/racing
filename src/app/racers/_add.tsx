@@ -24,11 +24,12 @@ export default function AddPartial() {
   }
 
   return (
-    <div>
+    <div className="p-4">
       Name:
         <input
           type="text"
           value={name}
+          placeholder="Name"
           onChange={ handleNameChange }
           className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
         />
@@ -36,6 +37,7 @@ export default function AddPartial() {
         <input
           type="text"
           value={sailNumber}
+          placeholder="Sail number"
           onChange={ handleSailNumberChange }
           className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
         />
