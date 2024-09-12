@@ -54,12 +54,25 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
       />
   }
 
+  function _Details() {
+    return (
+      <NavTile
+        title="+"
+        subtitle="Race details"
+        href="/details"
+        className="border border-dashed border-gray-300 text-gray-400"
+      />
+    )
+  }
+
   return (
     <div className="p-4 col-2">
       <HTML.h1>Setup</HTML.h1>
 
       <div className="row-2">
         <_AddRacers />
+
+        <_Details />
 
         <NavTile
           title="Reset"
