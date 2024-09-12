@@ -56,6 +56,7 @@ export function NavTile(
     <Tile
       title={title}
       subtitle={subtitle}
+      className="bg-white"
       onClick={ () => router.push(href) }
     />
   )

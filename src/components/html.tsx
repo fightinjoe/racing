@@ -6,8 +6,9 @@ interface NodeParams {
 }
 
 function h1({className, children}: NodeParams) {
+
   return (
-    <h1 {...{className}}>{ children }</h1>
+    <h1 className={`font-medium ${className}`}>{ children }</h1>
   )
 }
 

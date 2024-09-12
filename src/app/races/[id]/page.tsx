@@ -73,7 +73,7 @@ export default function RacePage({params}: {params: {id: string}}) {
   function _Finishers() {
     return (
       <div className="p-4 col-2 bg-ocean-200">
-        <h2><strong>Finshers</strong></h2>
+        <HTML.h1>Finshers</HTML.h1>
         <div className="row-wrap-2">
           { race.finishers.map( (f,i) => (
             <FinisherTile key={i} position={i} racer={ f } /> 
