@@ -37,11 +37,19 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
     <div className="p-4 col-2">
       <HTML.h1>Setup</HTML.h1>
 
-      <NavTile
-        title="Racers"
-        subtitle={ raceDay.racers().length+'' }
-        href="/racers"
-      />
+      <div className="row-2">
+        <NavTile
+          title="Racers"
+          subtitle={ raceDay.racers().length+'' }
+          href="/racers"
+        />
+
+        <NavTile
+          title="Reset"
+          subtitle="Clear data"
+          href="/reset"
+        />
+      </div>
     </div>
   )
 }

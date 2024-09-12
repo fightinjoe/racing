@@ -5,7 +5,8 @@ interface RaceState {
   races: RaceSchema[],
 
   startRace: (fleet?:FleetSchema) => RaceSchema,
-  finishRacer: (racer: RacerSchema, race: RaceSchema) => void
+  finishRacer: (racer: RacerSchema, race: RaceSchema) => void,
+  clearRaces: () => void
 }
 
 export const useRaceStore = create<RaceState>()(
@@ -52,6 +53,14 @@ export const useRaceStore = create<RaceState>()(
           ...get().races.filter(r=>r.id!==race.id),
           { ...race, finishers: [...race.finishers, finisher]}
         ]})
+      },
+
+      clearRaces: () => {
+        const consent = `Are you sure you want to permanently delete ${ get().races.length } races?`
+
+        if (!confirm(consent)) return
+
+        set({ races: [] })
       }
     }),
     { name: 'race-storage' },

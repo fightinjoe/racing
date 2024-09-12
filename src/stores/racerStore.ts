@@ -4,7 +4,8 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 interface RacerState {
   racers: RacerSchema[],
 
-  addRacer: (name: string, sailNumber: string) => RacerSchema
+  addRacer: (name: string, sailNumber: string) => RacerSchema,
+  clearRacers: () => void
 }
 
 export const useRacerStore = create<RacerState>()(
@@ -23,6 +24,14 @@ export const useRacerStore = create<RacerState>()(
         }
         set({ racers: [...get().racers, racer] })
         return racer
+      },
+
+      clearRacers: () => {
+        const consent = `Are you sure you want to permanently delete ${ get().racers.length } racers?`
+
+        if (!confirm(consent)) return
+
+        set({ racers: [] })
       }
     }),
     { name: 'racer-storage' },

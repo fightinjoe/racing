@@ -85,7 +85,7 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   return (
     <div>
-      <header className="p-4 flex flex-row gap-2">
+      <header className="p-4 row-2">
         <HTML.back />
         Single race { _race.id }
       </header>
