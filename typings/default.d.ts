@@ -8,7 +8,10 @@ declare global {
   type SailSizeSchema = z.infer<typeof Schemas.sailSizeSchema>
   type ConfigSchema = {
     sailSize: SailSizeSchema,
-    fleets: FleetSchema[]
+    fleets: FleetSchema[],
+
+    // Track whether the race configuration has been saved at least once
+    hasSaved: boolean
   }
   
   type FailureSchema = z.infer<typeof Schemas.failureSchema>

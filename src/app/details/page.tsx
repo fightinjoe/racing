@@ -16,6 +16,7 @@ type MyFormData = {
 
 export default function DetailsPage() {
   const [config, updateConfig] = useDetailsStore(s=>[s.config,s.updateConfig])
+  const router = useRouter()
   
   const handleSubmit = (data: MyFormData) => {
     let newConfig = {} as ConfigSchema
@@ -27,6 +28,8 @@ export default function DetailsPage() {
       : ['A', 'B']
 
     updateConfig( newConfig )
+
+    router.back()
   }
 
   return (
@@ -42,8 +45,6 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
     sailSize: data.sailSize,
     fleetSize: data.fleets.length.toString()
   }
-
-  const router = useRouter()
 
   /** Form registration **/
   const {
@@ -62,11 +63,7 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
 
   const handleReset = () => {
     reset(formData)
-  }
-
-  function submitCallback(data: MyFormData) {
-    onSubmit(data)
-    router.back()
+    return false
   }
 
   function _Radio({dataKey, value, children}: {dataKey:any, value:any, children: React.ReactNode}) {
@@ -94,7 +91,7 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
       <div className="p-4">
         <form
           className="col-2"
-          onSubmit={handleSubmit(submitCallback)}
+          onSubmit={handleSubmit(onSubmit)}
         >
           <HTML.h1>Sail size</HTML.h1>
 
@@ -111,7 +108,7 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
           </fieldset>
 
           <div className="row-4 justify-end mt-6">
-            <button onClick={ handleReset } className="ButtonCancel">Reset</button>
+            <button onClick={ handleReset } className="ButtonCancel" type="button">Reset</button>
             <input type="submit" value="Save" className="ButtonSubmit" />
           </div>
 

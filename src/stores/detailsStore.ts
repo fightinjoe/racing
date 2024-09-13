@@ -14,12 +14,13 @@ export const useDetailsStore = create(
     (set, get) => ({
       config: {
         sailSize: 'small',
-        fleets: ['AB']
+        fleets: ['AB'],
+        hasSaved: false
       },
 
       updateConfig: (data: ConfigSchema) => {
-        // newConfig.sailSize && sailSizeSchema.parse(newConfig.sailSize)
-        let newConfig = {} as ConfigSchema
+        // Set the config to have been saved whenever it is updated
+        let newConfig = { hasSaved: true } as ConfigSchema
 
         newConfig.sailSize = sailSizeSchema.parse(data.sailSize)
         newConfig.fleets = data.fleets.map( (f:any) => fleetSchema.parse(f) )

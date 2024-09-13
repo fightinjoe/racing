@@ -7,7 +7,10 @@ import NextStep from "@/components/nextStep"
 
 import { useRaceStore } from "@/stores/raceStore"
 import { useRacerStore } from "@/stores/racerStore"
+import { useDetailsStore } from "@/stores/detailsStore"
 import { RaceDay } from "@/models/raceday"
+
+import { capitalize } from "@/lib/string"
 
 export default function Home() {
   const racers = useRacerStore(s=>s.racers)
@@ -36,6 +39,8 @@ export default function Home() {
 }
 
 function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
+  const config = useDetailsStore(s=>s.config)
+
   function _AddRacers() {
     const count = raceDay._racers.length
 
@@ -56,12 +61,18 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
 
   function _Details() {
     return (
-      <NavTile
-        title="+"
-        subtitle="Race details"
-        href="/details"
-        className="border border-dashed border-gray-300 text-gray-400"
-      />
+      config.hasSaved
+      ? <NavTile
+          title={ config.fleets.length === 1 ? '1 fleet' : '2 fleets' }
+          subtitle={ `${ capitalize(config.sailSize) } sails` }
+          href="/details"
+        />
+      : <NavTile
+          title="+"
+          subtitle="Race details"
+          href="/details"
+          className="TileTodo"
+        />
     )
   }
 
