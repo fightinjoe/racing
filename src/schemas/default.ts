@@ -6,6 +6,8 @@ export const roleSchema = z.enum(['Racer', 'Race committee', 'Volunteer', 'Crash
 // The different possilble fleets a race might be run for
 export const fleetSchema = z.enum(['A', 'B', 'AB'])
 
+export const sailSizeSchema = z.enum(['small', 'large'])
+
 // The different possible ways a racing participant might not finish the race.
 // DSQ = Disqualified (see finishers.note)
 // DNF = Did not finish

@@ -14,3 +14,27 @@
     height: calc( (100cqw - 16px*2 - 8px*2) / 3);
   }
 }
+
+@layer components {
+  .SelectBox {
+    @apply row-0 py-1;
+    @apply text-sm;
+  }
+
+  .SelectBox input[type=radio] {
+    @apply hidden;
+  }
+
+  .SelectBox label {
+    @apply bg-gray-200;
+    @apply px-3 py-1 my-1;
+    @apply border-2 border-x-gray-200 border-y-white;
+    @apply cursor-pointer;
+  }
+
+  .SelectBox input:checked + label {
+    @apply py-2 my-0;
+    @apply bg-white;
+    @apply border-ocean-400;
+  }
+}
