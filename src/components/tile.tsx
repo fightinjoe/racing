@@ -31,7 +31,7 @@ export default function Tile({ title, subtitle, className, onClick, children }: 
 
   return (
     <div
-      className={`Tile relative border border-white text-center rounded ${ className }`}
+      className={`Tile relative text-center rounded ${ className }`}
     >
       { onClick
         ? <_ClickWrapper><_Content>{children}</_Content></_ClickWrapper>
