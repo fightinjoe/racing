@@ -37,4 +37,20 @@
     @apply bg-white;
     @apply border-ocean-400;
   }
+
+  .ButtonSubmit {
+    @apply bg-ocean-400 text-white text-sm;
+    @apply px-4 py-1;
+    @apply cursor-pointer;
+  }
+
+  .ButtonSubmit:hover { @apply bg-ocean-500 }
+
+  .ButtonCancel {
+    @apply px-4 py-1;
+    @apply cursor-pointer;
+  }
+
+  .ButtonCancel:hover { @apply bg-gray-100; }
+
 }

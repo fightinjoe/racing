@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect } from 'react'
-import { useForm, SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation'
 
 import HTML from "@/components/html"
 import { useDetailsStore } from "@/stores/detailsStore"
-import { useState } from 'react'
 
 type MyFormData = {
   sailSize: SailSizeSchema,
@@ -43,6 +43,8 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
     fleetSize: data.fleets.length.toString()
   }
 
+  const router = useRouter()
+
   /** Form registration **/
   const {
     register,
@@ -57,6 +59,15 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
   // a reset of the form values. Zustan's `onFinishHydration` was
   // attempted to be used, but `useDetailsStore.persis` was undefined 🤷
   useEffect(() => { reset(formData) }, [data])
+
+  const handleReset = () => {
+    reset(formData)
+  }
+
+  function submitCallback(data: MyFormData) {
+    onSubmit(data)
+    router.back()
+  }
 
   function _Radio({dataKey, value, children}: {dataKey:any, value:any, children: React.ReactNode}) {
     const id = value
@@ -83,7 +94,7 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
       <div className="p-4">
         <form
           className="col-2"
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(submitCallback)}
         >
           <HTML.h1>Sail size</HTML.h1>
 
@@ -99,8 +110,10 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
             <_Radio dataKey="fleetSize" value={'2'}>2 separate fleets</_Radio>
           </fieldset>
 
-
-          <input type="submit" />
+          <div className="row-4 justify-end mt-6">
+            <button onClick={ handleReset } className="ButtonCancel">Reset</button>
+            <input type="submit" value="Save" className="ButtonSubmit" />
+          </div>
 
         </form>
       </div>

@@ -23,7 +23,8 @@ const config: Config = {
   theme: {
     gapSize: {
       0: '0px',
-      2: '0.5rem;'
+      2: '0.5rem',
+      4: '1rem'
     },
     extend: {
       colors: {
@@ -71,7 +72,6 @@ const config: Config = {
           ...CSS.col,
           'gap': value
         })
-
       },{
         values: theme('gapSize')
       })
