@@ -3,10 +3,16 @@ const RACER_FLOOR = 5
 export class RaceDay {
   _racers: RacerSchema[]
   _races: RaceSchema[]
+  _config: ConfigSchema
 
-  constructor(racers: RacerSchema[], races: RaceSchema[]) {
+  constructor(racers: RacerSchema[], races: RaceSchema[], config: ConfigSchema) {
     this._racers = racers
     this._races=races
+    this._config=config
+  }
+
+  get fleets(): FleetSchema[] {
+    return this._config.fleets
   }
 
   /**
@@ -41,13 +47,9 @@ export class RaceDay {
    * @returns Array of races
    */
   unfinishedRaces(fleet?: FleetSchema): RaceSchema[] {
-    const unfinishedRaces = this._races.filter(
-      r => r.finishers.length < this._racers.length
+    return this.races(fleet).filter(
+      r => r.finishers.length < this.racers(fleet).length
     )
-
-    if (!fleet) return unfinishedRaces
-
-    return unfinishedRaces.filter( r => r.fleet === fleet )
   }
 
   /**
@@ -56,13 +58,9 @@ export class RaceDay {
    * @returns Array of races
    */
   finishedRaces(fleet?: FleetSchema): RaceSchema[] {
-    const finishedRaces = this._races.filter(
-      r => r.finishers.length === this._racers.length
+    return this.races(fleet).filter(
+      r => r.finishers.length === this.racers(fleet).length
     )
-
-    if (!fleet) return finishedRaces
-
-    return finishedRaces.filter( r => r.fleet === fleet )
   }
 
   canRace(): Boolean {

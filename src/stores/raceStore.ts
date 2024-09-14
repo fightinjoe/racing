@@ -27,7 +27,7 @@ export const useRaceStore = create<RaceState>()(
 
         const race: RaceSchema = {
           id: `${ raceCount+1 }${fleet}`,
-          fleet: 'AB',
+          fleet: fleet,
           startTime: Date.now(),
           finishers: []
         }
