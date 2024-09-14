@@ -15,8 +15,9 @@ import { capitalize } from "@/lib/string"
 export default function Home() {
   const racers = useRacerStore(s=>s.racers)
   const races = useRaceStore(s=>s.races)
+  const config = useDetailsStore(s=>s.config)
 
-  const raceDay = new RaceDay(racers, races)
+  const raceDay = new RaceDay(racers, races, config)
 
   return (
     <main>
@@ -106,27 +107,32 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
 }
 
 function RacesPartial({ raceDay }: { raceDay: RaceDay}) {
-  const unfinishedRaces = raceDay.unfinishedRaces()
-  const finishedRaces = raceDay.finishedRaces()
+  const _FleetRaces = ({fleet}: {fleet: FleetSchema}) => {
+    const unfinishedRaces = raceDay.unfinishedRaces( fleet )
+    const finishedRaces = raceDay.finishedRaces( fleet )
 
-  // Print either the current race, or the option to start a race
-  const _CurrentRace = () => unfinishedRaces.length
-    ? <Race.run race={unfinishedRaces[0]} />
-    : <Race.start /> 
+    return (
+      <div className="col-2">
+        {/* Either the current race, or the CTA to start a race */}
+        <div className="col-2">
+          {
+            unfinishedRaces.length
+            ? <Race.run race={unfinishedRaces[0]} />
+            : <Race.start fleet={ fleet } count={ finishedRaces.length+1} /> 
+          }
+        </div>
+  
+        {/* All of the finished races */}
+        <div className="col-2">
+          { finishedRaces.reverse().map( r => <Race.show race={r} key={r.id} /> )}
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <div className="col-2">
-      {/* Either the current race, or the CTA to start a race */}
-      <div className="col-2">
-        <_CurrentRace />
-      </div>
-
-      {/* All of the finished races */}
-      <div className="col-2">
-        { finishedRaces.map( r => <Race.show race={r} key={r.id} /> )}
-      </div>
+    <div className="row-2">
+      {raceDay.fleets.map( (fleet,i) => (<_FleetRaces fleet={fleet} key={i} />) ) }
     </div>
   )
-
-  return 
 }

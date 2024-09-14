@@ -8,13 +8,13 @@ import HTML from '@/components/html'
 import { printDuration } from "@/lib/printer"
 import { Timer } from "./timer"
 
-function StartRacePartial({fleet = 'AB'}: {fleet?:FleetSchema}) {
+function StartRacePartial({fleet = 'AB', count}: {fleet?:FleetSchema, count: number}) {
   const router = useRouter()
   const startRace = useRaceStore(s=>s.startRace)
 
   const handleClick = () => {
     // create the race
-    const race = startRace()
+    const race = startRace(fleet)
 
     // redirect to the race
     router.push(`/races/${race.id}`)
@@ -25,8 +25,8 @@ function StartRacePartial({fleet = 'AB'}: {fleet?:FleetSchema}) {
       className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
       onClick={ handleClick }
     >
-      <HTML.h1>New AB race</HTML.h1>
-      <HTML.small>Start race #</HTML.small>
+      <HTML.h1>New { fleet } race</HTML.h1>
+      <HTML.small>Start race #{ count }</HTML.small>
     </button>
   )
 }

@@ -2,12 +2,12 @@ export class Race {
   // The current race
   _race: RaceSchema
 
-  // All racers participating in the race
+  // All racers participating in the race, filtered by `_race.fleet`
   _racers: RacerSchema[]
 
   constructor(race: RaceSchema, racers: RacerSchema[]) {
     this._race = race
-    this._racers = racers
+    this._racers = racers.filter( r => r.fleet === race.fleet )
   }
 
   // The time the race started
