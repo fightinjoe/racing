@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
 
 import HTML from "@/components/html"
+import Form from '@/components/form'
 import { useDetailsStore } from "@/stores/detailsStore"
 
 type MyFormData = {
@@ -65,21 +66,7 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
     reset(formData)
     return false
   }
-
-  function _Radio({dataKey, value, children}: {dataKey:any, value:any, children: React.ReactNode}) {
-    const id = value
-      .toString()
-      .toLowerCase()
-      .replace(/ /g,'-')          // replace ' ' with '-'
-      .replace(/[^a-z0-9-]/g, '') // remove non alpha-numeric values
   
-    return (
-      <div>
-        <input type="radio" id={ id } {...{value}} {...register(dataKey)} />
-        <label htmlFor={ id }>{ children }</label>
-      </div>
-    )
-  }
 
   return (
     <main>
@@ -96,15 +83,15 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
           <HTML.h1>Sail size</HTML.h1>
 
           <fieldset className="SelectBox mb-4">
-            <_Radio dataKey="sailSize" value="small">Small</_Radio>
-            <_Radio dataKey="sailSize" value="large">Large</_Radio>
+            <Form.Radio name="sailSize" value="small" register={register}>Small</Form.Radio>
+            <Form.Radio name="sailSize" value="large" register={register}>Large</Form.Radio>
           </fieldset>
 
           <HTML.h1>Fleet size</HTML.h1>
 
           <fieldset className="SelectBox">
-            <_Radio dataKey="fleetSize" value={'1'}>1 single fleet</_Radio>
-            <_Radio dataKey="fleetSize" value={'2'}>2 separate fleets</_Radio>
+            <Form.Radio name="fleetSize" value={'1'} register={register}>1 single fleet</Form.Radio>
+            <Form.Radio name="fleetSize" value={'2'} register={register}>2 separate fleets</Form.Radio>
           </fieldset>
 
           <div className="row-4 justify-end mt-6">
