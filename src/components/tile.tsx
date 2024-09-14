@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation"
 
 interface TileProps {
   title: string,
-  subtitle: string,
+  subtitle: string | React.ReactNode,
   className?: string,
   onClick?: () => void,
   children?: React.ReactNode
@@ -48,7 +48,7 @@ export default function Tile({ title, subtitle, className, onClick, children }: 
  */
 export function NavTile(
   { title, subtitle, href, className }:
-  { title: string, subtitle: string, href: string, className?: string }
+  { title: string, subtitle: string | React.ReactNode, href: string, className?: string }
 ) {
   const router = useRouter()
 
@@ -70,7 +70,7 @@ export function RacerTile({racer, onClick}: {racer: RacerSchema, onClick?: () =>
   return (
     <Tile
       title={ racer.sailNumber || '?' }
-      subtitle={ racer.name }
+      subtitle={ `${racer.name} (${racer.fleet} fleet)` }
       className="bg-ocean-100"
       onClick={ onClick }
     />

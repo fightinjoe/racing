@@ -22,8 +22,10 @@ export default function Home() {
     <main>
       <img src="/MFA_splash.png" />
 
+      {/* Banner communicating what the next steps are */}
       <NextStep />
 
+      {/* Shows the races once configuration is done. Otherwise shows configuration setup */}
       <section className="bg-white p-4">
         { raceDay.canRace()
           ? <RacesPartial {...{raceDay}} />
@@ -31,6 +33,7 @@ export default function Home() {
         }
       </section>
       
+      {/* Config settings, only shown once racing can start */}
       <section className="bg-gray-100 px-4">
         { raceDay.canRace() && <SetupPartial {...{raceDay}} /> }
       </section>
@@ -40,9 +43,16 @@ export default function Home() {
 
 function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
   const config = useDetailsStore(s=>s.config)
+  const racers = useRacerStore(s=>s.racers)
 
   function _AddRacers() {
     const count = raceDay._racers.length
+
+    const subtitle = <>
+      <strong>{ racers.filter(r=>r.fleet==='A').length }</strong> A fleet
+      <br />
+      <strong>{ racers.filter(r=>r.fleet==='B').length }</strong> B fleet
+    </>
 
     return count === 0
     ? <NavTile
@@ -53,7 +63,7 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
       />
     : <NavTile
         title="Racers"
-        subtitle={ raceDay.racers().length+'' }
+        subtitle={ subtitle }
         href="/racers"
         className={ count < 5 ? "bg-yellow-100" : "bg-sky-50"}
       />
