@@ -9,7 +9,7 @@ export default function ListPartial() {
 
   return (
     <div className="row-wrap-2 p-4">
-      { racers.map( (r,i) => <RacerTile racer={r} /> )}
+      { racers.map( (r,i) => <RacerTile key={i} racer={r} /> )}
     </div>
   )
 }
