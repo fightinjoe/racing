@@ -4,7 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 interface RacerState {
   racers: RacerSchema[],
 
-  addRacer: (name: string, sailNumber: string) => RacerSchema,
+  addRacer: (name: string, sailNumber: string, fleet: FleetSchema) => RacerSchema,
   clearRacers: () => void
 }
 
@@ -13,13 +13,13 @@ export const useRacerStore = create<RacerState>()(
     (set, get) => ({
       racers: [],
 
-      addRacer: (name: string, sailNumber: string) => {
+      addRacer: (name, sailNumber, fleet) => {
         const racer: RacerSchema = {
           name,
           sailNumber,
+          fleet,
           role: 'Racer',
           id: name + Date.now(),
-          fleet: 'A',
           isGuest: false
         }
         set({ racers: [...get().racers, racer] })
