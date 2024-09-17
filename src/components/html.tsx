@@ -18,10 +18,18 @@ function small({children}: {children: React.ReactNode}) {
   )
 }
 
-function back({url}: {url?: string}) {
+/**
+ * Displays a <-- Back button
+ * @param url optional string URL to push into the Next router
+ * @param onClick option click handler that replaces default click behavior
+ * @returns 
+ */
+function back({url, onClick}: {url?: string, onClick?: ()=>void}) {
   const router = useRouter()
 
-  function handleClick() {
+  const handleClick = () => {
+    if (onClick) return onClick()
+
     url
     ? router.push(url)
     : router.back()

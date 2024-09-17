@@ -35,7 +35,7 @@ export default function RacePage({params}: {params: {id: string}}) {
           <Timer start={ race!.startTime } />
         </strong>
 
-        <small className="flex-auto">2. Windward Leeward</small>
+        <small className="flex-auto">{race.course}</small>
 
         <button className="bg-white px-2 py-1 rounded">
           <small>Cancel race</small>
@@ -51,7 +51,7 @@ export default function RacePage({params}: {params: {id: string}}) {
           <Duration start={ race.startTime } finish={ race.finishTime! } />
         </strong>
         <small>
-          Finished • Course Type
+          Finished • { race.course }
         </small>
       </div>
     )

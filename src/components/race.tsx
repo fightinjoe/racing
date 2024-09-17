@@ -13,24 +13,24 @@ import { Timer } from "./timer"
  * create the race, but allows for course selection that is required to begin the race
  * @returns 
  */
-function StartRacePartial({fleet = 'AB', count}: {fleet?:FleetSchema, count: number}) {
-  const router = useRouter()
+// function StartRacePartial({fleet = 'AB', count}: {fleet?:FleetSchema, count: number}) {
+//   const router = useRouter()
 
-  const handleClick = () => {
-    // redirect to the race
-    router.push(`/races/course`)
-  }
+//   const handleClick = () => {
+//     // redirect to the race
+//     router.push(`/races/course`)
+//   }
 
-  return (
-    <button
-      className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
-      onClick={ handleClick }
-    >
-      <HTML.h1>New { fleet } race</HTML.h1>
-      <HTML.small>Start race #{ count }</HTML.small>
-    </button>
-  )
-}
+//   return (
+//     <button
+//       className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
+//       onClick={ handleClick }
+//     >
+//       <HTML.h1>New { fleet } race</HTML.h1>
+//       <HTML.small>Start race #{ count }</HTML.small>
+//     </button>
+//   )
+// }
 
 function BeginRacePartial({fleet = 'AB', course, count, disabled}:
   {fleet?:FleetSchema, course?:CourseSchema, count: number, disabled?: boolean}) {
@@ -77,7 +77,7 @@ function RunRacePartial({race}:{race:RaceSchema}) {
         <span>•</span>
         <span>Race { race.id }</span>
       </HTML.h1>
-      <HTML.small>Course name</HTML.small>
+      <HTML.small>{ race.course }</HTML.small>
     </button>
   )
 }
@@ -105,7 +105,7 @@ function ShowRacePartial({race}:{race:RaceSchema}) {
 }
 
 const Race = {
-  start: StartRacePartial,
+  // start: StartRacePartial,
   begin: BeginRacePartial,
   run: RunRacePartial,
   show: ShowRacePartial

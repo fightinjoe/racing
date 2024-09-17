@@ -39,6 +39,10 @@ export class Race {
     return this.unfinishedRacers.length === 0
   }
 
+  get course(): CourseSchema {
+    return this._race.course
+  }
+
   /**
    * Boolean representing whether any racher has finished the race yet
    */
