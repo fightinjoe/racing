@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware'
 interface RaceState {
   races: RaceSchema[],
 
-  startRace: (fleet?:FleetSchema) => RaceSchema,
+  startRace: (fleet?:FleetSchema, course?:CourseSchema) => RaceSchema,
   finishRacer: (racer: RacerSchema, race: RaceSchema) => void,
   clearRaces: () => void
 }
@@ -22,12 +22,13 @@ export const useRaceStore = create<RaceState>()(
        * @param fleet The racing fleet for which to start the race
        * @returns 
        */
-      startRace: (fleet:FleetSchema = 'AB') => {
+      startRace: (fleet:FleetSchema = 'AB', course:CourseSchema = '1. Triangle') => {
         const raceCount = get().races.filter(r=>r.fleet===fleet).length
 
         const race: RaceSchema = {
           id: `${ raceCount+1 }${fleet}`,
-          fleet: fleet,
+          fleet,
+          course,
           startTime: Date.now(),
           finishers: []
         }

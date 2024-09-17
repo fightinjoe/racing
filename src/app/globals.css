@@ -16,6 +16,10 @@
 }
 
 @layer components {
+  body * {
+    @apply transition-all duration-150;
+  }
+
   /* RadioTabs
    *   Stylized Radio button + Label that appears as a tabbed
    *   toggle between 2, 3, or 4 options, displayed as a horizontal list
@@ -46,14 +50,18 @@
    *   Stylized Radio button + Label that appears as a clickable tile
    *   that remains selected once clicked
    */
-  .RadioTile input[type=radio] {
+   .RadioTile input[type=radio] {
     @apply hidden;
   }
 
   .RadioTile label {
-    @apply p-1;
-    @apply border-2 border-white;
-    @apply bg-white;
+    @apply p-1 h-full;
+    @apply border-2 border-ocean-100;
+    @apply bg-ocean-100;
+  }
+
+  .RadioTile label:hover {
+    @apply bg-ocean-200;
   }
 
   .RadioTile input:checked + label {

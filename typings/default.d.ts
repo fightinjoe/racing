@@ -3,9 +3,9 @@ import * as Schemas from "@/schemas/default"
 
 declare global {
   type RoleSchema = z.infer<typeof Schemas.roleSchema>
-  
   type FleetSchema = z.infer<typeof Schemas.fleetSchema>
   type SailSizeSchema = z.infer<typeof Schemas.sailSizeSchema>
+  type CourseSchema = z.infer<typeof Schemas.courseSchema>
   type ConfigSchema = {
     sailSize: SailSizeSchema,
     fleets: FleetSchema[],

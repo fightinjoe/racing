@@ -32,13 +32,16 @@ function StartRacePartial({fleet = 'AB', count}: {fleet?:FleetSchema, count: num
   )
 }
 
-function BeginRacePartial({fleet = 'AB', count}: {fleet?:FleetSchema, count: number}) {
+function BeginRacePartial({fleet = 'AB', course, count, disabled}:
+  {fleet?:FleetSchema, course?:CourseSchema, count: number, disabled?: boolean}) {
   const router = useRouter()
   const startRace = useRaceStore(s=>s.startRace)
 
   const handleClick = () => {
+    if (disabled) return
+
     // create the race
-    const race = startRace(fleet)
+    const race = startRace(fleet, course)
 
     // redirect to the race
     router.push(`/races/${race.id}`)
@@ -46,8 +49,9 @@ function BeginRacePartial({fleet = 'AB', count}: {fleet?:FleetSchema, count: num
 
   return (
     <button
-      className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
+      className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500 disabled:bg-gray-200"
       onClick={ handleClick }
+      disabled={ disabled }
     >
       <HTML.h1>Begin start sequence</HTML.h1>
       <small>Race {count} - {fleet} fleet</small>

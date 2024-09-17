@@ -7,12 +7,13 @@ import HTML from "@/components/html"
 import Race from "@/components/race"
 import { toId } from "@/lib/string"
 
+import { courseSchema } from "@/schemas/default"
+
 export default function CourseSelection({fleet}: {fleet:FleetSchema}) {
   const races = useRaceStore(s=>s.races)
   const raceCount = races.filter(r => r.fleet === fleet).length
 
-    const [course, setCourse] = useState<string>('')
-
+  const [course, setCourse] = useState<CourseSchema | undefined>()
 
   const imgs = [
     ['1_triangle.png',         '1. Triangle'],
@@ -23,31 +24,8 @@ export default function CourseSelection({fleet}: {fleet:FleetSchema}) {
     ['6_no_jibe_upwind.png',   '6. No Jibe upwind finish'],
   ]
 
-  function _Course({img, title}:{img:string, title:string}) {
-    const id = toId(title)
-
-    const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-      console.log(e.target.value)
-      setCourse(e.target.value)
-    }
-
-    return (
-      <div className="RadioTile">
-        <input
-          type="radio"
-          id={id}
-          name="course"
-          value={title}
-          checked={course === title}
-          onChange={onChange}
-        />
-        <label htmlFor={id} className="col-2 items-center">
-          <img src={`/imgs/${img}`} className="h-[87px]" />
-          <small className="text-center">{ title }</small>
-        </label>
-      </div>
-      
-    )
+  const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setCourse( courseSchema.parse(e.target.value) )
   }
 
   return (
@@ -58,10 +36,25 @@ export default function CourseSelection({fleet}: {fleet:FleetSchema}) {
       </header>
       
       <div className="grid grid-cols-3 gap-2">
-        { imgs.map( ([img, title],i) => <_Course img={img} title={title} key={i} /> ) }
+        { imgs.map( ([img, title],i) => (
+            <div className="RadioTile" key={i}>
+              <input
+                type="radio"
+                id={ toId(title) }
+                name="course"
+                value={title}
+                checked={course === title}
+                onChange={onChange}
+              />
+              <label htmlFor={ toId(title) } className="col-2 items-center">
+                <img src={`/imgs/${img}`} className="h-[87px]" />
+                <small className="text-center">{ title }</small>
+              </label>
+            </div>
+        ) ) }
       </div>
 
-      <Race.begin fleet={fleet} count={raceCount+1} />
+      <Race.begin fleet={fleet} course={course} count={raceCount+1} disabled={ !course } />
     </main>
   )
 }

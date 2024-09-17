@@ -8,6 +8,15 @@ export const fleetSchema = z.enum(['A', 'B', 'AB'])
 
 export const sailSizeSchema = z.enum(['small', 'large'])
 
+export const courseSchema = z.enum([
+  '1. Triangle',
+  '2. Windward Leeward',
+  '3. Golden Cup',
+  '4. WL twice around',
+  '5. No Jibe',
+  '6. No Jibe upwind finish'
+])
+
 // The different possible ways a racing participant might not finish the race.
 // DSQ = Disqualified (see finishers.note)
 // DNF = Did not finish
@@ -80,6 +89,9 @@ export const raceBase = z.object({
 
   // The fleet that is racing
   fleet: fleetSchema,
+
+  // The course being raced
+  course: courseSchema,
 
   // The time the race starts
   startTime: z.number(),

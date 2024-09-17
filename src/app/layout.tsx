@@ -18,7 +18,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={ `${inter.className} bg-gray-50`}>
+      <body className={ `${inter.className} bg-gray-50 transition-all duration-500`}>
 
         <div className="ContainerMeat mx-auto w-[390px] bg-white shadow">
           {children}
