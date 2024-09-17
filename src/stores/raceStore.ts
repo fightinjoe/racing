@@ -1,11 +1,14 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+import { Race } from '@/models/race'
+
 interface RaceState {
   races: RaceSchema[],
 
   startRace: (fleet?:FleetSchema, course?:CourseSchema) => RaceSchema,
   finishRacer: (racer: RacerSchema, race: RaceSchema) => void,
+  cancelRace: (race: RaceSchema) => void,
   clearRaces: () => void
 }
 
@@ -29,7 +32,7 @@ export const useRaceStore = create<RaceState>()(
           id: `${ raceCount+1 }${fleet}`,
           fleet,
           course,
-          startTime: Date.now(),
+          startTime: Date.now() + Race.CONFIG.countdownDuration,
           finishers: []
         }
 
@@ -53,6 +56,19 @@ export const useRaceStore = create<RaceState>()(
         set({ races: [
           ...get().races.filter(r=>r.id!==race.id),
           { ...race, finishers: [...race.finishers, finisher]}
+        ]})
+      },
+
+      /**
+       * Cancels an existing race
+       */
+      cancelRace: (race_schema) => {
+        const race = new Race(race_schema)
+
+        if (race.canCancel ) throw new Error('A race that has finishers cannot be canceled')
+
+        set({races:[
+          ...get().races.filter( r => r.id !== race.id )
         ]})
       },
 

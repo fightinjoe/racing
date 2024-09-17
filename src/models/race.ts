@@ -1,3 +1,5 @@
+export type RaceState = 'before-start' | 'can-recall' | 'racing'
+
 export class Race {
   // The current race
   _race: RaceSchema
@@ -5,15 +7,29 @@ export class Race {
   // All racers participating in the race, filtered by `_race.fleet`
   _racers: RacerSchema[]
 
-  constructor(race: RaceSchema, racers: RacerSchema[]) {
-    this._race = race
-    this._racers = racers.filter( r => r.fleet === race.fleet )
+  static CONFIG = {
+    // Time in milliseconds for the countdown
+    countdownDuration: 10 * 1000 // 2 * 60 * 1000
   }
 
-  // The time the race started
-  get startTime(): number {
-    return this._race.startTime
+  constructor(race: RaceSchema, racers?: RacerSchema[]) {
+    this._race = race
+    this._racers = racers
+      ? racers.filter( r => r.fleet === race.fleet )
+      : []
   }
+
+  /*== Simple getters ==*/
+
+  get startTime(): number { return this._race.startTime }
+
+  get finishers(): RacerSchema[] { return this._race.finishers }
+
+  get id(): string { return this._race.id }
+
+  get course(): CourseSchema { return this._race.course }
+
+  /*== Calculated getters ==*/
 
   // The time the race finished
   get finishTime(): number | undefined {
@@ -21,10 +37,6 @@ export class Race {
 
     const lastFinisher = this._race.finishers.at(-1)
     return lastFinisher?.finishedAt
-  }
-
-  get finishers(): RacerSchema[] {
-    return this._race.finishers
   }
 
   // The list of all racers who haven't yet finished the race
@@ -39,8 +51,28 @@ export class Race {
     return this.unfinishedRacers.length === 0
   }
 
-  get course(): CourseSchema {
-    return this._race.course
+  // Returns the State Machine state of the race
+  get fullRaceState(): [RaceState, number] {
+    const duration = Date.now() - this.startTime
+
+    const s =
+      duration < 0 ? 'before-start' :
+      duration < Race.CONFIG.countdownDuration ? 'can-recall' :
+      'racing'
+
+    return [s, duration]
+  }
+
+  get raceState(): RaceState {
+    return this.fullRaceState[0]
+  }
+
+  /**
+   * Return whether or not a race can be canceled. Any race that doesn't have
+   * any finishers can be canceled
+   */
+  get canCancel(): boolean {
+    return !!this.finishers.length
   }
 
   /**

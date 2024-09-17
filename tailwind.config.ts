@@ -36,7 +36,8 @@ const config: Config = {
         'ocean-800': '#2451B8',
         'aqua-300': '#80F6DD',
         'aqua-400': '#2CF0C6',
-        'aqua-500': '#04E0B1'
+        'aqua-500': '#04E0B1',
+        'clear-100': '#FFFFFF66'
       },
     },
   },

@@ -21,7 +21,7 @@ type ModalConfig = {
 
 export default function Home() {
   const racers = useRacerStore(s=>s.racers)
-  const [races, startRace] = useRaceStore(s=>[s.races, s.startRace])
+  const races = useRaceStore(s=>s.races)
   const config = useDetailsStore(s=>s.config)
 
   const raceDay = new RaceDay(racers, races, config)
