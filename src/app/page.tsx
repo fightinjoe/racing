@@ -42,7 +42,7 @@ export default function Home() {
         <section className="bg-white p-4">
           { raceDay.canRace()
             // Print the races that have happened already
-            ?  <div className="row-2">
+            ?  <div className={ `gap-2 grid grid-cols-${ raceDay.fleets.length }`}>
                 {raceDay.fleets.map( (fleet,i) =>
                   (<FleetRacesPartial {...{fleet, raceDay, onStartRace: setModalConfig}} key={i} />) )
                 }
@@ -110,7 +110,7 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
   }
 
   return (
-    <div className="p-4 col-2">
+    <div className="py-4 col-2">
       <HTML.h1>Setup</HTML.h1>
 
       <div className="row-2">
