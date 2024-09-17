@@ -82,14 +82,14 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
         >
           <HTML.h1>Sail size</HTML.h1>
 
-          <fieldset className="SelectBox mb-4">
+          <fieldset className="RadioTabs mb-4">
             <Form.Radio name="sailSize" value="small" register={register}>Small</Form.Radio>
             <Form.Radio name="sailSize" value="large" register={register}>Large</Form.Radio>
           </fieldset>
 
           <HTML.h1>Fleet size</HTML.h1>
 
-          <fieldset className="SelectBox">
+          <fieldset className="RadioTabs">
             <Form.Radio name="fleetSize" value={'1'} register={register}>1 single fleet</Form.Radio>
             <Form.Radio name="fleetSize" value={'2'} register={register}>2 separate fleets</Form.Radio>
           </fieldset>

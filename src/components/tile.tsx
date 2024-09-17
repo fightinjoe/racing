@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation"
 
 interface TileProps {
-  title: string,
+  title: string | React.ReactNode,
   subtitle: string | React.ReactNode,
   className?: string,
   onClick?: () => void,

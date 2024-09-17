@@ -1,30 +1,25 @@
 import React from "react"
 import { FieldValues, useForm, UseFormRegister, Path } from "react-hook-form"
-
-interface FormParams<T> {
-  defaultValues: T,
-  children: React.ReactNode,
-  onSubmit: () => void
-}
+import { toId } from "@/lib/string"
 
 interface RadioParams<T extends FieldValues> {
   name: Path<T>,
-  register: UseFormRegister<T>,
+  register?: UseFormRegister<T>,
   value: string,
   children: React.ReactNode,
   rest?: any
 }
 
 function Radio<T extends FieldValues>({name, register, value, children, ...rest}: RadioParams<T>) {
-  const id = value
-    .toString()
-    .toLowerCase()
-    .replace(/ /g,'-')          // replace ' ' with '-'
-    .replace(/[^a-z0-9-]/g, '') // remove non alpha-numeric values
+  const id = toId(value)
 
   return (
     <div>
-      <input type="radio" id={ id } value={ value } {...register(name)} {...rest} />
+      {
+        register
+        ? <input type="radio" id={ id } value={ value } {...register(name)} {...rest} />
+        : <input type="radio" id={ id } value={ value } {...rest} />
+      }
       <label htmlFor={ id }>{ children }</label>
     </div>
   )

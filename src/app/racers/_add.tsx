@@ -52,7 +52,7 @@ export default function AddPartial() {
         {...register('sailNumber')}
       />
 
-      <fieldset className="SelectBox">
+      <fieldset className="RadioTabs">
         <Form.Radio name="fleet" value={'A'} register={register}>A fleet</Form.Radio>
         <Form.Radio name="fleet" value={'B'} register={register}>B fleet</Form.Radio>
       </fieldset>

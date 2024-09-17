@@ -16,28 +16,52 @@
 }
 
 @layer components {
-  .SelectBox {
+  /* RadioTabs
+   *   Stylized Radio button + Label that appears as a tabbed
+   *   toggle between 2, 3, or 4 options, displayed as a horizontal list
+   */
+  .RadioTabs {
     @apply row-0 py-1;
     @apply text-sm;
   }
 
-  .SelectBox input[type=radio] {
+  .RadioTabs input[type=radio] {
     @apply hidden;
   }
 
-  .SelectBox label {
+  .RadioTabs label {
     @apply bg-gray-200;
     @apply px-3 py-1 my-1;
     @apply border-2 border-x-gray-200 border-y-white;
     @apply cursor-pointer;
   }
 
-  .SelectBox input:checked + label {
+  .RadioTabs input:checked + label {
     @apply py-2 my-0;
     @apply bg-white;
     @apply border-ocean-400;
   }
 
+  /* RadioButton
+   *   Stylized Radio button + Label that appears as a clickable tile
+   *   that remains selected once clicked
+   */
+  .RadioTile input[type=radio] {
+    @apply hidden;
+  }
+
+  .RadioTile label {
+    @apply p-1;
+    @apply border-2 border-white;
+    @apply bg-white;
+  }
+
+  .RadioTile input:checked + label {
+    @apply border-ocean-400;
+    @apply bg-ocean-100;
+  }
+
+  /* Submit button styling */
   .ButtonSubmit {
     @apply bg-ocean-400 text-white text-sm;
     @apply px-4 py-1;
