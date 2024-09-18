@@ -20,33 +20,33 @@
     @apply transition-all duration-150;
   }
 
-  /* RadioTabs
+  /* RadioSlider
    *   Stylized Radio button + Label that appears as a tabbed
    *   toggle between 2, 3, or 4 options, displayed as a horizontal list
    */
-  .RadioTabs {
+  .RadioSlider {
     @apply row-0 py-1;
     @apply text-sm;
   }
 
-  .RadioTabs input[type=radio] {
+  .RadioSlider input[type=radio] {
     @apply hidden;
   }
 
-  .RadioTabs label {
+  .RadioSlider label {
     @apply bg-gray-200;
     @apply px-3 py-1 my-1;
     @apply border-2 border-x-gray-200 border-y-white;
     @apply cursor-pointer;
   }
 
-  .RadioTabs input:checked + label {
+  .RadioSlider input:checked + label {
     @apply py-2 my-0;
     @apply bg-white;
     @apply border-ocean-400;
   }
 
-  /* RadioButton
+  /* RadioTile
    *   Stylized Radio button + Label that appears as a clickable tile
    *   that remains selected once clicked
    */
@@ -67,6 +67,30 @@
   .RadioTile input:checked + label {
     @apply border-ocean-400;
     @apply bg-ocean-100;
+  }
+
+  /* RadioTabs
+   *
+   */
+   .RadioTabs {
+    @apply row-2 justify-center py-1 mb-2 w-full;
+    @apply text-sm;
+  }
+
+  .RadioTabs input[type=radio] {
+    @apply hidden;
+  }
+
+  .RadioTabs label {
+    @apply px-3 py-1 my-1;
+    @apply border-b-2 border-x-gray-200 border-y-white;
+    @apply cursor-pointer;
+  }
+
+  .RadioTabs input:checked + label {
+    @apply py-2 my-0;
+    @apply bg-white;
+    @apply border-ocean-400;
   }
 
   /* Submit button styling */
