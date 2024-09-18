@@ -73,9 +73,15 @@ function ShowRacePartial({race}:{race:RaceSchema}) {
     <button
       className="block flex flex-col p-4 bg-ocean-100 hover:bg-ocean-200"
       onClick={ () => router.push(`/races/${race.id}`) }
+      title={ `Race ${race.id} - 1st: ${first.name} (${duration})` }
     >
-      <HTML.h1>Race {race.id}</HTML.h1>
-      <HTML.small>1st: { first.name } @ { duration }</HTML.small>
+      <HTML.h1 className="row-2 items-center w-full text-left">
+        <span className="grow">Race {race.id}</span>
+        <HTML.small className="font-light">{ duration }</HTML.small>
+      </HTML.h1>
+      <HTML.small className="text-left truncate w-full text-gray-500 font-light">
+        1st: { first.name }
+      </HTML.small>
     </button>
   )
 }

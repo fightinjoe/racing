@@ -1,20 +1,20 @@
 import { useRouter } from "next/navigation"
 
-interface NodeParams {
-  className?: string,
-  children?: React.ReactNode
-}
+type HeadingProps = React.PropsWithChildren<React.HTMLAttributes<HTMLHeadingElement>>
 
-function h1({className, children}: NodeParams) {
+function h1({children, ...rest}: HeadingProps) {
+  const className = `font-medium ${rest.className}`
 
   return (
-    <h1 className={`font-medium ${className}`}>{ children }</h1>
+    <h1 className={className}>{ children }</h1>
   )
 }
 
-function small({children}: {children: React.ReactNode}) {
+type SmallProps = React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
+
+function small({children, ...rest}: SmallProps) {
   return (
-    <small>{ children }</small>
+    <small {...rest}>{ children }</small>
   )
 }
 
