@@ -3,7 +3,6 @@
 import { useRouter } from "next/navigation"
 import { useRaceStore } from "@/stores/raceStore"
 
-import Tile from "@/components/tile"
 import HTML from '@/components/html'
 import { printDuration } from "@/lib/printer"
 import { Timer } from "./timer"
@@ -25,7 +24,7 @@ function StartRacePartial({fleet = 'AB', course, count, disabled}:
 
   return (
     <button
-      className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500 disabled:bg-gray-200"
+      className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500 disabled:TileTodo disabled:bg-white disabled:border-2"
       onClick={ handleClick }
       disabled={ disabled }
     >
