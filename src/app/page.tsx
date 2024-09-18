@@ -207,7 +207,7 @@ function CourseModal({fleet, count, onCancel}:
         ) ) }
       </div>
 
-      <Race.begin fleet={fleet} course={course} count={count} disabled={ !course } />
+      <Race.start fleet={fleet} course={course} count={count} disabled={ !course } />
     </div>
   )
 }

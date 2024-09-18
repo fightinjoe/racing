@@ -8,31 +8,7 @@ import HTML from '@/components/html'
 import { printDuration } from "@/lib/printer"
 import { Timer } from "./timer"
 
-/**
- * React Component for printing the START RACE button on the main page. This does not
- * create the race, but allows for course selection that is required to begin the race
- * @returns 
- */
-// function StartRacePartial({fleet = 'AB', count}: {fleet?:FleetSchema, count: number}) {
-//   const router = useRouter()
-
-//   const handleClick = () => {
-//     // redirect to the race
-//     router.push(`/races/course`)
-//   }
-
-//   return (
-//     <button
-//       className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
-//       onClick={ handleClick }
-//     >
-//       <HTML.h1>New { fleet } race</HTML.h1>
-//       <HTML.small>Start race #{ count }</HTML.small>
-//     </button>
-//   )
-// }
-
-function BeginRacePartial({fleet = 'AB', course, count, disabled}:
+function StartRacePartial({fleet = 'AB', course, count, disabled}:
   {fleet?:FleetSchema, course?:CourseSchema, count: number, disabled?: boolean}) {
   const router = useRouter()
   const startRace = useRaceStore(s=>s.startRace)
@@ -105,8 +81,7 @@ function ShowRacePartial({race}:{race:RaceSchema}) {
 }
 
 const Race = {
-  // start: StartRacePartial,
-  begin: BeginRacePartial,
+  start: StartRacePartial,
   run: RunRacePartial,
   show: ShowRacePartial
 }
