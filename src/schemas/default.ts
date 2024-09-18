@@ -44,7 +44,7 @@ const participantBase = z.object({
   isGuest: z.boolean(),
 
   // If racing, the participant's sail number
-  sailNumber: z.string().optional(),
+  sailNumber: z.string(),
 
   // If racing, the participant's boat name
   boatName: z.string().optional(),
