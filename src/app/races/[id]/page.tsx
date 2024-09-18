@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useRaceStore } from "@/stores/raceStore"
 import { useRacerStore } from "@/stores/racerStore"
@@ -8,7 +8,7 @@ import { useRacerStore } from "@/stores/racerStore"
 import { Race, RaceState } from "@/models/race"
 
 import FinishRacerPartial from "./_finishRacer"
-import { FinisherTile } from "@/components/tile"
+import Tile, { FinisherTile } from "@/components/tile"
 import { Duration, Timer } from "@/components/timer"
 import HTML from "@/components/html"
 
@@ -31,6 +31,7 @@ export default function RacePage({params}: {params: {id: string}}) {
   useEffect(() => {
     if (!initialState) return
 
+    // Tracks intervals so they can be canceled when the component is de-rendered
     let intervals: NodeJS.Timeout[] = []
     setRaceState(initialState)
 
@@ -49,8 +50,6 @@ export default function RacePage({params}: {params: {id: string}}) {
         setRaceState('racing')
       }, Race.CONFIG.countdownDuration - duration!))
     }
-
-
 
     return () => {
       intervals.map( i => clearTimeout(i) )
@@ -71,7 +70,7 @@ export default function RacePage({params}: {params: {id: string}}) {
   /*== Local partials ==*/
 
   function _Banner() {
-    return race.isFinished ? <_DurationBanner /> : <_TimerBanner />
+    return race!.isFinished ? <_DurationBanner /> : <_TimerBanner />
   }
 
   // Ticking timer that displays as a banner while a race is being run
@@ -106,10 +105,10 @@ export default function RacePage({params}: {params: {id: string}}) {
     return (
       <div className="row-2 items-center">
         <strong className="w-[100px] p-4">
-          <Duration start={ race.startTime } finish={ race.finishTime! } />
+          <Duration start={ race!.startTime } finish={ race!.finishTime! } />
         </strong>
         <small>
-          Finished • { race.course }
+          Finished • { race!.course }
         </small>
       </div>
     )
@@ -120,22 +119,31 @@ export default function RacePage({params}: {params: {id: string}}) {
       <div className="p-4 col-2">
         <h2><strong>Still racing</strong></h2>
         <div className="row-wrap-2">
-          { race.unfinishedRacers.map( (r,i) => (
-            <FinishRacerPartial key={i} race={_race!} racer={r} />
+          { race!.unfinishedRacers.map( (r,i) => (
+            raceState === 'racing'
+            ? <FinishRacerPartial key={i} race={_race!} racer={r} />
+            : <Tile key={i} title={r.sailNumber} subtitle={r.name} className="TileTodo bg-white" />
           )) }
         </div>
       </div>
     )
   }
 
+  // FINISHERS section that lists the racers that have finished
   function _Finishers() {
     return (
-      <div className="p-4 col-2 bg-ocean-200">
-        <HTML.h1>Finshers</HTML.h1>
-        <div className="row-wrap-2">
-          { race.finishers.map( (f,i) => (
-            <FinisherTile key={i} position={i} racer={ f } /> 
-          )) }
+      <div className="py-4 col-2 bg-ocean-200">
+        <HTML.h1 className="px-4">Finshers</HTML.h1>
+        <div className="py-4 overflow-x-scroll scroll-smooth">
+          <div className="row-2 mx-4">
+            { 
+              race!.hasFinishers
+              ? race!.finishers.map( (f,i) => (
+                  <FinisherTile key={i} position={i} racer={ f } />
+                ))
+              : <Tile title="..." subtitle="No finishers" className="TileTodo bg-white" />
+            }
+          </div>
         </div>
       </div>
     )
@@ -144,16 +152,43 @@ export default function RacePage({params}: {params: {id: string}}) {
   return (
     <div>
       <header className="p-4 row-2">
-        <HTML.back />
-        Single race { _race.id }
-        ({raceState})
+        <HTML.back /> Single race { _race!.id }
       </header>
 
       <_Banner />
 
-      { race.hasFinishers && <_Finishers /> }
+      { raceState === 'racing' && race && <FinishersPartial race={race} /> }
 
-      { !race.isFinished && <_StillRacing /> }
+      { !race!.isFinished && <_StillRacing /> }
     </div>
   )
 }
+
+  function FinishersPartial({race}: {race:Race}) {
+    const wrapper = useRef(null)
+
+    useEffect(() => {
+      // debugger
+      if (!wrapper.current) return
+      
+      const elt = wrapper.current as HTMLDivElement
+      elt.scrollLeft = elt.scrollWidth - elt.clientWidth
+    },[race])
+
+    return (
+      <div className="py-4 col-2 bg-ocean-200">
+        <HTML.h1 className="px-4">Finshers</HTML.h1>
+        <div className="py-4 overflow-x-scroll scroll-smooth" ref={wrapper}>
+          <div className="row-2 mx-4">
+            { 
+              race!.hasFinishers
+              ? race!.finishers.map( (f,i) => (
+                  <FinisherTile key={i} position={i} racer={ f } />
+                ))
+              : <Tile title="..." subtitle="No finishers" className="TileTodo bg-white" />
+            }
+          </div>
+        </div>
+      </div>
+    )
+  }

@@ -82,7 +82,7 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
         title="+"
         subtitle="Add racers"
         href="/racers"
-        className="border border-dashed border-gray-300 text-gray-400"
+        className="TileTodo"
       />
     : <NavTile
         title="Racers"

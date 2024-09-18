@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef } from "react"
 import { useRouter } from "next/navigation"
 
 interface TileProps {
@@ -94,11 +95,13 @@ export function FinisherTile({racer, position}:{racer: RacerSchema, position: nu
     position === 2 ? 'bg-blue-400' :
     'bg-gray-300 text-black'
 
+  const ref = useRef()
+
   return (
     <Tile
       title={ racer.sailNumber || '?' }
       subtitle={ racer.name }
-      className="bg-white border-gray-300"
+      className="bg-white border-gray-300 shrink-0"
     >
       {/* Position badge */}
       <div className={`absolute ${bgColor} text-white top-[-8px] left-[-8px] rounded-full text-xs w-8 h-8 leading-8`}>
