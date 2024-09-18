@@ -38,6 +38,8 @@
     @apply px-3 py-1 my-1;
     @apply border-2 border-x-gray-200 border-y-white;
     @apply cursor-pointer;
+    /* BUG: forces parent to be the same height */
+    @apply flex;
   }
 
   .RadioSlider input:checked + label {
