@@ -11,7 +11,7 @@ import { sortSailNumbers } from "@/lib/string"
 export default function ListPartial() {
   const racers = useRacerStore(s=>s.racers)
 
-  const [sort, setSort] = useState<RacersSort>('number')
+  const [sort, setSort] = useState<RacersSort>('added')
 
   const handleClick: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSort(e.target.value as RacersSort)
@@ -37,7 +37,7 @@ export default function ListPartial() {
       {
         racers
           .sort( (r1, r2) => 
-            sort === 'added'  ?  -1 :
+            sort === 'added'  ?  (r1.id < r2.id ? -1 : 1) :
             sort === 'name'   ? (r1.name < r2.name ? -1 : 1) :
             sort === 'number' ? sortSailNumbers(r1.sailNumber, r2.sailNumber) :
             sort === 'fleet'  ? (r1.fleet === r2.fleet ? sortSailNumbers(r1.sailNumber, r2.sailNumber) : (r1.fleet < r2.fleet ? -1 : 1)) :

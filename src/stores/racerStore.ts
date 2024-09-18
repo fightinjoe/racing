@@ -19,7 +19,7 @@ export const useRacerStore = create<RacerState>()(
           sailNumber,
           fleet,
           role: 'Racer',
-          id: name + Date.now(),
+          id: Date.now() + name,
           isGuest: false
         }
         set({ racers: [...get().racers, racer] })
