@@ -2,7 +2,7 @@ import React from "react"
 import { FieldValues, useForm, UseFormRegister, Path } from "react-hook-form"
 import { toId } from "@/lib/string"
 
-interface RadioParams<T extends FieldValues> {
+interface RadioProps<T extends FieldValues> {
   name: Path<T>,
   register?: UseFormRegister<T>,
   value: string,
@@ -10,7 +10,7 @@ interface RadioParams<T extends FieldValues> {
   rest?: any
 }
 
-function Radio<T extends FieldValues>({name, register, value, children, ...rest}: RadioParams<T>) {
+function Radio<T extends FieldValues>({name, register, value, children, ...rest}: RadioProps<T>) {
   const id = toId(value)
 
   return (
@@ -25,8 +25,26 @@ function Radio<T extends FieldValues>({name, register, value, children, ...rest}
   )
 }
 
+interface TextProps<T extends FieldValues>
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'name'> {
+    register?: UseFormRegister<T>,
+    name: Path<T>
+  }
+
+function Text<T extends FieldValues>({ name, register, ...props }: TextProps<T>) {
+  return (
+    <input
+      type="text"
+      className={ `FormText ${props.className}`}
+      {...(register ? register(name) : {})}
+      { ...props }
+    />
+  )
+}
+
 const FormComponents = {
-  Radio
+  Radio,
+  Text
 }
 
 export default FormComponents

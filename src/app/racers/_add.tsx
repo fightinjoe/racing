@@ -13,20 +13,9 @@ type _FormData = {
 }
 
 export default function AddPartial() {
-  // const [name, setName] = useState('')
-  // const [sailNumber, setSailNumber] = useState('')
-
-  const { register, reset, handleSubmit, setValue } = useForm<_FormData>()
+  const { register, handleSubmit, setValue } = useForm<_FormData>()
 
   const addRacer = useRacerStore(s=>s.addRacer)
-
-  // const handleNameChange: ChangeEventHandler = (e:any) => {
-  //   setName( e.target.value )
-  // }
-
-  // const handleSailNumberChange: ChangeEventHandler = (e:any) => {
-  //   setSailNumber( e.target.value )
-  // }
   
   const onSubmit = (data: _FormData) => {
     console.log('submitted data', data)
@@ -38,18 +27,16 @@ export default function AddPartial() {
 
   return (
     <form className="p-4" onSubmit={handleSubmit(onSubmit)}>
-      <input
-        type="text"
+      <Form.Text
         placeholder="Name"
-        className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
-        {...register('name')}
+        register={register}
+        name="name"
       />
 
-      <input
-        type="text"
+      <Form.Text
         placeholder="Sail number"
-        className="mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0"
-        {...register('sailNumber')}
+        register={register}
+        name="sailNumber"
       />
 
       <fieldset className="RadioSlider">
