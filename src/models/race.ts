@@ -12,11 +12,13 @@ export class Race {
     countdownDuration: 10 * 1000 // 2 * 60 * 1000
   }
 
-  constructor(race: RaceSchema, racers?: RacerSchema[]) {
+  constructor(race: RaceSchema, racers: RacerSchema[] = []) {
     this._race = race
-    this._racers = racers
+
+    // If the race does not have a fleet, then all fleets are sailing combined
+    this._racers = race.fleet
       ? racers.filter( r => r.fleet === race.fleet )
-      : []
+      : racers
   }
 
   /*== Simple getters ==*/

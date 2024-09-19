@@ -6,7 +6,7 @@ import { Race } from '@/models/race'
 interface RaceState {
   races: RaceSchema[],
 
-  startRace: (fleet?:FleetSchema, course?:CourseSchema) => RaceSchema,
+  startRace: (course:CourseSchema, fleet?:FleetSchema) => RaceSchema,
   finishRacer: (racer: RacerSchema, race: RaceSchema) => void,
   cancelRace: (race: RaceSchema) => void,
   clearRaces: () => void
@@ -25,11 +25,11 @@ export const useRaceStore = create<RaceState>()(
        * @param fleet The racing fleet for which to start the race
        * @returns 
        */
-      startRace: (fleet:FleetSchema = 'AB', course:CourseSchema = '1. Triangle') => {
+      startRace: (course = '1. Triangle', fleet) => {
         const raceCount = get().races.filter(r=>r.fleet===fleet).length
 
         const race: RaceSchema = {
-          id: `${ raceCount+1 }${fleet}`,
+          id: `${ raceCount+1 }${fleet || ''}`,
           fleet,
           course,
           startTime: Date.now() + Race.CONFIG.countdownDuration,

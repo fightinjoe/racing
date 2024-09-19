@@ -14,7 +14,7 @@ export const useDetailsStore = create(
     (set, get) => ({
       config: {
         sailSize: 'small',
-        fleets: ['AB'],
+        raceSeparateFleets: true,
         hasSaved: false
       },
 
@@ -23,7 +23,7 @@ export const useDetailsStore = create(
         let newConfig = { hasSaved: true } as ConfigSchema
 
         newConfig.sailSize = sailSizeSchema.parse(data.sailSize)
-        newConfig.fleets = data.fleets.map( (f:any) => fleetSchema.parse(f) )
+        newConfig.raceSeparateFleets = data.raceSeparateFleets
 
         set({
           config: {

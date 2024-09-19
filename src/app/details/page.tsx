@@ -12,7 +12,7 @@ type MyFormData = {
   sailSize: SailSizeSchema,
   // react-hook-form wasn't registering changes with type <number>,
   // so a string is used instead
-  fleetSize: string
+  raceSeparateFleets: string
 }
 
 export default function DetailsPage() {
@@ -24,9 +24,7 @@ export default function DetailsPage() {
 
     newConfig.sailSize = data.sailSize
 
-    newConfig.fleets = data.fleetSize === '1'
-      ? ['AB']
-      : ['A', 'B']
+    newConfig.raceSeparateFleets = data.raceSeparateFleets === 'true'
 
     updateConfig( newConfig )
 
@@ -44,7 +42,7 @@ export default function DetailsPage() {
 function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:MyFormData) => void}) {
   const formData: MyFormData = {
     sailSize: data.sailSize,
-    fleetSize: data.fleets.length.toString()
+    raceSeparateFleets: data.raceSeparateFleets+''
   }
 
   /** Form registration **/
@@ -90,8 +88,8 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
           <HTML.h1>Fleet size</HTML.h1>
 
           <fieldset className="RadioSlider">
-            <Form.Radio name="fleetSize" value={'1'} register={register}>1 single fleet</Form.Radio>
-            <Form.Radio name="fleetSize" value={'2'} register={register}>2 separate fleets</Form.Radio>
+            <Form.Radio name="raceSeparateFleets" value={'false'} register={register}>Single fleet</Form.Radio>
+            <Form.Radio name="raceSeparateFleets" value={'true'} register={register}>Separate fleets</Form.Radio>
           </fieldset>
 
           <div className="row-4 justify-end mt-6">

@@ -4,7 +4,7 @@ import { z } from "zod"
 export const roleSchema = z.enum(['Racer', 'Race committee', 'Volunteer', 'Crash boat'])
 
 // The different possilble fleets a race might be run for
-export const fleetSchema = z.enum(['A', 'B', 'AB'])
+export const fleetSchema = z.enum(['A', 'B'])
 
 export const sailSizeSchema = z.enum(['small', 'large'])
 
@@ -88,7 +88,7 @@ export const raceBase = z.object({
   id: z.string(),
 
   // The fleet that is racing
-  fleet: fleetSchema,
+  fleet: fleetSchema.optional(),
 
   // The course being raced
   course: courseSchema,

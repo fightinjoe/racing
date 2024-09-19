@@ -8,7 +8,9 @@ declare global {
   type CourseSchema = z.infer<typeof Schemas.courseSchema>
   type ConfigSchema = {
     sailSize: SailSizeSchema,
-    fleets: FleetSchema[],
+
+    // Whether the fleets race separately (true) or together (false)
+    raceSeparateFleets: boolean,
 
     // Track whether the race configuration has been saved at least once
     hasSaved: boolean

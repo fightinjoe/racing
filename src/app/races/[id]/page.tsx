@@ -129,30 +129,10 @@ export default function RacePage({params}: {params: {id: string}}) {
     )
   }
 
-  // FINISHERS section that lists the racers that have finished
-  function _Finishers() {
-    return (
-      <div className="py-4 col-2 bg-ocean-200">
-        <HTML.h1 className="px-4">Finshers</HTML.h1>
-        <div className="py-4 overflow-x-scroll scroll-smooth">
-          <div className="row-2 mx-4">
-            { 
-              race!.hasFinishers
-              ? race!.finishers.map( (f,i) => (
-                  <FinisherTile key={i} position={i} racer={ f } />
-                ))
-              : <Tile title="..." subtitle="No finishers" className="TileTodo bg-white" />
-            }
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <div>
       <header className="p-4 row-2">
-        <HTML.back /> Single race { _race!.id }
+        <HTML.back /> Single race { _race!.id } { _race.fleet ? '' : '(combined)'}
       </header>
 
       <_Banner />

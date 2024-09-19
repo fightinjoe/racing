@@ -11,8 +11,15 @@ export class RaceDay {
     this._config=config
   }
 
+  get raceSeparateFleets(): boolean { return this._config.raceSeparateFleets }
+
+  /**
+   * Array of all of the "scoring fleets" for racers
+   */
   get fleets(): FleetSchema[] {
-    return this._config.fleets
+    return this._racers
+      .map(r => r.fleet)
+      .filter( (fleet,i,self) => self.indexOf(fleet) === i ) // remove duplicates
   }
 
   /**

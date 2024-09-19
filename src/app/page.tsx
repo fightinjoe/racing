@@ -15,7 +15,7 @@ import { RaceDay } from "@/models/raceday"
 import { capitalize, toId } from "@/lib/string"
 
 type ModalConfig = {
-  fleet: FleetSchema,
+  fleet?: FleetSchema,
   count: number
 } | undefined
 
@@ -42,11 +42,7 @@ export default function Home() {
         <section className="bg-white p-4">
           { raceDay.canRace()
             // Print the races that have happened already
-            ?  <div className={ `gap-2 grid ${ raceDay.fleets.length === 1 ? 'grid-cols-1' : 'grid-cols-2' }`}>
-                {raceDay.fleets.map( (fleet,i) =>
-                  (<FleetRacesPartial {...{fleet, raceDay, onStartRace: setModalConfig}} key={i} />) )
-                }
-              </div>
+            ?  <AllFleetsPartial {...{raceDay, setModalConfig}} />
 
             // Or only show the SETUP tiles if racing can't yet be started
             : <SetupPartial {...{raceDay}} />
@@ -96,7 +92,7 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
     return (
       config.hasSaved
       ? <NavTile
-          title={ config.fleets.length === 1 ? '1 fleet' : '2 fleets' }
+          title={ config.raceSeparateFleets ? '2 fleets' : '1 fleet' }
           subtitle={ `${ capitalize(config.sailSize) } sails` }
           href="/details"
         />
@@ -128,11 +124,32 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
   )
 }
 
+function AllFleetsPartial({ raceDay, setModalConfig }: {raceDay: RaceDay, setModalConfig: (config:ModalConfig)=>void}) {
+  // If the fleets are racing separately, then group the races and CTA in separate columns,
+  // one for each fleet
+  if(raceDay.raceSeparateFleets) {
+    const className = `grid-cols-${ raceDay.fleets.length }`
+
+    return (<div className={ `gap-2 grid ${ className }`}>
+      {raceDay.fleets.map( (fleet,i) =>
+        (<FleetRacesPartial {...{fleet, raceDay, onStartRace: setModalConfig}} key={i} />) )
+      }
+    </div>)
+  }
+  
+  return (<div className={ `gap-2 grid grid-cols-1`}>
+    <FleetRacesPartial {...{raceDay, onStartRace: setModalConfig}} />
+  </div>)
+}
+
 /**
  * Partial for displaying a fleet's races, and the option CTA to start a new race
+ * @param param.fleet Optional - leave empty when racing as a single fleet
+ * @param param.raceDay The RaceDay class instance to pull races from
+ * @returns 
  */
 function FleetRacesPartial({fleet, raceDay, onStartRace}:
-  {fleet: FleetSchema, raceDay: RaceDay, onStartRace: (c:ModalConfig)=>void}) {
+  {fleet?: FleetSchema, raceDay: RaceDay, onStartRace: (c:ModalConfig)=>void}) {
   const unfinishedRaces = raceDay.unfinishedRaces( fleet )
   const finishedRaces = raceDay.finishedRaces( fleet )
 
@@ -164,7 +181,7 @@ function FleetRacesPartial({fleet, raceDay, onStartRace}:
 }
 
 function CourseModal({fleet, count, onCancel}:
-  {fleet:FleetSchema, count:number, onCancel: ()=>void}) {
+  {fleet?:FleetSchema, count:number, onCancel: ()=>void}) {
   const [course, setCourse] = useState<CourseSchema | undefined>()
 
   const imgs = [
@@ -185,7 +202,7 @@ function CourseModal({fleet, count, onCancel}:
     <div className="p-4 col-4 absolute inset-0 bg-white">
       <header className="row-2">
         <HTML.back onClick={ onCancel } />
-        Race {count} - {fleet} fleet
+        Race {count} {fleet && `- ${fleet} fleet`}
       </header>
       
       <div className="grid grid-cols-3 gap-2">
@@ -207,7 +224,7 @@ function CourseModal({fleet, count, onCancel}:
         ) ) }
       </div>
 
-      <Race.start fleet={fleet} course={course} count={count} disabled={ !course } />
+      <Race.start fleet={fleet} course={course!} count={count} disabled={ !course } />
     </div>
   )
 }

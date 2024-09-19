@@ -7,8 +7,8 @@ import HTML from '@/components/html'
 import { printDuration } from "@/lib/printer"
 import { Timer } from "./timer"
 
-function StartRacePartial({fleet = 'AB', course, count, disabled}:
-  {fleet?:FleetSchema, course?:CourseSchema, count: number, disabled?: boolean}) {
+function StartRacePartial({fleet, course, count, disabled}:
+  {fleet?:FleetSchema, course:CourseSchema, count: number, disabled?: boolean}) {
   const router = useRouter()
   const startRace = useRaceStore(s=>s.startRace)
 
@@ -16,7 +16,7 @@ function StartRacePartial({fleet = 'AB', course, count, disabled}:
     if (disabled) return
 
     // create the race
-    const race = startRace(fleet, course)
+    const race = startRace(course, fleet)
 
     // redirect to the race
     router.push(`/races/${race.id}`)
@@ -29,7 +29,7 @@ function StartRacePartial({fleet = 'AB', course, count, disabled}:
       disabled={ disabled }
     >
       <HTML.h1>Begin start sequence</HTML.h1>
-      <small>Race {count} - {fleet} fleet</small>
+      <small>Race {count}{ fleet && ` - ${fleet} fleet` }</small>
     </button>
   )
 }
