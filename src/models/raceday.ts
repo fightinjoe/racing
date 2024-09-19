@@ -71,6 +71,12 @@ export class RaceDay {
   }
 
   canRace(): Boolean {
-    return this._racers.length >= RACER_FLOOR
+    let count = new Map()
+
+    // Count the racers for each fleet
+    this._racers.forEach( r => count.set( r.fleet, (count.get(r.fleet) || 0)+1 ))
+
+    // If any of the fleets have a count of less than RACER_FLOOR, then racing CAN'T begin
+    return !Array.from(count.values()).find( c => c < RACER_FLOOR )
   }
 }
