@@ -7,9 +7,7 @@ import HTML from "@/components/html"
 import Race from "@/components/race"
 import NextStep from "@/components/nextStep"
 
-import { useRaceStore } from "@/stores/raceStore"
-import { useRacerStore } from "@/stores/racerStore"
-import { useDetailsStore } from "@/stores/detailsStore"
+import { useRaceDayStore } from "@/stores/raceDayStore"
 import { RaceDay } from "@/models/raceday"
 
 import { capitalize, toId } from "@/lib/string"
@@ -20,9 +18,7 @@ type ModalConfig = {
 } | undefined
 
 export default function Home() {
-  const racers = useRacerStore(s=>s.racers)
-  const races = useRaceStore(s=>s.races)
-  const config = useDetailsStore(s=>s.config)
+  const [racers, races, config] = useRaceDayStore(s=>[s.racers, s.races, s.config])
 
   const raceDay = new RaceDay(racers, races, config)
 
@@ -42,7 +38,7 @@ export default function Home() {
         <section className="bg-white p-4">
           { raceDay.canRace()
             // Print the races that have happened already
-            ?  <AllFleetsPartial {...{raceDay, setModalConfig}} />
+            ? <RacesPartial {...{raceDay}} onStartRace={setModalConfig} />
 
             // Or only show the SETUP tiles if racing can't yet be started
             : <SetupPartial {...{raceDay}} />
@@ -61,16 +57,13 @@ export default function Home() {
 }
 
 function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
-  const config = useDetailsStore(s=>s.config)
-  const racers = useRacerStore(s=>s.racers)
-
   function _AddRacers() {
     const count = raceDay._racers.length
 
     const subtitle = <>
-      <strong>{ racers.filter(r=>r.fleet==='A').length }</strong> A fleet
+      <strong>{ raceDay.racers('A').length }</strong> A fleet
       <br />
-      <strong>{ racers.filter(r=>r.fleet==='B').length }</strong> B fleet
+      <strong>{ raceDay.racers('B').length }</strong> B fleet
     </>
 
     return count === 0
@@ -90,10 +83,10 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
 
   function _Details() {
     return (
-      config.hasSaved
+      raceDay._config.hasSaved
       ? <NavTile
-          title={ config.raceSeparateFleets ? '2 fleets' : '1 fleet' }
-          subtitle={ `${ capitalize(config.sailSize) } sails` }
+          title={ raceDay.raceSeparateFleets ? '2 fleets' : '1 fleet' }
+          subtitle={ `${ capitalize(raceDay.sailSize) } sails` }
           href="/details"
         />
       : <NavTile
@@ -124,58 +117,78 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
   )
 }
 
-function AllFleetsPartial({ raceDay, setModalConfig }: {raceDay: RaceDay, setModalConfig: (config:ModalConfig)=>void}) {
-  // If the fleets are racing separately, then group the races and CTA in separate columns,
-  // one for each fleet
-  if(raceDay.raceSeparateFleets) {
-    const className = `grid-cols-${ raceDay.fleets.length }`
-
-    return (<div className={ `gap-2 grid ${ className }`}>
-      {raceDay.fleets.map( (fleet,i) =>
-        (<FleetRacesPartial {...{fleet, raceDay, onStartRace: setModalConfig}} key={i} />) )
-      }
-    </div>)
-  }
-  
-  return (<div className={ `gap-2 grid grid-cols-1`}>
-    <FleetRacesPartial {...{raceDay, onStartRace: setModalConfig}} />
-  </div>)
+function RacesPartial({raceDay, onStartRace}:
+  {raceDay: RaceDay, onStartRace: (config:ModalConfig)=>void}) {
+  return (
+    <>
+      <CurrentRacesPartial {...{raceDay, onStartRace}} />
+      <ViewScoresButton />
+      <FinishedRacesPartial {...{raceDay}} />
+    </>
+  )
 }
 
-/**
- * Partial for displaying a fleet's races, and the option CTA to start a new race
- * @param param.fleet Optional - leave empty when racing as a single fleet
- * @param param.raceDay The RaceDay class instance to pull races from
- * @returns 
- */
-function FleetRacesPartial({fleet, raceDay, onStartRace}:
-  {fleet?: FleetSchema, raceDay: RaceDay, onStartRace: (c:ModalConfig)=>void}) {
-  const unfinishedRaces = raceDay.unfinishedRaces( fleet )
-  const finishedRaces = raceDay.finishedRaces( fleet )
+function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStartRace:(c:ModalConfig)=>void}) {
+  const fleets: (FleetSchema | undefined)[] = raceDay.fleets.length ? raceDay.fleets : [undefined]
+  const className = `gap-2 grid grid-cols-${ raceDay.fleets.length }`
 
+  let currentRaces = new Map<FleetSchema|undefined, RaceSchema|undefined>()
+  fleets.forEach( fleet => currentRaces.set(fleet, raceDay.unfinishedRaces(fleet)[0]) )
+
+  return (
+    <div className={className}>
+      {
+        fleets.map( (fleet, i) => (
+          currentRaces.get(fleet)
+          ? <Race.run race={ currentRaces.get(fleet)! } key={i} />
+          : <NextRaceButton {...{fleet, raceDay, onStartRace}} key={i} />
+        ))
+      }
+    </div>
+  )
+}
+
+function NextRaceButton({fleet, raceDay, onStartRace}:
+  {fleet:FleetSchema|undefined, raceDay:RaceDay, onStartRace:(c:ModalConfig)=>void}
+) {
   const nextRaceCount = raceDay.races(fleet).length + 1
 
   return (
-    <div className="col-2">
-      {/* Either the current race, or the CTA to start a race */}
-      <div className="col-2">
-        {
-          unfinishedRaces.length
-          ? <Race.run race={unfinishedRaces[0]} />
-          : <button
-              className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
-              onClick={ () => onStartRace({fleet, count: nextRaceCount}) }
-            >
-              <HTML.h1>New { fleet } race</HTML.h1>
-              <HTML.small>Start race #{ nextRaceCount }</HTML.small>
-            </button>
-        }
-      </div>
+    <button
+      className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
+      onClick={ () => onStartRace({fleet, count: nextRaceCount}) }
+    >
+      <HTML.h1>New { fleet } race</HTML.h1>
+      <HTML.small>Start race #{ nextRaceCount }</HTML.small>
+    </button>
+  )
+}
 
-      {/* All of the finished races */}
-      <div className="col-2">
-        { finishedRaces.reverse().map( r => <Race.show race={r} key={r.id} /> )}
-      </div>
+function ViewScoresButton() {
+  return (
+    <button className="w-full text-center py-4 text-ocean-500">
+      <small>View scores for the day</small>
+    </button>
+  )
+}
+
+function FinishedRacesPartial({raceDay}: {raceDay: RaceDay}) {
+  const fleets: (FleetSchema | undefined)[] = raceDay.fleets.length ? raceDay.fleets : [undefined]
+
+  const className = `gap-2 grid grid-cols-${ raceDay.fleets.length }`
+
+  let finishedRaces = new Map<FleetSchema|undefined, RaceSchema[]>()
+  fleets.forEach( fleet => finishedRaces.set(fleet, raceDay.finishedRaces(fleet)) )
+
+  return (
+    <div className={className}>
+      {
+        fleets.map( (fleet, i) => (
+          <div className="col-2" key={i}>
+            { finishedRaces.get(fleet)!.map( r => <Race.show race={r} key={r.id} /> ) }
+          </div>
+        ))
+      }
     </div>
   )
 }
