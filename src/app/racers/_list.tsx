@@ -2,14 +2,14 @@
 
 import { useState } from "react"
 
-import { useRacerStore } from "@/stores/racerStore"
+import { useRaceDayStore } from "@/stores/raceDayStore"
 import { RacerTile } from "@/components/tile"
 import Form from "@/components/form"
 
 import { sortSailNumbers } from "@/lib/string"
 
 export default function ListPartial() {
-  const racers = useRacerStore(s=>s.racers)
+  const racers = useRaceDayStore(s=>s.racers)
 
   const [sort, setSort] = useState<RacersSort>('added')
 

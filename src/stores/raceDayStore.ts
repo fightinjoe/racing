@@ -2,23 +2,61 @@ import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 import { Race } from '@/models/race'
+import { RaceDay } from '@/models/raceday'
 
-interface RaceState {
+import { sailSizeSchema } from '@/schemas/default'
+
+interface RaceDayState {
+  racers: RacerSchema[],
   races: RaceSchema[],
+  config: ConfigSchema,
+
+  addRacer: (name: string, sailNumber: string, fleet: FleetSchema) => RacerSchema,
+  clearRacers: () => void,
 
   startRace: (course:CourseSchema, fleet?:FleetSchema) => RaceSchema,
   finishRacer: (racer: RacerSchema, race: RaceSchema) => void,
   cancelRace: (race: RaceSchema) => void,
-  clearRaces: () => void
+  clearRaces: () => void,
+
+  updateConfig: (newConfig: ConfigSchema) => void,
 }
 
-export const useRaceStore = create<RaceState>()(
+export const useRaceDayStore = create<RaceDayState>()(
   persist(
     (set, get) => ({
+      racers: [],
       /**
        * Array of races across all fleets in unpredictable order
        */
       races: [],
+
+      config: {
+        sailSize: 'small',
+        raceSeparateFleets: true,
+        hasSaved: false
+      },
+
+      addRacer: (name, sailNumber, fleet) => {
+        const racer: RacerSchema = {
+          name,
+          sailNumber,
+          fleet,
+          role: 'Racer',
+          id: Date.now() + name,
+          isGuest: false
+        }
+        set({ racers: [...get().racers, racer] })
+        return racer
+      },
+
+      clearRacers: () => {
+        const consent = `Are you sure you want to permanently delete ${ get().racers.length } racers?`
+
+        if (!confirm(consent)) return
+
+        set({ racers: [] })
+      },
 
       /**
        * Starts a new race, placing it in the object tracking current races
@@ -26,6 +64,12 @@ export const useRaceStore = create<RaceState>()(
        * @returns 
        */
       startRace: (course = '1. Triangle', fleet) => {
+        // Ensure that a new race for a fleet isn't started if there
+        // is already an unfinished race
+        const raceDay = new RaceDay(get().racers, get().races, get().config)
+        if( raceDay.unfinishedRaces(fleet).length !== 0 )
+          throw new Error(`Cannot start a new race when there's an unfinished race${fleet && 'for fleet '+fleet}`)
+
         const raceCount = get().races.filter(r=>r.fleet===fleet).length
 
         const race: RaceSchema = {
@@ -78,8 +122,23 @@ export const useRaceStore = create<RaceState>()(
         if (!confirm(consent)) return
 
         set({ races: [] })
+      },
+
+      updateConfig: (data: ConfigSchema) => {
+        // Set the config to have been saved whenever it is updated
+        let newConfig = { hasSaved: true } as ConfigSchema
+
+        newConfig.sailSize = sailSizeSchema.parse(data.sailSize)
+        newConfig.raceSeparateFleets = data.raceSeparateFleets
+
+        set({
+          config: {
+            ...get().config,
+            ...newConfig
+          }
+        })
       }
     }),
-    { name: 'race-storage' },
+    { name: 'race-day-storage' },
   ),
 )

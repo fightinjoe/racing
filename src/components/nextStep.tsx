@@ -1,13 +1,11 @@
 'use client'
 
-import { useDetailsStore } from "@/stores/detailsStore"
-import { useRacerStore } from "@/stores/racerStore"
+import { useRaceDayStore } from "@/stores/raceDayStore"
 
 import { RaceDay } from "@/models/raceday"
 
 export default function NextStep() {
-  const racers = useRacerStore(s=>s.racers)
-  const config = useDetailsStore(s=>s.config)
+  const [racers, config] = useRaceDayStore(s=>[s.racers, s.config])
   const raceDay = new RaceDay(racers,[],config)
 
   const message =

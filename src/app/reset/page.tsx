@@ -1,13 +1,12 @@
 'use client'
 
-import { useRaceStore } from "@/stores/raceStore"
-import { useRacerStore } from "@/stores/racerStore"
+import { useRaceDayStore } from "@/stores/raceDayStore"
 
 import HTML from "@/components/html"
 
 export default function ResetPage() {
-  const [races,  clearRaces]  = useRaceStore( s=>[s.races,  s.clearRaces])
-  const [racers, clearRacers] = useRacerStore(s=>[s.racers, s.clearRacers])
+  const [races, racers, clearRaces, clearRacers] =
+    useRaceDayStore( s=>[s.races, s.racers, s.clearRaces, s.clearRacers])
 
   return (
     <div>

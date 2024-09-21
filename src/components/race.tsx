@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from "next/navigation"
-import { useRaceStore } from "@/stores/raceStore"
+import { useRaceDayStore } from "@/stores/raceDayStore"
 
 import HTML from '@/components/html'
 import { printDuration } from "@/lib/printer"
@@ -10,7 +10,7 @@ import { Timer } from "./timer"
 function StartRacePartial({fleet, course, count, disabled}:
   {fleet?:FleetSchema, course:CourseSchema, count: number, disabled?: boolean}) {
   const router = useRouter()
-  const startRace = useRaceStore(s=>s.startRace)
+  const startRace = useRaceDayStore(s=>s.startRace)
 
   const handleClick = () => {
     if (disabled) return

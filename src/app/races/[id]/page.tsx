@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
-import { useRaceStore } from "@/stores/raceStore"
-import { useRacerStore } from "@/stores/racerStore"
+import { useRaceDayStore } from "@/stores/raceDayStore"
 
 import { Race, RaceState } from "@/models/race"
 
@@ -18,9 +17,9 @@ export default function RacePage({params}: {params: {id: string}}) {
   const [raceState, setRaceState] = useState<RaceState>('before-start')
 
   // The current race to display
-  const [_races, cancelRace] = useRaceStore(s => [s.races, s.cancelRace])
+  const [_races, cancelRace] = useRaceDayStore(s => [s.races, s.cancelRace])
   const _race = _races.find(r=>r.id===params.id)
-  const _racers = useRacerStore(s=>s.racers)
+  const _racers = useRaceDayStore(s=>s.racers)
   
   const race = _race && new Race(_race, _racers)
 

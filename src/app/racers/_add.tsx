@@ -1,6 +1,6 @@
 'use client'
 
-import { useRacerStore } from "@/stores/racerStore"
+import { useRaceDayStore } from "@/stores/raceDayStore"
 // import { ChangeEventHandler, MouseEventHandler, useState } from "react"
 import { useForm } from "react-hook-form"
 
@@ -15,7 +15,7 @@ type _FormData = {
 export default function AddPartial() {
   const { register, handleSubmit, setValue } = useForm<_FormData>()
 
-  const addRacer = useRacerStore(s=>s.addRacer)
+  const addRacer = useRaceDayStore(s=>s.addRacer)
   
   const onSubmit = (data: _FormData) => {
     console.log('submitted data', data)

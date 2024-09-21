@@ -13,6 +13,8 @@ export class RaceDay {
 
   get raceSeparateFleets(): boolean { return this._config.raceSeparateFleets }
 
+  get sailSize(): string { return this._config.sailSize }
+
   /**
    * Array of all of the "scoring fleets" for racers
    */
@@ -50,7 +52,7 @@ export class RaceDay {
 
   /**
    * Returns all unfinished races, optionally filtered by fleet
-   * @param fleet Optional fleet to filter by
+   * @param fleet Optional fleet to filter by. Returns all unfinished races if undefined
    * @returns Array of races
    */
   unfinishedRaces(fleet?: FleetSchema): RaceSchema[] {
@@ -73,7 +75,7 @@ export class RaceDay {
   canRace(): Boolean {
     let count = new Map()
 
-    // Count the racers for each fleet
+    // Count the racers for each fleet, storing them in a Map keyed by fleet
     this._racers.forEach( r => count.set( r.fleet, (count.get(r.fleet) || 0)+1 ))
 
     // If any of the fleets have a count of less than RACER_FLOOR, then racing CAN'T begin

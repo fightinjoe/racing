@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 
 import HTML from "@/components/html"
 import Form from '@/components/form'
-import { useDetailsStore } from "@/stores/detailsStore"
+import { useRaceDayStore } from "@/stores/raceDayStore"
 
 type MyFormData = {
   sailSize: SailSizeSchema,
@@ -16,7 +16,7 @@ type MyFormData = {
 }
 
 export default function DetailsPage() {
-  const [config, updateConfig] = useDetailsStore(s=>[s.config,s.updateConfig])
+  const [config, updateConfig] = useRaceDayStore(s=>[s.config,s.updateConfig])
   const router = useRouter()
   
   const handleSubmit = (data: MyFormData) => {
