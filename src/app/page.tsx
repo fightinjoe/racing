@@ -11,6 +11,7 @@ import { useRaceDayStore } from "@/stores/raceDayStore"
 import { RaceDay } from "@/models/raceday"
 
 import { capitalize, toId } from "@/lib/string"
+import { useRouter } from "next/navigation"
 
 type ModalConfig = {
   fleet?: FleetSchema,
@@ -165,8 +166,14 @@ function NextRaceButton({fleet, raceDay, onStartRace}:
 }
 
 function ViewScoresButton() {
+  const router = useRouter()
+
+  const handleClick = () => {
+    router.push('/scores')
+  }
+
   return (
-    <button className="w-full text-center py-4 text-ocean-500">
+    <button className="w-full text-center py-4 text-ocean-500" onClick={ handleClick }>
       <small>View scores for the day</small>
     </button>
   )

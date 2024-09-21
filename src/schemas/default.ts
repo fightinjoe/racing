@@ -131,3 +131,20 @@ export const weatherSchema = z.object({
   condition: z.string().optional(),
   current: z.enum(['high tide', 'low tide', 'ebb', 'flood']).optional()
 })
+
+export const scoringPositionSchema = z.object({
+  points: z.number(),
+  position: z.number(),
+  failure: failureSchema.optional()
+})
+
+export const racerScoresSchema = z.object({
+  racer: racerSchema,
+  points: z.number(),
+  positions: z.array(scoringPositionSchema)
+})
+
+export const fleetScoresSchema = z.object({
+  fleet: fleetSchema.optional(),
+  racerScores: z.array(racerScoresSchema)
+})
