@@ -35,27 +35,39 @@ function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema
 
       <table>
         <tr className="text-right bg-ocean-800 text-white text-sm">
+          {/* Position + Name header */}
           <th className="font-light text-left py-2">
             <span className="w-[2em] inline-block text-right pr-2 font-normal"></span>
             Name
           </th>
+
+          {/* Total header */}
           <th className="font-light pr-4">Total</th>
+
+          {/* Races header*/}
           {
             races.map( (race,i) => (
-              <th className={`font-light ${ races.length === i+1 && 'pr-2'}`}>{race}</th>
+              <th className={`font-light text-center ${ races.length === i+1 && 'pr-2'}`}>{race}</th>
             ))
           }
         </tr>
       {
         scores.racerScores.map( (s,i) => (
           <tr className={`${ i%2 ? 'bg-gray-100' : ''}`}>
+            {/* Position + Name */}
             <th className="py-2 text-left pr-2">
-              <span className="w-[2em] inline-block text-right pr-2 font-normal">{i+1}</span>
+              <span className="w-[2em] inline-block text-right pr-2 font-normal font-mono text-sm">{i+1}</span>
               {s.racer.name}
             </th>
-            <td className="py-2 text-right font-bold pr-4">{s.points}</td>
+
+            {/* Total points */}
+            <td className="py-2 text-right font-bold font-mono pr-4">{s.points}</td>
+
+            {/* Races */}
             { s.positions.map( (p,i) => (<>
-              <td className={`py-2 text-right ${s.positions.length === i+1 && 'pr-2'}`}>{p.position}</td>
+              <td className={`py-2 text-center text-sm font-mono ${s.positions.length === i+1 && 'pr-2'}`}>
+                <span className={`inline-block w-[1.25rem] rounded-full ${p.position===1 && 'bg-aqua-400'}`}>{p.position}</span>
+              </td>
             </>))}
           </tr>
         ))
