@@ -19,10 +19,20 @@ export default function ScoresPage() {
       </header>
 
       { raceDay.fleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
+
+      <div className="col-0 flex-row p-4">
+        <a
+          className="ButtonSubmit"
+          href={`mailto:fightinjoe@gmail.com?subject=Scores&body=${ encodeURI(raceDay.emailScores()) }`}
+        >
+          Email all scores
+        </a>
+      </div>
     </main>
   )
 }
 
+// Displays the table of scores for a single racing fleet
 function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema}) {
   const scores = raceDay.scores(fleet)
 

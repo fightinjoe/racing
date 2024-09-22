@@ -137,4 +137,26 @@ export class RaceDay {
 
     return { fleet, racerScores }
   }
+
+  emailScores(): string {
+    // race_fleet	is_rc	name	sail_number	start_fleet ...races
+    const fleets = this.fleets.length ? this.fleets : [undefined]
+
+    const scores = fleets.map( fleet => this.scores(fleet) )
+
+    const out = scores.map( ({fleet, racerScores}) => (
+      racerScores.map( ({racer, positions}) => (
+        [
+          fleet,
+          '',
+          racer.name,
+          racer.sailNumber,
+          racer.fleet,
+          ...positions.map( ({position, failure}) => failure ? failure : position )
+        ].join(",")
+      )).join(";\n")
+    )).join(";\n")
+
+    return out
+  }
 }
