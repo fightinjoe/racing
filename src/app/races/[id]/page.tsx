@@ -6,9 +6,9 @@ import { useRaceDayStore } from "@/stores/raceDayStore"
 
 import { Race, RaceState } from "@/models/race"
 
-import FinishRacerPartial from "./_finishRacer"
 import Tile, { FinisherTile } from "@/components/tile"
 import { Duration, Timer } from "@/components/timer"
+import RacerListPartial from "@/app/racers/_list"
 import HTML from "@/components/html"
 
 export default function RacePage({params}: {params: {id: string}}) {
@@ -115,15 +115,13 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   function _StillRacing() {
     return (
-      <div className="p-4 col-2">
-        <h2><strong>Still racing</strong></h2>
-        <div className="row-wrap-2">
-          { race!.unfinishedRacers.map( (r,i) => (
-            raceState === 'racing'
-            ? <FinishRacerPartial key={i} race={_race!} racer={r} />
-            : <Tile key={i} title={r.sailNumber} subtitle={r.name} className="TileTodo bg-white" />
-          )) }
-        </div>
+      <div className="col-2 py-4">
+        <h2 className="px-4"><strong>Still racing</strong></h2>
+        <RacerListPartial
+          racers={ race!.unfinishedRacers }
+          race={_race!}
+          sorts={['number', 'name']}
+        />
       </div>
     )
   }

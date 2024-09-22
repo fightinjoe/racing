@@ -71,11 +71,11 @@
     @apply bg-ocean-100;
   }
 
-  /* RadioTabs
-   *
+  /* 
+   * RadioTabs
    */
    .RadioTabs {
-    @apply row-2 justify-center py-1 mb-2 w-full;
+    @apply row-2 py-1 mb-2 w-full;
     @apply text-sm;
   }
 

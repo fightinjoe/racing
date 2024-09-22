@@ -1,10 +1,14 @@
 'use client'
 
+import { useRaceDayStore } from "@/stores/raceDayStore"
+
 import ListPartial from "./_list"
 import AddPartial from "./_add"
 import HTML from "@/components/html"
 
 export default function RacersPage() {
+  const racers = useRaceDayStore(s => s.racers)
+
   return (
     <main>
       <header className="p-4 row-2">
@@ -14,7 +18,7 @@ export default function RacersPage() {
 
       <div>
         <AddPartial />
-        <ListPartial />
+        <ListPartial racers={racers} />
       </div>
     </main>
   )

@@ -131,7 +131,7 @@ function RacesPartial({raceDay, onStartRace}:
 
 function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStartRace:(c:ModalConfig)=>void}) {
   const fleets: (FleetSchema | undefined)[] = raceDay.fleets.length ? raceDay.fleets : [undefined]
-  const className = `gap-2 grid grid-cols-${ raceDay.fleets.length }`
+  const className = `gap-2 grid ${ 'grid-cols-' + raceDay.fleets.length }`
 
   let currentRaces = new Map<FleetSchema|undefined, RaceSchema|undefined>()
   fleets.forEach( fleet => currentRaces.set(fleet, raceDay.unfinishedRaces(fleet)[0]) )

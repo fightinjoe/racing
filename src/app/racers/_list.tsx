@@ -2,16 +2,15 @@
 
 import { useState } from "react"
 
-import { useRaceDayStore } from "@/stores/raceDayStore"
 import { RacerTile } from "@/components/tile"
 import Form from "@/components/form"
 
-import { sortSailNumbers } from "@/lib/string"
+import { capitalize, sortSailNumbers } from "@/lib/string"
 
-export default function ListPartial() {
-  const racers = useRaceDayStore(s=>s.racers)
+export default function ListPartial(params: {racers:RacerSchema[], sorts?:RacersSort[]}) {
+  const sorts = params.sorts || ['added', 'name', 'number', 'fleet']
 
-  const [sort, setSort] = useState<RacersSort>('added')
+  const [sort, setSort] = useState<RacersSort>( sorts[0] )
 
   const handleClick: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSort(e.target.value as RacersSort)
@@ -28,16 +27,21 @@ export default function ListPartial() {
     <div className="row-wrap-2 p-4">
 
       <fieldset className="RadioTabs row-2">
-        <Form.Radio {...props('added')}>Added</Form.Radio>
-        <Form.Radio {...props('name')}>Name</Form.Radio>
-        <Form.Radio {...props('number')}>Sail number</Form.Radio>
-        <Form.Radio {...props('fleet')}>Fleet</Form.Radio>
+        {
+          sorts.map( (s,i) => (
+            <Form.Radio {...props(s)}>{
+              s === 'added' ? 'Default' :
+              s === 'number' ? 'Sail number' :
+              capitalize(s)
+            }</Form.Radio>
+          ))
+        }
       </fieldset>
 
       {
-        racers
+        params.racers
           .sort( (r1, r2) => 
-            sort === 'added'  ?  (r1.id < r2.id ? -1 : 1) :
+            sort === 'added'  ?  (r1.id > r2.id ? -1 : 1) :
             sort === 'name'   ? (r1.name < r2.name ? -1 : 1) :
             sort === 'number' ? sortSailNumbers(r1.sailNumber, r2.sailNumber) :
             sort === 'fleet'  ? (r1.fleet === r2.fleet ? sortSailNumbers(r1.sailNumber, r2.sailNumber) : (r1.fleet < r2.fleet ? -1 : 1)) :
