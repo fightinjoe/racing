@@ -25,7 +25,9 @@ export class Race {
 
   get startTime(): number { return this._race.startTime }
 
-  get finishers(): RacerSchema[] { return this._race.finishers }
+  get finishers(): FinisherSchema[] { return this._race.finishers }
+  get qualifiedFinishers(): FinisherSchema[] { return this.finishers.filter( r => !r.failure )}
+  get failedFinishers(): FinisherSchema[] { return this.finishers.filter( r => r.failure )}
 
   get id(): string { return this._race.id }
 

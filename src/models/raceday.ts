@@ -106,7 +106,8 @@ export class RaceDay {
 
     // For each race and each finisher, append finish data to the RacerScores object
     races.map( (race, race_i) => {
-      race.finishers.map( (finisher, pos) => {
+      let pos = 1
+      race.finishers.map( (finisher) => {
         // The accumulated racer's scores
         let scores = lookup.get(finisher.id)
 
@@ -118,8 +119,10 @@ export class RaceDay {
         if (scores.positions.length !== race_i)
           throw new Error(`Missing race ${race_i} data for racer ${finisher.name}`)
         
-        let position: number = finisher.positionOverride || pos+1
-        let points = finisher.failure ? failurePoints : position
+        let position: number | FailureSchema = finisher.positionOverride || (finisher.failure || pos)
+        let points = finisher.failure ? failurePoints : pos
+
+        if( !finisher.failure ) pos++
 
         // The ScoringPosition the the current race
         const score = {points, position, failure: finisher.failure}

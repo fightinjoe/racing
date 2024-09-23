@@ -134,7 +134,7 @@ export const weatherSchema = z.object({
 
 export const scoringPositionSchema = z.object({
   points: z.number(),
-  position: z.number(),
+  position: z.union([z.number(), failureSchema]),
   failure: failureSchema.optional()
 })
 

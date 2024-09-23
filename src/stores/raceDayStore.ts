@@ -15,7 +15,7 @@ interface RaceDayState {
   clearRacers: () => void,
 
   startRace: (course:CourseSchema, fleet?:FleetSchema) => RaceSchema,
-  finishRacer: (racer: RacerSchema, race: RaceSchema) => void,
+  finishRacer: (racer: RacerSchema, race: RaceSchema, failure?: FailureSchema) => void,
   cancelRace: (race: RaceSchema) => void,
   clearRaces: () => void,
 
@@ -89,13 +89,13 @@ export const useRaceDayStore = create<RaceDayState>()(
        * Adds a racer to the list of finishers, logging the time they finished
        * @param racer Racer to finish in the race
        */
-      finishRacer: (racer, race) => {
+      finishRacer: (racer, race, failure) => {
         if (race.finishers.find(f=>f.id===racer.id)) throw new Error(`Racer '${racer.name}' has already finished`)
 
-        const finisher:FinisherSchema = {
-          ...racer,
-          finishedAt: Date.now()
-        }
+        let finisher:FinisherSchema = { ...racer }
+        failure 
+        ? finisher.failure = failure
+        : finisher.finishedAt = Date.now()
 
         set({ races: [
           ...get().races.filter(r=>r.id!==race.id),

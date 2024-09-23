@@ -95,8 +95,6 @@ export function FinisherTile({racer, position}:{racer: RacerSchema, position: nu
     position === 2 ? 'bg-blue-400' :
     'bg-gray-300 text-black'
 
-  const ref = useRef()
-
   return (
     <Tile
       title={ racer.sailNumber || '?' }
@@ -109,4 +107,62 @@ export function FinisherTile({racer, position}:{racer: RacerSchema, position: nu
       </div>
     </Tile>
   )
+}
+
+export function FailureTile({racer}:{racer: FinisherSchema}) {
+  return (
+    <Tile
+      title={ racer.sailNumber || '?' }
+      subtitle={ racer.name }
+      className="bg-white border-gray-300 shrink-0"
+    >
+      {/* Position badge */}
+      <div className={`absolute border border-2 border-red-600 bg-red-100 text-red-600 top-[-8px] left-[-8px] rounded-full text-xs w-12 py-1`}>
+        { racer.failure }
+      </div>
+    </Tile>
+  )
+}
+
+export function ModalTile({racer, children}: {racer: RacerSchema, children?:React.ReactNode}) {
+  const dialog = useRef(null)
+
+  const onClick = () => {
+    if(!dialog || !dialog.current) return
+    
+    const modal: HTMLDialogElement = dialog.current
+    const tile = modal.parentNode as HTMLDivElement
+    const dims = tile.getBoundingClientRect()
+
+    // Position the modal
+    modal.style.top = dims.top + 'px'
+    modal.style.left = dims.left + 'px'
+    modal.style.width = dims.width + 'px'
+
+    // Make the modal appear on the screen
+    modal!.showModal()
+  }
+
+  const onDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    console.log('onDialogClick')
+    e.preventDefault()
+    e.stopPropagation()
+
+    const modal:HTMLDialogElement = dialog!.current!
+    modal.close()
+  }
+
+  return (
+    <div>
+      <Tile
+        title={ racer.sailNumber || '?' }
+        subtitle={ `${racer.name} (${racer.fleet} fleet)` }
+        className="bg-ocean-100 relative"
+        onClick={ onClick }
+      />
+      <dialog ref={dialog} className={`Modal`} onClick={ onDialogClick }>
+        { children }
+      </dialog>
+    </div>
+  ) 
 }

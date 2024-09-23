@@ -76,7 +76,7 @@ function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema
             {/* Races */}
             { s.positions.map( (p,i) => (<>
               <td className={`py-2 text-center text-sm font-mono ${s.positions.length === i+1 && 'pr-2'}`}>
-                <span className={`inline-block w-[1.25rem] rounded-full ${p.position===1 && 'bg-aqua-400'}`}>{p.position}</span>
+                <span className={`inline-block w-[1.25rem] rounded-full ${p.position===1 && 'bg-aqua-400'} ${p.position.toString().length > 2 && 'text-red-600'}`}>{p.position}</span>
               </td>
             </>))}
           </tr>
