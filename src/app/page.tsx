@@ -127,10 +127,18 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
 
 function RacesPartial({raceDay, onStartRace}:
   {raceDay: RaceDay, onStartRace: (config:ModalConfig)=>void}) {
+
+  // Decide if scores should be shown
+  const showScores = raceDay.racingFleets && raceDay.racingFleets
+    // Get the array of finished races for each fleet...
+    .map( fleet => raceDay.finishedRaces(fleet).length )
+    // ...then make sure each fleet has at least 1 finished race
+    .reduce( (agg, c) => agg && c>0, true )
+  
   return (
     <>
       <CurrentRacesPartial {...{raceDay, onStartRace}} />
-      { raceDay.finishedRaces().length ? <ViewScoresButton /> : null }
+      { showScores && <ViewScoresButton /> }
       <FinishedRacesPartial {...{raceDay}} />
     </>
   )
