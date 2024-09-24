@@ -56,6 +56,10 @@ export class Race {
   }
 
   // Returns the State Machine state of the race
+  /**
+   * State Machine for the current race
+   * @returns [ RaceState, duration: number ]
+   */
   get fullRaceState(): [RaceState, number] {
     const duration = Date.now() - this.startTime
 

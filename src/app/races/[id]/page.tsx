@@ -128,7 +128,9 @@ export default function RacePage({params}: {params: {id: string}}) {
             race!.unfinishedRacers
               .sort( helpSortRacers )
               .map( r => (
-                <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
+                race!.raceState === 'racing'
+                ? <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
+                : <Tile title={r.sailNumber} subtitle={r.name} className="TileTodo" />
               ) )
           }
         </div>
