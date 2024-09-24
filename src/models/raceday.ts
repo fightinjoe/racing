@@ -26,7 +26,7 @@ export class RaceDay {
     if( this.racers().length === 0 ) return undefined
 
     return this._config.raceSeparateFleets
-    ? this.scoringFleets
+    ? this.scoringFleets.sort()
     : [undefined]
   }
 
@@ -37,6 +37,7 @@ export class RaceDay {
   get scoringFleets(): FleetSchema[] {
     return this._racers
       .map(r => r.fleet)
+      .sort()
       .filter( (fleet,i,self) => self.indexOf(fleet) === i ) // remove duplicates
   }
 
