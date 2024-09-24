@@ -38,7 +38,7 @@ export default function Home() {
         {/* Shows the races once configuration is done. Otherwise shows configuration setup */}
         <section className="bg-white p-4">
           { raceDay.canRace()
-            // Print the races that have happened already
+            // Show START RACE / CURRENT RACE and past races
             ? <RacesPartial {...{raceDay}} onStartRace={setModalConfig} />
 
             // Or only show the SETUP tiles if racing can't yet be started
@@ -130,7 +130,7 @@ function RacesPartial({raceDay, onStartRace}:
   return (
     <>
       <CurrentRacesPartial {...{raceDay, onStartRace}} />
-      <ViewScoresButton />
+      { raceDay.finishedRaces().length ? <ViewScoresButton /> : null }
       <FinishedRacesPartial {...{raceDay}} />
     </>
   )
