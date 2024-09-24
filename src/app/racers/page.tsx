@@ -2,7 +2,7 @@
 
 import { useRaceDayStore } from "@/stores/raceDayStore"
 
-import { useRacerSort } from "./_list"
+import { useRacerSort } from "@/lib/useRacerSort"
 
 import AddPartial from "./_add"
 import HTML from "@/components/html"
@@ -33,10 +33,6 @@ export default function RacersPage() {
           ))
         }</div>
       </section>
-
-      <div>
-        {/* <ListPartial racers={racers} /> */}
-      </div>
     </main>
   )
 }

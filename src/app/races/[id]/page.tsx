@@ -10,6 +10,7 @@ import Tile, { FinisherTile, FailureTile } from "@/components/tile"
 import { Duration, Timer } from "@/components/timer"
 import { ModalTile } from "@/components/tile"
 import HTML from "@/components/html"
+import { useRacerSort } from "@/lib/useRacerSort"
 
 export default function RacePage({params}: {params: {id: string}}) {
   
@@ -20,6 +21,8 @@ export default function RacePage({params}: {params: {id: string}}) {
   const [_races, cancelRace, finishRacer] = useRaceDayStore(s => [s.races, s.cancelRace, s.finishRacer])
   const _race = _races.find(r=>r.id===params.id)
   const _racers = useRaceDayStore(s=>s.racers)
+
+  const {Tabs, helpSortRacers} = useRacerSort({sorts: ['number', 'name']})
   
   const race = _race && new Race(_race, _racers)
 
@@ -115,14 +118,18 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   function _StillRacing() {
     return (
-      <div className="col-2 py-4">
-        <h2 className="px-4"><strong>Still racing</strong></h2>
+      <div className="col-4">
+        <h2><strong>Still racing</strong></h2>
+
+        <Tabs />
 
         <div className="row-wrap-2 w-full">
           {
-            race!.unfinishedRacers.map( r => (
-              <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
-            ) )
+            race!.unfinishedRacers
+              .sort( helpSortRacers )
+              .map( r => (
+                <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
+              ) )
           }
         </div>
       </div>
@@ -141,7 +148,10 @@ export default function RacePage({params}: {params: {id: string}}) {
       {/* Show the finishers when racing */}
       { raceState === 'racing' && race && <FinishersPartial race={race} /> }
 
-      { !race!.isFinished && <_StillRacing /> }
+      {/* Show the racers that are still racing */}
+      <section className="p-4">
+        { !race!.isFinished && <_StillRacing /> }
+      </section>
     </div>
   )
 }
@@ -176,10 +186,10 @@ export default function RacePage({params}: {params: {id: string}}) {
           race!.failedFinishers.length > 0 &&
           <>
             <HTML.h1 className="px-4">Disqualified</HTML.h1>
-            <div className="py-4 overflow-x-scroll scroll-smooth" ref={wrapper}>
+            <div className="py-4 overflow-x-scroll scroll-smooth">
               <div className="row-2 mx-4">
-                { race!.failedFinishers.map( (f,i) => (
-                    <FailureTile key={i} position={i} racer={ f } />
+                { race!.failedFinishers.reverse().map( (f,i) => (
+                    <FailureTile key={i} racer={ f } />
                   ))
                 }
               </div>
