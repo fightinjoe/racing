@@ -26,7 +26,7 @@ export default function AddPartial() {
   }
 
   return (
-    <form className="p-4" onSubmit={handleSubmit(onSubmit)}>
+    <form  className="col-2 items-start" onSubmit={handleSubmit(onSubmit)}>
       <Form.Text
         placeholder="Name"
         register={register}
