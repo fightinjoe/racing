@@ -5,8 +5,8 @@ import { useRaceDayStore } from "@/stores/raceDayStore"
 import HTML from "@/components/html"
 
 export default function ResetPage() {
-  const [races, racers, clearRaces, clearRacers] =
-    useRaceDayStore( s=>[s.races, s.racers, s.clearRaces, s.clearRacers])
+  const [races, racers, clearRaces, clearRacers, clearConfig] =
+    useRaceDayStore( s=>[s.races, s.racers, s.clearRaces, s.clearRacers, s.clearConfig])
 
   return (
     <div>
@@ -15,16 +15,15 @@ export default function ResetPage() {
         Clear data
       </header>
 
-      <div className="p-4 col-2">
-        <div>
-          <HTML.h1>{ races.length } races</HTML.h1>
-          <button onClick={ clearRaces }>Clear all races</button>
-        </div>
-
-        <div>
-          <HTML.h1>{ racers.length } racers</HTML.h1>
-          <button onClick={ clearRacers }>Clear all racers</button>
-        </div>
+      <div className="p-4 grid grid-cols-2 gap-4">
+        <HTML.h1>{ races.length } races</HTML.h1>
+        <button onClick={ clearRaces } className="ButtonSubmit">Clear all races</button>
+      
+        <HTML.h1>{ racers.length } racers</HTML.h1>
+        <button onClick={ clearRacers } className="ButtonSubmit">Clear all racers</button>
+      
+        <HTML.h1>Race day</HTML.h1>
+        <button onClick={ clearConfig } className="ButtonSubmit">Clear details</button>
       </div>
 
     </div>

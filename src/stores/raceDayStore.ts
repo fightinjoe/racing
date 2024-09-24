@@ -20,20 +20,27 @@ interface RaceDayState {
   clearRaces: () => void,
 
   updateConfig: (newConfig: ConfigSchema) => void,
+  clearConfig: () => void
+}
+
+const DEFAULT_RACERS: RacerSchema[] = []
+
+const DEFAULT_RACES: RaceSchema[] = []
+
+const DEFAULT_CONFIG: ConfigSchema = {
+  sailSize: 'small',
+  raceSeparateFleets: true,
+  hasSaved: false
 }
 
 export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
-  racers: [],
+  racers: DEFAULT_RACERS,
   /**
    * Array of races across all fleets in unpredictable order
    */
-  races: [],
+  races: DEFAULT_RACES,
 
-  config: {
-    sailSize: 'small',
-    raceSeparateFleets: true,
-    hasSaved: false
-  },
+  config: DEFAULT_CONFIG,
 
   addRacer: (name, sailNumber, fleet) => {
     const racer: RacerSchema = {
@@ -135,5 +142,9 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
         ...newConfig
       }
     })
+  },
+
+  clearConfig: () => {
+    set({ config: DEFAULT_CONFIG })
   }
 }), { name: 'race-day-storage' }))
