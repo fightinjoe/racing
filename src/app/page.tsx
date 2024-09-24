@@ -83,10 +83,17 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
   }
 
   function _Details() {
+    // If there is a single fleet, then print "1 fleet". Otherwise, count
+    // the number of fleets and print "0 fleets", "1 fleet", "2 fleets", etc.
+    const f = raceDay.racingFleets ? raceDay.racingFleets.length : 0
+    const title = raceDay.raceSeparateFleets
+    ? `${f} fleet${ f===1 ? '' : 's'}`
+    : '1 fleet'
+
     return (
       raceDay._config.hasSaved
       ? <NavTile
-          title={ raceDay.raceSeparateFleets ? '2 fleets' : '1 fleet' }
+          title={ title }
           subtitle={ `${ capitalize(raceDay.sailSize) } sails` }
           href="/details"
         />

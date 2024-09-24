@@ -9,9 +9,10 @@ export default function NextStep() {
   const raceDay = new RaceDay(racers,[],config)
 
   const message =
-    racers.length === 0                             ? <>Register your first <strong>racer</strong> to get started</> :
-    config.raceSeparateFleets && !raceDay.canRace() ? <><strong>Add 5 racers</strong> to each fleet to run the first race</> :
-    !raceDay.canRace()                              ?   <><strong>Add 5 racers</strong> to run the first race</> : ''
+    racers.length === 0                                      ? <>Register your first <strong>racer</strong> to get started</> :
+    config.raceSeparateFleets && !raceDay.hasEnoughRacers()  ? <><strong>Add 5 racers</strong> to each fleet to run the first race</> :
+    !config.raceSeparateFleets && !raceDay.hasEnoughRacers() ? <><strong>Add 5 racers</strong> to run the first race</> :
+    !config.hasSaved                                         ? <>Set the <strong>race details</strong> to start racing</> : ''
 
   if (!message) return
 

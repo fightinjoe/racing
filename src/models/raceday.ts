@@ -93,10 +93,21 @@ export class RaceDay {
    * @returns true if racing can start, false if not
    */
   canRace(): Boolean {
+    // Can't race until the config has been viewed for the first time
+    if( !this._config.hasSaved ) return false
+
+    return this.hasEnoughRacers()
+  }
+
+  hasEnoughRacers(): Boolean {
+    // Can't race if the number of racers is less than RACER_FLOOR
     const fleets = this.racingFleets || [undefined]
 
     return fleets
+      // Calculate the number of racers per fleet
       .map( fleet => (this.racers(fleet).length >= RACER_FLOOR) )
+
+      // Check that there are enough racers for each fleet
       .reduce( (agg, x) => (agg && x), true )
   }
 
