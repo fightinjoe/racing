@@ -11,6 +11,8 @@ export default function ScoresPage() {
 
   const raceDay = new RaceDay(racers, races, config)
 
+  if( !raceDay.racingFleets ) return (<strong>404: No races found</strong>)
+
   return (
     <main>
       <header className="p-4 row-2">
@@ -18,7 +20,7 @@ export default function ScoresPage() {
         <HTML.h1>Scores</HTML.h1>
       </header>
 
-      { raceDay.scoringFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
+      { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
 
       <div className="col-0 flex-row p-4">
         <a
@@ -33,9 +35,9 @@ export default function ScoresPage() {
 }
 
 // Displays the table of scores for a single racing fleet
-function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema}) {
+function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema | undefined}) {
   const scores = raceDay.scores(fleet)
-
+  
   // Array of sequential R#, starting with R1, to be used as the race column headers
   const races: string[] = scores.racerScores[0].positions.map( (_,i) => `R${i+1}` )
 
@@ -45,9 +47,11 @@ function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema
 
       <table>
         <tr className="text-right bg-ocean-800 text-white text-sm">
-          {/* Position + Name header */}
+          {/* Position + Fleet? + Name header */}
+
           <th className="font-light text-left py-2">
             <span className="w-[2em] inline-block text-right pr-2 font-normal"></span>
+            { fleet ? '' : <span></span>}
             Name
           </th>
 
@@ -67,6 +71,7 @@ function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema
             {/* Position + Name */}
             <th className="py-2 text-left pr-2">
               <span className="w-[2em] inline-block text-right pr-2 font-normal font-mono text-sm">{i+1}</span>
+              { fleet ? '' : <small className="font-light pr-2">({ s.racer.fleet })</small>}
               {s.racer.name}
             </th>
 

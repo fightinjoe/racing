@@ -121,9 +121,6 @@ export class RaceDay {
     if( fleet && this.scoringFleets.indexOf(fleet) === -1 )
       throw new Error(`Cannot find scores for '${fleet}' fleet`)
 
-    if( !fleet && this.scoringFleets.length > 1 )
-      throw new Error(`Please specify which fleet to score`)
-
     const racers = this.racers(fleet)
     const races = this.finishedRaces(fleet)
     const failurePoints = racers.length+1
