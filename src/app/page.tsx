@@ -130,8 +130,9 @@ function RacesPartial({raceDay, onStartRace}:
 }
 
 function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStartRace:(c:ModalConfig)=>void}) {
-  const fleets: (FleetSchema | undefined)[] = raceDay.fleets.length ? raceDay.fleets : [undefined]
-  const className = `gap-2 grid ${ 'grid-cols-' + raceDay.fleets.length }`
+  const fleets: (FleetSchema | undefined)[] = raceDay.racingFleets || []
+  const cols = 'grid-cols-' + fleets.length
+  const className = `gap-2 grid ${ cols }`
 
   let currentRaces = new Map<FleetSchema|undefined, RaceSchema|undefined>()
   fleets.forEach( fleet => currentRaces.set(fleet, raceDay.unfinishedRaces(fleet)[0]) )
@@ -180,9 +181,9 @@ function ViewScoresButton() {
 }
 
 function FinishedRacesPartial({raceDay}: {raceDay: RaceDay}) {
-  const fleets: (FleetSchema | undefined)[] = raceDay.fleets.length ? raceDay.fleets : [undefined]
-
-  const className = `gap-2 grid grid-cols-${ raceDay.fleets.length }`
+  const fleets: (FleetSchema | undefined)[] = raceDay.racingFleets || []
+  const cols = 'grid-cols-'+fleets.length
+  const className = `gap-2 grid ${ cols }`
 
   let finishedRaces = new Map<FleetSchema|undefined, RaceSchema[]>()
   fleets.forEach( fleet => finishedRaces.set(fleet, raceDay.finishedRaces(fleet)) )

@@ -18,7 +18,7 @@ export default function ScoresPage() {
         <HTML.h1>Scores</HTML.h1>
       </header>
 
-      { raceDay.fleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
+      { raceDay.scoringFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
 
       <div className="col-0 flex-row p-4">
         <a

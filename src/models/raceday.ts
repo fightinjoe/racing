@@ -16,9 +16,25 @@ export class RaceDay {
   get sailSize(): string { return this._config.sailSize }
 
   /**
-   * Array of all of the "scoring fleets" for racers
+   * Array of the separate "racing fleets", which is dependent on whether the racers
+   * are racing as a combined fleet or separately
+   * @returns single fleet racing returns `[undefined]`, otherwise an array of the 
+   * separate fleets.
    */
-  get fleets(): FleetSchema[] {
+  get racingFleets(): (FleetSchema | undefined)[] | undefined {
+    // If there are no racers, then don't return `[]`, but rather `undefined`
+    if( this.racers().length === 0 ) return undefined
+
+    return this._config.raceSeparateFleets
+    ? this.scoringFleets
+    : [undefined]
+  }
+
+  /**
+   * Array of all of the "scoring fleets" for racers, regardless of whether the racers
+   * race in a combined or separate fleets
+   */
+  get scoringFleets(): FleetSchema[] {
     return this._racers
       .map(r => r.fleet)
       .filter( (fleet,i,self) => self.indexOf(fleet) === i ) // remove duplicates
@@ -72,14 +88,16 @@ export class RaceDay {
     )
   }
 
+  /**
+   * Determines if the parameters for starting racing have been met
+   * @returns true if racing can start, false if not
+   */
   canRace(): Boolean {
-    let count = new Map()
+    const fleets = this.racingFleets || [undefined]
 
-    // Count the racers for each fleet, storing them in a Map keyed by fleet
-    this._racers.forEach( r => count.set( r.fleet, (count.get(r.fleet) || 0)+1 ))
-
-    // If any of the fleets have a count of less than RACER_FLOOR, then racing CAN'T begin
-    return !Array.from(count.values()).find( c => c < RACER_FLOOR )
+    return fleets
+      .map( fleet => (this.racers(fleet).length >= RACER_FLOOR) )
+      .reduce( (agg, x) => (agg && x), true )
   }
 
   /**
@@ -89,10 +107,10 @@ export class RaceDay {
   scores(fleet?: FleetSchema): FleetScoresSchema {
     // Raise an error if the fleet isn't found, or no fleet is passed in when
     // there is more than one fleet
-    if( fleet && this.fleets.indexOf(fleet) === -1 )
+    if( fleet && this.scoringFleets.indexOf(fleet) === -1 )
       throw new Error(`Cannot find scores for '${fleet}' fleet`)
 
-    if( !fleet && this.fleets.length > 1 )
+    if( !fleet && this.scoringFleets.length > 1 )
       throw new Error(`Please specify which fleet to score`)
 
     const racers = this.racers(fleet)
@@ -143,7 +161,7 @@ export class RaceDay {
 
   emailScores(): string {
     // race_fleet	is_rc	name	sail_number	start_fleet ...races
-    const fleets = this.fleets.length ? this.fleets : [undefined]
+    const fleets = this.scoringFleets.length ? this.scoringFleets : [undefined]
 
     const scores = fleets.map( fleet => this.scores(fleet) )
 
