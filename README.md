@@ -3,7 +3,7 @@ This is a web app to track scores for sail races. All data lives in the browser'
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+## Development
 
 First, run the development server:
 
