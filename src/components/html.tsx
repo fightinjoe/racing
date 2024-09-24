@@ -1,8 +1,10 @@
+'use client'
+
 import { useRouter } from "next/navigation"
 
 type HeadingProps = React.PropsWithChildren<React.HTMLAttributes<HTMLHeadingElement>>
 
-function h1({children, ...rest}: HeadingProps) {
+function H1({children, ...rest}: HeadingProps) {
   const className = `font-medium ${rest.className}`
 
   return (
@@ -12,7 +14,7 @@ function h1({children, ...rest}: HeadingProps) {
 
 type SmallProps = React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
 
-function small({children, ...rest}: SmallProps) {
+function Small({children, ...rest}: SmallProps) {
   return (
     <small {...rest}>{ children }</small>
   )
@@ -24,7 +26,7 @@ function small({children, ...rest}: SmallProps) {
  * @param onClick option click handler that replaces default click behavior
  * @returns 
  */
-function back({url, onClick}: {url?: string, onClick?: ()=>void}) {
+function Back({url, onClick}: {url?: string, onClick?: ()=>void}) {
   const router = useRouter()
 
   const handleClick = () => {
@@ -41,7 +43,7 @@ function back({url, onClick}: {url?: string, onClick?: ()=>void}) {
 }
 
 const HTML = {
-  h1, small, back
+  H1, Small, Back
 }
 
 export default HTML

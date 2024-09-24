@@ -34,7 +34,7 @@ export function useRacerSort(params: {sorts?:RacersSort[]} = {}) {
       <fieldset className="RadioTabs row-2">
         {
           sorts.map( (s,i) => (
-            <Form.Radio {...props(s)}>{
+            <Form.Radio key={i} {...props(s)}>{
               s === 'added' ? 'Default' :
               s === 'number' ? 'Sail number' :
               capitalize(s)

@@ -16,8 +16,8 @@ export default function ScoresPage() {
   return (
     <main>
       <header className="p-4 row-2">
-        <HTML.back />
-        <HTML.h1>Scores</HTML.h1>
+        <HTML.Back />
+        <HTML.H1>Scores</HTML.H1>
       </header>
 
       { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
@@ -43,7 +43,7 @@ function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema
 
   return (
     <div className="p-4 col-2">
-      <HTML.h1>Fleet { fleet } scores</HTML.h1>
+      <HTML.H1>Fleet { fleet } scores</HTML.H1>
 
       <table>
         <tr className="text-right bg-ocean-800 text-white text-sm">
@@ -61,13 +61,13 @@ function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema
           {/* Races header*/}
           {
             races.map( (race,i) => (
-              <th className={`font-light text-center ${ races.length === i+1 && 'pr-2'}`}>{race}</th>
+              <th key={i} className={`font-light text-center ${ races.length === i+1 && 'pr-2'}`}>{race}</th>
             ))
           }
         </tr>
       {
         scores.racerScores.map( (s,i) => (
-          <tr className={`${ i%2 ? 'bg-gray-100' : ''}`}>
+          <tr key={i} className={`${ i%2 ? 'bg-gray-100' : ''}`}>
             {/* Position + Name */}
             <th className="py-2 text-left pr-2">
               <span className="w-[2em] inline-block text-right pr-2 font-normal font-mono text-sm">{i+1}</span>

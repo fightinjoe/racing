@@ -11,18 +11,18 @@ export default function ResetPage() {
   return (
     <div>
       <header className="p-4 row-2">
-        <HTML.back />
+        <HTML.Back />
         Clear data
       </header>
 
       <div className="p-4 grid grid-cols-2 gap-4">
-        <HTML.h1>{ races.length } races</HTML.h1>
+        <HTML.H1>{ races.length } races</HTML.H1>
         <button onClick={ clearRaces } className="ButtonSubmit">Clear all races</button>
       
-        <HTML.h1>{ racers.length } racers</HTML.h1>
+        <HTML.H1>{ racers.length } racers</HTML.H1>
         <button onClick={ clearRacers } className="ButtonSubmit">Clear all racers</button>
       
-        <HTML.h1>Race day</HTML.h1>
+        <HTML.H1>Race day</HTML.H1>
         <button onClick={ clearConfig } className="ButtonSubmit">Clear details</button>
       </div>
 

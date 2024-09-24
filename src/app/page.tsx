@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <>
       <main>
-        <img src="/MFA_splash.png" />
+        <img src="/MFA_splash.png" alt="Mamaroneck Frostbite Association" />
 
         {/* Banner communicating what the next steps are */}
         <NextStep />
@@ -108,7 +108,7 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
 
   return (
     <div className="py-4 col-2">
-      <HTML.h1>Setup</HTML.h1>
+      <HTML.H1>Setup</HTML.H1>
 
       <div className="row-2">
         <_AddRacers />
@@ -175,8 +175,8 @@ function NextRaceButton({fleet, raceDay, onStartRace}:
       className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
       onClick={ () => onStartRace({fleet, count: nextRaceCount}) }
     >
-      <HTML.h1>New { fleet } race</HTML.h1>
-      <HTML.small>Start race #{ nextRaceCount }</HTML.small>
+      <HTML.H1>New { fleet } race</HTML.H1>
+      <HTML.Small>Start race #{ nextRaceCount }</HTML.Small>
     </button>
   )
 }
@@ -237,7 +237,7 @@ function CourseModal({fleet, count, onCancel}:
   return (
     <div className="p-4 col-4 absolute inset-0 bg-white">
       <header className="row-2">
-        <HTML.back onClick={ onCancel } />
+        <HTML.Back onClick={ onCancel } />
         Race {count} {fleet && `- ${fleet} fleet`}
       </header>
       
@@ -253,7 +253,7 @@ function CourseModal({fleet, count, onCancel}:
                 onChange={onChange}
               />
               <label htmlFor={ toId(title) } className="col-2 items-center">
-                <img src={`/imgs/${img}`} className="h-[87px]" />
+                <img src={`/imgs/${img}`} className="h-[87px]" alt={title} />
                 <small className="text-center">{ title }</small>
               </label>
             </div>

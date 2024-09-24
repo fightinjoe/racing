@@ -28,7 +28,7 @@ function StartRacePartial({fleet, course, count, disabled}:
       onClick={ handleClick }
       disabled={ disabled }
     >
-      <HTML.h1>Begin start sequence</HTML.h1>
+      <HTML.H1>Begin start sequence</HTML.H1>
       <small>Race {count}{ fleet && ` - ${fleet} fleet` }</small>
     </button>
   )
@@ -47,12 +47,12 @@ function RunRacePartial({race}:{race:RaceSchema}) {
       className="block flex flex-col p-4 bg-aqua-400 hover:bg-aqua-500 text-ocean-800"
       onClick={ () => router.push(`/races/${race.id}`) }
     >
-      <HTML.h1 className="flex flex-row gap-4">
+      <HTML.H1 className="flex flex-row gap-4">
         <Timer start={ race.startTime } />
         <span>•</span>
         <span>Race { race.id }</span>
-      </HTML.h1>
-      <HTML.small>{ race.course }</HTML.small>
+      </HTML.H1>
+      <HTML.Small>{ race.course }</HTML.Small>
     </button>
   )
 }
@@ -74,13 +74,13 @@ function ShowRacePartial({race}:{race:RaceSchema}) {
       onClick={ () => router.push(`/races/${race.id}`) }
       title={ `Race ${race.id} - 1st: ${first.name} (${duration})` }
     >
-      <HTML.h1 className="row-2 items-center w-full text-left">
+      <HTML.H1 className="row-2 items-center w-full text-left">
         <span className="grow">Race {race.id}</span>
-        <HTML.small className="font-light">{ duration }</HTML.small>
-      </HTML.h1>
-      <HTML.small className="text-left truncate w-full text-gray-500 font-light">
+        <HTML.Small className="font-light">{ duration }</HTML.Small>
+      </HTML.H1>
+      <HTML.Small className="text-left truncate w-full text-gray-500 font-light">
         1st: { first.name }
-      </HTML.small>
+      </HTML.Small>
     </button>
   )
 }

@@ -56,7 +56,7 @@ export default function RacePage({params}: {params: {id: string}}) {
     return () => {
       intervals.map( i => clearTimeout(i) )
     }
-  }, [_race])
+  }, [_race, duration, initialState, raceState])
 
   if (!_race) return (<strong>404: Race not found</strong>)
 
@@ -130,7 +130,7 @@ export default function RacePage({params}: {params: {id: string}}) {
               .map( r => (
                 race!.raceState === 'racing'
                 ? <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
-                : <Tile title={r.sailNumber} subtitle={r.name} className="TileTodo" />
+                : <Tile key={r.id} title={r.sailNumber} subtitle={r.name} className="TileTodo" />
               ) )
           }
         </div>
@@ -141,7 +141,7 @@ export default function RacePage({params}: {params: {id: string}}) {
   return (
     <div>
       <header className="p-4 row-2">
-        <HTML.back /> Single race { _race!.id } { _race.fleet ? '' : '(combined)'}
+        <HTML.Back /> Single race { _race!.id } { _race.fleet ? '' : '(combined)'}
       </header>
 
       {/* Timer, course */}
@@ -171,7 +171,7 @@ function FinishersPartial({race}: {race:Race}) {
   return (
     <div className="py-4 col-2 bg-ocean-200">
 
-      <HTML.h1 className="px-4">Finshers</HTML.h1>
+      <HTML.H1 className="px-4">Finshers</HTML.H1>
       <div className="py-4 overflow-x-scroll scroll-smooth" ref={wrapper}>
         <div className="row-2 mx-4">
           { 
@@ -187,7 +187,7 @@ function FinishersPartial({race}: {race:Race}) {
       {
         race!.failedFinishers.length > 0 &&
         <>
-          <HTML.h1 className="px-4">Disqualified</HTML.h1>
+          <HTML.H1 className="px-4">Disqualified</HTML.H1>
           <div className="py-4 overflow-x-scroll scroll-smooth">
             <div className="row-2 mx-4">
               { race!.failedFinishers.reverse().map( (f,i) => (
@@ -210,7 +210,6 @@ function StillRacingTile({racer, race, finishRacer}:
   const failures: FailureSchema[] = ['DSQ','DNF','DNS','TLE']
 
   const onShowFailures: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    console.log('onShowFailures')
     e.preventDefault()
     e.stopPropagation()
 
@@ -236,6 +235,7 @@ function StillRacingTile({racer, race, finishRacer}:
             </button>
           : failures.map( d => (
               <button
+                key={d}
                 className="ContextMenuSecondary"
                 onClick={ () => finishRacer(racer, race, d) }
                 >{d}</button>
