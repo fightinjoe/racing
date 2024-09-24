@@ -156,90 +156,90 @@ export default function RacePage({params}: {params: {id: string}}) {
   )
 }
 
-  function FinishersPartial({race}: {race:Race}) {
-    const wrapper = useRef(null)
+function FinishersPartial({race}: {race:Race}) {
+  const wrapper = useRef(null)
 
-    useEffect(() => {
-      if (!wrapper.current) return
-      
-      const elt = wrapper.current as HTMLDivElement
-      elt.scrollLeft = elt.scrollWidth - elt.clientWidth
-    },[race])
+  useEffect(() => {
+    if (!wrapper.current) return
+    
+    const elt = wrapper.current as HTMLDivElement
+    elt.scrollLeft = elt.scrollWidth - elt.clientWidth
+  },[race])
 
-    return (
-      <div className="py-4 col-2 bg-ocean-200">
+  return (
+    <div className="py-4 col-2 bg-ocean-200">
 
-        <HTML.h1 className="px-4">Finshers</HTML.h1>
-        <div className="py-4 overflow-x-scroll scroll-smooth" ref={wrapper}>
-          <div className="row-2 mx-4">
-            { 
-              race!.qualifiedFinishers.length > 0
-              ? race!.qualifiedFinishers.map( (f,i) => (
-                  <FinisherTile key={i} position={i} racer={ f } />
-                ))
-              : <Tile title="..." subtitle="No finishers" className="TileTodo bg-white" />
-            }
-          </div>
-        </div>
-
-        {
-          race!.failedFinishers.length > 0 &&
-          <>
-            <HTML.h1 className="px-4">Disqualified</HTML.h1>
-            <div className="py-4 overflow-x-scroll scroll-smooth">
-              <div className="row-2 mx-4">
-                { race!.failedFinishers.reverse().map( (f,i) => (
-                    <FailureTile key={i} racer={ f } />
-                  ))
-                }
-              </div>
-            </div>
-          </>
-        }
-      </div>
-    )
-  }
-
-  function StillRacingTile({racer, race, finishRacer}:
-    {racer: RacerSchema, race: RaceSchema, finishRacer: (racer: RacerSchema, race: RaceSchema, failure?: FailureSchema) => void}
-  ) {
-    const [hide, setHide] = useState<boolean>(true)
-
-    const failures: FailureSchema[] = ['DSQ','DNF','DNS','TLE']
-
-    const onShowFailures: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-      console.log('onShowFailures')
-      e.preventDefault()
-      e.stopPropagation()
-
-      setHide( false )
-    }
-
-    return (
-      <ModalTile racer={racer}>
-        <div className="col-0 gap-[1px] bg-gray-300">
-          <button
-            className="ContextMenuPrimary"
-            onClick={ () => finishRacer(racer, race) }
-          >
-            Finish
-          </button>
-          
-          { hide
-            ? <button
-                className="ContextMenuSecondary"
-                onClick={ onShowFailures }
-              >
-                Disqualify
-              </button>
-            : failures.map( d => (
-                <button
-                  className="ContextMenuSecondary"
-                  onClick={ () => finishRacer(racer, race, d) }
-                  >{d}</button>
+      <HTML.h1 className="px-4">Finshers</HTML.h1>
+      <div className="py-4 overflow-x-scroll scroll-smooth" ref={wrapper}>
+        <div className="row-2 mx-4">
+          { 
+            race!.qualifiedFinishers.length > 0
+            ? race!.qualifiedFinishers.map( (f,i) => (
+                <FinisherTile key={i} position={i} racer={ f } />
               ))
+            : <Tile title="..." subtitle="No finishers" className="TileTodo bg-white" />
           }
         </div>
-      </ModalTile>
-    )
+      </div>
+
+      {
+        race!.failedFinishers.length > 0 &&
+        <>
+          <HTML.h1 className="px-4">Disqualified</HTML.h1>
+          <div className="py-4 overflow-x-scroll scroll-smooth">
+            <div className="row-2 mx-4">
+              { race!.failedFinishers.reverse().map( (f,i) => (
+                  <FailureTile key={i} racer={ f } />
+                ))
+              }
+            </div>
+          </div>
+        </>
+      }
+    </div>
+  )
+}
+
+function StillRacingTile({racer, race, finishRacer}:
+  {racer: RacerSchema, race: RaceSchema, finishRacer: (racer: RacerSchema, race: RaceSchema, failure?: FailureSchema) => void}
+) {
+  const [hide, setHide] = useState<boolean>(true)
+
+  const failures: FailureSchema[] = ['DSQ','DNF','DNS','TLE']
+
+  const onShowFailures: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    console.log('onShowFailures')
+    e.preventDefault()
+    e.stopPropagation()
+
+    setHide( false )
   }
+
+  return (
+    <ModalTile racer={racer}>
+      <div className="col-0 gap-[1px] bg-gray-300">
+        <button
+          className="ContextMenuPrimary"
+          onClick={ () => finishRacer(racer, race) }
+        >
+          Finish
+        </button>
+        
+        { hide
+          ? <button
+              className="ContextMenuSecondary"
+              onClick={ onShowFailures }
+            >
+              Disqualify
+            </button>
+          : failures.map( d => (
+              <button
+                className="ContextMenuSecondary"
+                onClick={ () => finishRacer(racer, race, d) }
+                >{d}</button>
+            ))
+        }
+      </div>
+    </ModalTile>
+  )
+}
