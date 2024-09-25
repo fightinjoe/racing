@@ -5,7 +5,6 @@ import { useRaceDayStore } from "@/stores/raceDayStore"
 import { useRacerSort } from "@/lib/useRacerSort"
 
 import AddPartial from "./_add"
-import type { RacerFormData } from "./_add"
 import HTML from "@/components/html"
 import { ModalTile } from "@/components/tile"
 
@@ -17,7 +16,7 @@ export default function RacersPage() {
 
   const [racerToEdit, setRacerToEdit] = useState<RacerSchema | null>(null)
 
-  const onSave = (data: RacerFormData) => {
+  const onSave = (data: RacerFormSchema) => {
     racerToEdit
     ? editRacer(racerToEdit, data)
     : addRacer(data.name, data.sailNumber, data.fleet)

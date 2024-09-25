@@ -17,8 +17,8 @@ function Radio<T extends FieldValues>({name, register, value, children, ...rest}
     <div>
       {
         register
-        ? <input type="radio" id={ id } value={ value } {...register(name)} {...rest} />
-        : <input type="radio" id={ id } value={ value } {...rest} />
+        ? <input type="radio" readOnly={true} id={ id } value={ value } {...register(name)} {...rest} />
+        : <input type="radio" readOnly={true} id={ id } value={ value } {...rest} />
       }
       <label htmlFor={ id }>{ children }</label>
     </div>
