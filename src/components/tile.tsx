@@ -124,7 +124,8 @@ export function FailureTile({racer}:{racer: FinisherSchema}) {
   )
 }
 
-export function ModalTile({racer, children}: {racer: RacerSchema, children?:React.ReactNode}) {
+export function ModalTile({racer, children, className}:
+  {racer: RacerSchema, children?:React.ReactNode, className:string}) {
   const dialog = useRef(null)
 
   const onClick = () => {
@@ -157,7 +158,7 @@ export function ModalTile({racer, children}: {racer: RacerSchema, children?:Reac
       <Tile
         title={ racer.sailNumber || '?' }
         subtitle={ `${racer.name} (${racer.fleet} fleet)` }
-        className="bg-ocean-100 relative"
+        className={`relative ${className}`}
         onClick={ onClick }
       />
       <dialog ref={dialog} className={`Modal`} onClick={ onDialogClick }>

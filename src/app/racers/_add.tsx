@@ -40,7 +40,7 @@ export default function AddPartial({ racer, onSave, onCancel }:
   }
 
   return (
-    <form  className="col-2 items-start" onSubmit={handleSubmit(onSubmit)}>
+    <form className="col-2 items-start" onSubmit={handleSubmit(onSubmit)}>
       <Form.Text
         placeholder="Name"
         register={register}
@@ -58,12 +58,14 @@ export default function AddPartial({ racer, onSave, onCancel }:
         <Form.Radio name="fleet" value={'B'} register={register}>B fleet</Form.Radio>
       </fieldset>
 
-      {
-        racer
-        ? <button onClick={ handleCancel }>Cancel</button>
-        : ''
-      }
-      <input type="submit" value={ racer ? 'Save changes' : 'Add' } className="ButtonSubmit" />
+      <div className="row-4 w-full justify-end">
+        {
+          racer
+          ? <button onClick={ handleCancel }>Cancel</button>
+          : ''
+        }
+        <input type="submit" value={ racer ? 'Save changes' : 'Add' } className="ButtonSubmit" />
+      </div>
     </form>
   )
 }

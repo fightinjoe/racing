@@ -37,7 +37,7 @@ export default function RacersPage() {
         </HTML.Back>
       </header>
 
-      <section className="bg-white p-4">
+      <section className={`p-4 ${racerToEdit ? 'bg-yellow-100' : 'bg-white'}`}>
         <AddPartial racer={racerToEdit} {...{onSave, onCancel}} />
       </section>
 
@@ -46,7 +46,11 @@ export default function RacersPage() {
 
         <div className="row-wrap-2">{
           racers.sort( helpSortRacers ).map( (racer,i) => (
-            <ModalTile key={i} racer={racer}>
+            <ModalTile
+              key={i}
+              racer={racer}
+              className={racerToEdit && racer.id === racerToEdit.id ? 'bg-yellow-100' : 'bg-white'}
+            >
               <div className="col-0 gap-[1px] bg-gray-300">
                 <button
                   className="ContextMenuPrimary"
