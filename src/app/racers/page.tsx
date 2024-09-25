@@ -61,7 +61,7 @@ export default function RacersPage() {
                 
                 <button
                   className="ContextMenuSecondary"
-                  onClick={ () => deleteRacer(racer) }
+                  onClick={ () => confirm('Do you want to permanently delete this racer?') && deleteRacer(racer) }
                 >
                   Delete
                 </button>
