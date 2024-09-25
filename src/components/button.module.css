@@ -17,3 +17,17 @@
     @apply font-medium text-black;
   }
 }
+
+.primary {
+  @apply p-4 w-full rounded;
+  @apply font-medium text-white bg-ocean-400;
+
+  &:hover, &:active {
+    @apply bg-ocean-500 shadow;
+  }
+}
+
+.secondary {
+  @apply px-4 py-3 w-full;
+  @apply text-sm text-gray-700 bg-white;
+}

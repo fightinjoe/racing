@@ -80,28 +80,28 @@
   .ButtonCancel:hover { @apply bg-gray-100; }
 
   /* Styling for context menu buttons */
-  .ContextMenuPrimary {
+  /* .ContextMenuPrimary {
     @apply p-4 w-full;
     @apply font-medium text-ocean-800 bg-ocean-100;
-  }
+  } */
 
-  .ContextMenuSecondary {
+  /* .ContextMenuSecondary {
     @apply px-4 py-2 w-full;
     @apply text-sm bg-white;
-  }
+  } */
 
-  .TileTodo {
+  /* .TileTodo {
     @apply border border-dashed border-gray-300 text-gray-400;
-  }
+  } */
 
   .FormText {
     @apply mt-1 block w-full rounded-md bg-gray-100 border-transparent focus:border-gray-500 focus:bg-white focus:ring-0;
   }
 
-  .Modal {
+  /* .Modal {
     position: absolute;
     margin: 0;
-  }
+  } */
 
   .Modal::backdrop {
     background-color: rgba(0,0,0,0.4);

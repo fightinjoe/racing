@@ -6,6 +6,7 @@ import { useRacerSort } from "@/lib/useRacerSort"
 
 import AddPartial from "./_add"
 import HTML from "@/components/html"
+import Button from "@/components/button"
 import { ModalTile } from "@/components/tile"
 
 export default function RacersPage() {
@@ -49,19 +50,15 @@ export default function RacersPage() {
               className={racerToEdit && racer.id === racerToEdit.id ? 'bg-yellow-100' : 'bg-ocean-200'}
             >
               <div className="col-0 gap-[1px] bg-gray-300">
-                <button
-                  className="ContextMenuPrimary"
-                  onClick={ () => setRacerToEdit(racer) }
-                >
+                <Button.Primary onClick={ () => setRacerToEdit(racer) }>
                   Edit
-                </button>
+                </Button.Primary>
                 
-                <button
-                  className="ContextMenuSecondary"
+                <Button.Secondary
                   onClick={ () => confirm('Do you want to permanently delete this racer?') && deleteRacer(racer) }
                 >
                   Delete
-                </button>
+                </Button.Secondary>
               </div>
             </ModalTile>
           ))

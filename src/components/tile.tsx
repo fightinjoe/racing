@@ -144,9 +144,9 @@ export function ModalTile({racer, children, className}:
     const dims = tile.getBoundingClientRect()
 
     // Position the modal
-    modal.style.top = dims.top + 'px'
-    modal.style.left = dims.left + 'px'
-    modal.style.width = dims.width + 'px'
+    modal.style.top = `${ dims.top - 5 }px`
+    modal.style.left = `${ dims.left - 5 }px`
+    modal.style.width = `${ dims.width + 8 }px`
 
     // Make the modal appear on the screen
     modal!.showModal()
@@ -169,7 +169,7 @@ export function ModalTile({racer, children, className}:
         className={`relative ${className}`}
         onClick={ onClick }
       />
-      <dialog ref={dialog} className={`Modal`} onClick={ onDialogClick }>
+      <dialog ref={dialog} className={styles.modal} onClick={ onDialogClick }>
         { children }
       </dialog>
     </div>
