@@ -13,6 +13,8 @@ import { RaceDay } from "@/models/raceday"
 import { capitalize, toId } from "@/lib/string"
 import { useRouter } from "next/navigation"
 
+import styles from "./page.module.css"
+
 type ModalConfig = {
   fleet?: FleetSchema,
   count: number
@@ -234,7 +236,7 @@ function CourseModal({fleet, count, onCancel}:
       
       <div className="grid grid-cols-3 gap-2">
         { imgs.map( ([img, title],i) => (
-            <div className="RadioTile" key={i}>
+            <div className={ styles.RadioTile } key={i}>
               <input
                 type="radio"
                 id={ toId(title) }

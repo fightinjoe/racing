@@ -52,7 +52,7 @@
    *   Stylized Radio button + Label that appears as a clickable tile
    *   that remains selected once clicked
    */
-   .RadioTile input[type=radio] {
+   /* .RadioTile input[type=radio] {
     @apply hidden;
   }
 
@@ -69,7 +69,7 @@
   .RadioTile input:checked + label {
     @apply border-ocean-400;
     @apply bg-ocean-100;
-  }
+  } */
 
   /* Submit button styling */
 

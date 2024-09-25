@@ -7,6 +7,8 @@ import HTML from '@/components/html'
 import { printDuration } from "@/lib/printer"
 import { Timer } from "./timer"
 
+import styles from "./race.module.css"
+
 function StartRacePartial({fleet, course, count, disabled}:
   {fleet?:FleetSchema, course:CourseSchema, count: number, disabled?: boolean}) {
   const router = useRouter()
@@ -24,7 +26,7 @@ function StartRacePartial({fleet, course, count, disabled}:
 
   return (
     <button
-      className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500 disabled:TileTodo disabled:bg-white disabled:border-2"
+      className={ styles.startRace }
       onClick={ handleClick }
       disabled={ disabled }
     >
