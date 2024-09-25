@@ -12,6 +12,7 @@ interface RaceDayState {
   config: ConfigSchema,
 
   addRacer: (name: string, sailNumber: string, fleet: FleetSchema) => RacerSchema,
+  deleteRacer: (racer: RacerSchema) => void,
   clearRacers: () => void,
 
   startRace: (course:CourseSchema, fleet?:FleetSchema) => RaceSchema,
@@ -53,6 +54,15 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
     }
     set({ racers: [...get().racers, racer] })
     return racer
+  },
+
+  /**
+   * Deletes a racer from the data store
+   * @param racer RacerSchema for the racer to delete
+   */
+  deleteRacer: (racer) => {
+    const racers = get().racers.filter( r => r.id !== racer.id )
+    set({ racers })
   },
 
   clearRacers: () => {

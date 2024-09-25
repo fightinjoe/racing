@@ -6,12 +6,12 @@ import { useRacerSort } from "@/lib/useRacerSort"
 
 import AddPartial from "./_add"
 import HTML from "@/components/html"
-import { RacerTile } from "@/components/tile"
+import { ModalTile } from "@/components/tile"
 
 export default function RacersPage() {
-  const racers = useRaceDayStore(s => s.racers)
+  const [racers, deleteRacer] = useRaceDayStore(s => [s.racers, s.deleteRacer])
 
-  const {sort, Tabs, helpSortRacers} = useRacerSort()
+  const {Tabs, helpSortRacers} = useRacerSort()
 
   return (
     <main>
@@ -29,8 +29,23 @@ export default function RacersPage() {
         { racers.length > 0 && <Tabs /> }
 
         <div className="row-wrap-2">{
-          racers.sort( helpSortRacers ).map( (r,i) => (
-            <RacerTile key={i} racer={r} />
+          racers.sort( helpSortRacers ).map( (racer,i) => (
+            <ModalTile key={i} racer={racer}>
+              <div className="col-0 gap-[1px] bg-gray-300">
+                <button
+                  className="ContextMenuPrimary"
+                >
+                  Edit
+                </button>
+                
+                <button
+                  className="ContextMenuSecondary"
+                  onClick={ () => deleteRacer(racer) }
+                >
+                  Delete
+                </button>
+              </div>
+            </ModalTile>
           ))
         }</div>
       </section>
