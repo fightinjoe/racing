@@ -6,6 +6,7 @@ import { racerFormSchema } from "@/schemas/forms"
 import { zodResolver } from "@hookform/resolvers/zod"
 
 import Form from "@/components/form"
+import Button from "@/components/button"
 
 export default function AddPartial({ racer, onSave, onCancel }:
   {racer: RacerSchema | null, onSave: (d:RacerFormSchema)=>void, onCancel: ()=>void}) {
@@ -66,13 +67,13 @@ export default function AddPartial({ racer, onSave, onCancel }:
       </fieldset>
       {<ErrorMessage name="fleet" errors={errors}>Please choose a racing fleet</ErrorMessage>}
 
-      <div className="row-4 w-full justify-end">
+      <div className="row-0 w-full justify-end">
         {
           racer
-          ? <button onClick={ handleCancel }>Cancel</button>
+          ? <Button.Cancel onClick={ handleCancel } />
           : ''
         }
-        <input type="submit" value={ racer ? 'Save changes' : 'Add' } className="ButtonSubmit" />
+        <Button.Submit value={ racer ? 'Save changes' : 'Add' } />
       </div>
     </form>
   )

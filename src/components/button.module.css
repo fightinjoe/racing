@@ -1,0 +1,19 @@
+.submit {
+  @apply bg-ocean-400 text-white text-sm;
+  @apply px-6 py-3 rounded;
+  @apply cursor-pointer;
+
+  &:hover, &:active {
+    @apply bg-ocean-500 shadow;
+  }
+}
+
+.cancel {
+  @apply px-6 py-3;
+  @apply cursor-pointer;
+  @apply text-sm text-gray-700;
+
+  &:hover, &:active {
+    @apply font-medium text-black;
+  }
+}

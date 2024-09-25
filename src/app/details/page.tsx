@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import HTML from "@/components/html"
 import Form from '@/components/form'
 import { useRaceDayStore } from "@/stores/raceDayStore"
+import Button from '@/components/button'
 
 type MyFormData = {
   sailSize: SailSizeSchema,
@@ -93,7 +94,7 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
 
           <div className="row-4 justify-end mt-6">
             <button onClick={ handleReset } className="ButtonCancel" type="button">Reset</button>
-            <input type="submit" value="Save" className="ButtonSubmit" />
+            <Button.Submit value="Save" />
           </div>
 
         </form>
