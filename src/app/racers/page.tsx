@@ -30,7 +30,7 @@ export default function RacersPage() {
   }
 
   return (
-    <main>
+    <main className="h-full col-0">
       <HTML.Header>
         <HTML.Back>Racers</HTML.Back>
       </HTML.Header>
@@ -39,10 +39,10 @@ export default function RacersPage() {
         <AddPartial racer={racerToEdit} {...{onSave, onCancel}} />
       </section>
 
-      <section className="p-4 col-4 shadow-inner">
+      <section className="p-4 col-4 shadow-inner overflow-scroll">
         { racers.length > 0 && <Tabs darkMode={true} /> }
 
-        <div className="row-wrap-2">{
+        <div className="row-wrap-2 overflow-scroll">{
           racers.sort( helpSortRacers ).map( (racer,i) => (
             <ModalTile
               key={i}
