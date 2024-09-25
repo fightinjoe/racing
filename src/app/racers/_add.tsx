@@ -1,28 +1,42 @@
 'use client'
 
 import { useRaceDayStore } from "@/stores/raceDayStore"
-// import { ChangeEventHandler, MouseEventHandler, useState } from "react"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 
 import Form from "@/components/form"
 
-type _FormData = {
+export type RacerFormData = {
   name: string,
   sailNumber: string,
   fleet: FleetSchema
 }
 
-export default function AddPartial() {
-  const { register, handleSubmit, setValue } = useForm<_FormData>()
+export default function AddPartial({ racer, onSave, onCancel }:
+  {racer: RacerSchema | null, onSave: (d:RacerFormData)=>void, onCancel: ()=>void}) {
+  const { register, handleSubmit, setValue } = useForm<RacerFormData>()
 
-  const addRacer = useRaceDayStore(s=>s.addRacer)
-  
-  const onSubmit = (data: _FormData) => {
-    console.log('submitted data', data)
-    addRacer(data.name, data.sailNumber, data.fleet)
+  useEffect(() => {
+    if( !racer ) return
+
+    setValue('name', racer.name)
+    setValue('sailNumber', racer.sailNumber)
+    setValue('fleet', racer.fleet)
+  }, [racer])
+
+  const onSubmit = (data: RacerFormData) => {
+    onSave(data)
 
     setValue('name', '')
     setValue('sailNumber', '')
+  }
+
+  const handleCancel = () => {
+    onCancel()
+    setValue('name', '')
+    setValue('sailNumber', '')
+
+    return false
   }
 
   return (
@@ -44,7 +58,12 @@ export default function AddPartial() {
         <Form.Radio name="fleet" value={'B'} register={register}>B fleet</Form.Radio>
       </fieldset>
 
-      <input type="submit" value="Add" className="ButtonSubmit" />
+      {
+        racer
+        ? <button onClick={ handleCancel }>Cancel</button>
+        : ''
+      }
+      <input type="submit" value={ racer ? 'Save changes' : 'Add' } className="ButtonSubmit" />
     </form>
   )
 }
