@@ -5,6 +5,8 @@ import Form from "@/components/form"
 
 import { capitalize, sortSailNumbers } from "@/lib/string"
 
+import styles from "./useRacerSort.module.css"
+
 export function useRacerSort(params: {sorts?:RacersSort[]} = {}) {
   const sorts = params.sorts || ['added', 'name', 'number', 'fleet']
 
@@ -31,7 +33,7 @@ export function useRacerSort(params: {sorts?:RacersSort[]} = {}) {
     })
 
     return (
-      <fieldset className="RadioTabs row-2">
+      <fieldset className={`${styles.RadioTabs} row-2`}>
         {
           sorts.map( (s,i) => (
             <Form.Radio key={i} {...props(s)}>{
