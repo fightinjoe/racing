@@ -1,6 +1,7 @@
 'use client'
 
 import { useRouter } from "next/navigation"
+import styles from "./html.module.css"
 
 type HeadingProps = React.PropsWithChildren<React.HTMLAttributes<HTMLHeadingElement>>
 
@@ -21,8 +22,8 @@ function Small({children, ...rest}: SmallProps) {
 }
 
 type BackProps = React.PropsWithChildren<
-  React.HTMLAttributes<HTMLButtonElement> &
-  { url?: string }
+  React.HTMLAttributes<HTMLButtonElement>
+  & { url?: string }
 >
 
 /**
@@ -34,6 +35,8 @@ type BackProps = React.PropsWithChildren<
 function Back({url, ...props}: BackProps) {
   const router = useRouter()
 
+  const className = [styles.Back, props.className].join(' ')
+
   const handleClick: typeof props.onClick = (e) => {
     if (props.onClick) return props.onClick(e)
 
@@ -43,15 +46,29 @@ function Back({url, ...props}: BackProps) {
   }
 
   return (
-    <button onClick={handleClick} className="row-2">
-      &lt;--
+    <button
+      onClick={handleClick}
+      className={className}
+    >
+      <span>&lt;--</span>
       { props.children }
     </button>
   )
 }
 
+type HeaderProps = React.PropsWithChildren<React.HTMLAttributes<HTMLElement>>
+function Header(props: HeaderProps) {
+  const className = [styles.Header, props.className].join(' ')
+
+  return (
+    <header {...props} className={className}>
+      { props.children }
+    </header>
+  )
+}
+
 const HTML = {
-  H1, Small, Back
+  H1, Small, Back, Header
 }
 
 export default HTML

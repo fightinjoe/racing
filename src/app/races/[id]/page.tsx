@@ -140,11 +140,11 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   return (
     <div>
-      <header className="p-4 row-2">
+      <HTML.Header>
         <HTML.Back>
           Single race { _race!.id } { _race.fleet ? '' : '(combined)'}
         </HTML.Back>
-      </header>
+      </HTML.Header>
 
       {/* Timer, course */}
       <_Banner />

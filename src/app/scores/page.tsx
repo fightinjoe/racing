@@ -15,11 +15,9 @@ export default function ScoresPage() {
 
   return (
     <main>
-      <header className="p-4 row-2">
-        <HTML.Back>
-          <HTML.H1>Scores</HTML.H1>
-        </HTML.Back>
-      </header>
+      <HTML.Header>
+        <HTML.Back>Scores</HTML.Back>
+      </HTML.Header>
 
       { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
 

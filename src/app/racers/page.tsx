@@ -30,11 +30,9 @@ export default function RacersPage() {
 
   return (
     <main>
-      <header className="p-4 row-2">
-        <HTML.Back>
-          <HTML.H1>Racers</HTML.H1>
-        </HTML.Back>
-      </header>
+      <HTML.Header>
+        <HTML.Back>Racers</HTML.Back>
+      </HTML.Header>
 
       <section className={`p-4 ${racerToEdit ? 'bg-yellow-100' : 'bg-white'}`}>
         <AddPartial racer={racerToEdit} {...{onSave, onCancel}} />

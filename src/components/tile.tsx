@@ -133,7 +133,7 @@ export function FailureTile({racer}:{racer: FinisherSchema}) {
 }
 
 export function ModalTile({racer, children, className}:
-  {racer: RacerSchema, children?:React.ReactNode, className:string}) {
+  {racer: RacerSchema, children?:React.ReactNode, className?:string}) {
   const dialog = useRef(null)
 
   const onClick = () => {

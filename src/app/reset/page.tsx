@@ -10,11 +10,11 @@ export default function ResetPage() {
 
   return (
     <div>
-      <header className="p-4 row-2">
+      <HTML.Header>
         <HTML.Back>
           Clear data
         </HTML.Back>
-      </header>
+      </HTML.Header>
 
       <div className="p-4 grid grid-cols-2 gap-4">
         <HTML.H1>{ races.length } races</HTML.H1>

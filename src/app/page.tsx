@@ -226,11 +226,11 @@ function CourseModal({fleet, count, onCancel}:
 
   return (
     <div className="p-4 col-4 absolute inset-0 bg-white">
-      <header className="row-2">
+      <HTML.Header>
         <HTML.Back onClick={ onCancel }>
           Race {count} {fleet && `- ${fleet} fleet`}
         </HTML.Back>
-      </header>
+      </HTML.Header>
       
       <div className="grid grid-cols-3 gap-2">
         { imgs.map( ([img, title],i) => (

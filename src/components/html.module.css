@@ -1,0 +1,7 @@
+.Back {
+  @apply row-2 p-4;
+}
+
+.Header {
+  @apply bg-white sticky;
+}
