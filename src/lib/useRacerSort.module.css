@@ -1,20 +1,34 @@
 .RadioTabs {
   @apply row-2 py-1 mb-2 w-full;
   @apply text-sm;
-}
 
-.RadioTabs input[type=radio] {
-  @apply hidden;
-}
+  & input[type=radio] {
+    @apply hidden;
+  }
 
-.RadioTabs label {
-  @apply px-3 py-1 my-1;
-  @apply border-b-2 border-x-gray-200 border-y-white;
-  @apply cursor-pointer;
-}
+  & label {
+    @apply px-3 py-1 my-1;
+    @apply border-b-2 border-x-transparent border-y-white;
+    @apply cursor-pointer;
+  }
 
-.RadioTabs input:checked + label {
-  @apply py-2 my-0;
-  @apply bg-white;
-  @apply border-ocean-400;
+  & input:checked + label {
+    @apply py-2 my-0;
+    @apply bg-white;
+    @apply border-ocean-400;
+  }
+
+  &.dark {
+    & label {
+      @apply text-white;
+      @apply border-x-red-200 border-y-transparent;
+      @apply font-light;
+    }
+
+    & input:checked + label {
+      @apply bg-transparent;
+      @apply border-aqua-300;
+      @apply font-medium text-aqua-300;
+    }
+  }
 }

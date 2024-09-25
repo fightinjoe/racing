@@ -38,15 +38,15 @@ export default function RacersPage() {
         <AddPartial racer={racerToEdit} {...{onSave, onCancel}} />
       </section>
 
-      <section className="p-4 col-4 bg-gray-100 shadow-inner">
-        { racers.length > 0 && <Tabs /> }
+      <section className="p-4 col-4 shadow-inner">
+        { racers.length > 0 && <Tabs darkMode={true} /> }
 
         <div className="row-wrap-2">{
           racers.sort( helpSortRacers ).map( (racer,i) => (
             <ModalTile
               key={i}
               racer={racer}
-              className={racerToEdit && racer.id === racerToEdit.id ? 'bg-yellow-100' : 'bg-white'}
+              className={racerToEdit && racer.id === racerToEdit.id ? 'bg-yellow-100' : 'bg-ocean-200'}
             >
               <div className="col-0 gap-[1px] bg-gray-300">
                 <button

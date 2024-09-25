@@ -20,7 +20,7 @@ export function useRacerSort(params: {sorts?:RacersSort[]} = {}) {
     -1
   )
 
-  const Tabs = () => {
+  const Tabs = ({darkMode}: {darkMode?:boolean}) => {
     const handleClick: React.ChangeEventHandler<HTMLInputElement> = (e) => {
       setSort(e.target.value as RacersSort)
     }
@@ -33,7 +33,7 @@ export function useRacerSort(params: {sorts?:RacersSort[]} = {}) {
     })
 
     return (
-      <fieldset className={`${styles.RadioTabs} row-2`}>
+      <fieldset className={`${styles.RadioTabs} ${ darkMode && styles.dark}`}>
         {
           sorts.map( (s,i) => (
             <Form.Radio key={i} {...props(s)}>{
