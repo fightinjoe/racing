@@ -20,17 +20,22 @@ function Small({children, ...rest}: SmallProps) {
   )
 }
 
+type BackProps = React.PropsWithChildren<
+  React.HTMLAttributes<HTMLButtonElement> &
+  { url?: string }
+>
+
 /**
  * Displays a <-- Back button
  * @param url optional string URL to push into the Next router
  * @param onClick option click handler that replaces default click behavior
  * @returns 
  */
-function Back({url, onClick}: {url?: string, onClick?: ()=>void}) {
+function Back({url, ...props}: BackProps) {
   const router = useRouter()
 
-  const handleClick = () => {
-    if (onClick) return onClick()
+  const handleClick: typeof props.onClick = (e) => {
+    if (props.onClick) return props.onClick(e)
 
     url
     ? router.push(url)
@@ -38,7 +43,10 @@ function Back({url, onClick}: {url?: string, onClick?: ()=>void}) {
   }
 
   return (
-    <button onClick={handleClick}>&lt;--</button>
+    <button onClick={handleClick} className="row-2">
+      &lt;--
+      { props.children }
+    </button>
   )
 }
 

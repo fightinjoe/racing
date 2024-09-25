@@ -11,8 +11,9 @@ export default function ResetPage() {
   return (
     <div>
       <header className="p-4 row-2">
-        <HTML.Back />
-        Clear data
+        <HTML.Back>
+          Clear data
+        </HTML.Back>
       </header>
 
       <div className="p-4 grid grid-cols-2 gap-4">

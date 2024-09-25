@@ -16,8 +16,9 @@ export default function RacersPage() {
   return (
     <main>
       <header className="p-4 row-2">
-        <HTML.Back />
-        <HTML.H1>Racers</HTML.H1>
+        <HTML.Back>
+          <HTML.H1>Racers</HTML.H1>
+        </HTML.Back>
       </header>
 
       <section className="bg-white p-4">

@@ -69,8 +69,9 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
   return (
     <main>
       <header className="p-4 row-2">
-        <HTML.Back />
-        <HTML.H1>Race details</HTML.H1>
+        <HTML.Back>
+          <HTML.H1>Race details</HTML.H1>
+        </HTML.Back>
       </header>
 
       <div className="p-4">
