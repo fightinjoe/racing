@@ -29,8 +29,7 @@ export default function Home() {
 
   return (
     <>
-      <main>
-        <img src="/MFA_splash.png" alt="Mamaroneck Frostbite Association" />
+      <main className="m-2 mt-44 rounded overflow-hidden">
 
         {/* Banner communicating what the next steps are */}
         <NextStep />
@@ -67,19 +66,11 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
       <strong>{ raceDay.racers('B').length }</strong> B fleet
     </>
 
-    return count === 0
-    ? <NavTile
-        title="+"
-        subtitle="Add racers"
-        href="/racers"
-        className="TileTodo"
-      />
-    : <NavTile
-        title="Racers"
-        subtitle={ subtitle }
-        href="/racers"
-        className={ count < 5 ? "bg-yellow-100" : "bg-sky-50"}
-      />
+    return (
+      count === 0 ? <NavTile.Todo title="+" subtitle="Add racers" href="/racers" /> :
+      count < 5 ? <NavTile.Highlight title="Racers" subtitle={ subtitle } href="/racers" /> :
+      <NavTile.Base title="Racers" subtitle={ subtitle } href="/racers" className="bg-ocean-100" />
+    )
   }
 
   function _Details() {
@@ -92,16 +83,15 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
 
     return (
       raceDay._config.hasSaved
-      ? <NavTile
+      ? <NavTile.Base
           title={ title }
           subtitle={ `${ capitalize(raceDay.sailSize) } sails` }
           href="/details"
         />
-      : <NavTile
+      : <NavTile.Todo
           title="+"
           subtitle="Race details"
           href="/details"
-          className="TileTodo"
         />
     )
   }
@@ -115,7 +105,7 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
 
         <_Details />
 
-        <NavTile
+        <NavTile.Base
           title="Reset"
           subtitle="Clear data"
           href="/reset"

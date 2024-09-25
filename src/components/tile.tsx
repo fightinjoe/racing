@@ -3,6 +3,8 @@
 import { useRef } from "react"
 import { useRouter } from "next/navigation"
 
+import styles from './tile.module.css'
+
 interface TileProps {
   title: string | React.ReactNode,
   subtitle: string | React.ReactNode,
@@ -43,24 +45,30 @@ export default function Tile({ title, subtitle, className, onClick, children }: 
   )
 }
 
+interface NavTileProps {
+  title: string,
+  subtitle: string | React.ReactNode,
+  href: string,
+  className?: string
+}
+
 /**
  * Tile used for navigating to another page
  * @returns 
  */
-export function NavTile(
-  { title, subtitle, href, className }:
-  { title: string, subtitle: string | React.ReactNode, href: string, className?: string }
-) {
-  const router = useRouter()
+export const NavTile = {
+  Base: (props: NavTileProps) => {
+    const router = useRouter()
+    return <Tile {...props} onClick={ () => router.push(props.href) } />
+  },
 
-  return (
-    <Tile
-      title={title}
-      subtitle={subtitle}
-      className={`bg-white ${className}`}
-      onClick={ () => router.push(href) }
-    />
-  )
+  Todo: (props: NavTileProps) => (
+    <NavTile.Base {...{...props, className: `${props.className} ${styles.Todo}`}} />
+  ),
+
+  Highlight: (props: NavTileProps) => (
+    <NavTile.Base {...{...props, className: `${props.className} ${styles.Highlight}`}} />
+  ),
 }
 
 /**
