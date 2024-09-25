@@ -26,7 +26,7 @@ export default function RacersPage() {
       </section>
 
       <section className="p-4 col-4 bg-gray-100 shadow-inner">
-        <Tabs />
+        { racers.length > 0 && <Tabs /> }
 
         <div className="row-wrap-2">{
           racers.sort( helpSortRacers ).map( (r,i) => (
