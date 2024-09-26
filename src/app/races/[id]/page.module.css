@@ -1,0 +1,7 @@
+.wrapper {
+  @apply overflow-scroll;
+}
+
+.finishers {
+  @apply m-2 py-2 col-2 bg-ocean-200 rounded-xl;
+}

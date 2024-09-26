@@ -12,6 +12,8 @@ import { ModalTile } from "@/components/tile"
 import HTML from "@/components/html"
 import { useRacerSort } from "@/lib/useRacerSort"
 
+import styles from "./page.module.css"
+
 export default function RacePage({params}: {params: {id: string}}) {
   
   /*== Hooks ==*/
@@ -139,7 +141,7 @@ export default function RacePage({params}: {params: {id: string}}) {
   }
 
   return (
-    <div>
+    <div className="col-0 h-full bg-white">
       <HTML.Header>
         <HTML.Back>
           Single race { _race!.id } { _race.fleet ? '' : '(combined)'}
@@ -149,13 +151,15 @@ export default function RacePage({params}: {params: {id: string}}) {
       {/* Timer, course */}
       <_Banner />
 
-      {/* Show the finishers when racing */}
-      { raceState === 'racing' && race && <FinishersPartial race={race} /> }
+      <div className={ styles.wrapper }>
+        {/* Show the finishers when racing */}
+        { raceState === 'racing' && race && <FinishersPartial race={race} /> }
 
-      {/* Show the racers that are still racing */}
-      <section className="p-4">
-        { !race!.isFinished && <_StillRacing /> }
-      </section>
+        {/* Show the racers that are still racing */}
+        <section className="p-4">
+          { !race!.isFinished && <_StillRacing /> }
+        </section>
+      </div>
     </div>
   )
 }
@@ -171,7 +175,7 @@ function FinishersPartial({race}: {race:Race}) {
   },[race])
 
   return (
-    <div className="py-4 col-2 bg-ocean-200">
+    <section className={styles.finishers}>
 
       <HTML.H1 className="px-4">Finshers</HTML.H1>
       <div className="py-4 overflow-x-scroll scroll-smooth" ref={wrapper}>
@@ -200,7 +204,7 @@ function FinishersPartial({race}: {race:Race}) {
           </div>
         </>
       }
-    </div>
+    </section>
   )
 }
 
