@@ -6,7 +6,7 @@ import { useRaceDayStore } from "@/stores/raceDayStore"
 
 import { Race, RaceState } from "@/models/race"
 
-import Tile, { FinisherTile, FailureTile } from "@/components/tile"
+import Tile, { Tiles, FinisherTile, FailureTile } from "@/components/tile"
 import { Duration, Timer } from "@/components/timer"
 import { ModalTile } from "@/components/tile"
 import HTML from "@/components/html"
@@ -132,7 +132,7 @@ export default function RacePage({params}: {params: {id: string}}) {
               .map( r => (
                 race!.raceState === 'racing'
                 ? <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
-                : <Tile key={r.id} title={r.sailNumber} subtitle={r.name} className="TileTodo" />
+                : <Tiles.Todo key={r.id} title={r.sailNumber} subtitle={r.name} />
               ) )
           }
         </div>
@@ -148,7 +148,7 @@ export default function RacePage({params}: {params: {id: string}}) {
         </HTML.Back>
       </HTML.Header>
 
-      {/* Timer, course */}
+      {/* Timer + race course */}
       <_Banner />
 
       <div className={ styles.wrapper }>
