@@ -10,6 +10,8 @@ import Tile, { Tiles, FinisherTile, FailureTile } from "@/components/tile"
 import { Duration, Timer } from "@/components/timer"
 import { ModalTile } from "@/components/tile"
 import HTML from "@/components/html"
+import Button from "@/components/button"
+
 import { useRacerSort } from "@/lib/useRacerSort"
 
 import styles from "./page.module.css"
@@ -28,11 +30,12 @@ export default function RacePage({params}: {params: {id: string}}) {
   
   const race = _race && new Race(_race, _racers)
 
-  const [initialState, duration] = _race ? race!.fullRaceState : []
-  
   const router = useRouter()
 
+  // Setup the timeouts to change the racing state, from 'before-start' to 'can-recall' to 'racing'
   useEffect(() => {
+    const [initialState, duration] = _race ? race!.fullRaceState : []
+
     if (!initialState) return
 
     // Tracks intervals so they can be canceled when the component is de-rendered
@@ -58,7 +61,7 @@ export default function RacePage({params}: {params: {id: string}}) {
     return () => {
       intervals.map( i => clearTimeout(i) )
     }
-  }, [_race, duration, initialState, raceState])
+  }, [_race, raceState])
 
   if (!_race) return (<strong>404: Race not found</strong>)
 
@@ -225,26 +228,19 @@ function StillRacingTile({racer, race, finishRacer}:
   return (
     <ModalTile racer={racer}>
       <div className="col-0 gap-[1px] bg-gray-300">
-        <button
-          className="ContextMenuPrimary"
-          onClick={ () => finishRacer(racer, race) }
-        >
+        <Button.Primary onClick={ () => finishRacer(racer, race) }>
           Finish
-        </button>
+        </Button.Primary>
         
         { hide
-          ? <button
-              className="ContextMenuSecondary"
-              onClick={ onShowFailures }
-            >
+          ? <Button.Secondary onClick={ onShowFailures }>
               Disqualify
-            </button>
+            </Button.Secondary>
           : failures.map( d => (
-              <button
+              <Button.Secondary
                 key={d}
-                className="ContextMenuSecondary"
                 onClick={ () => finishRacer(racer, race, d) }
-                >{d}</button>
+                >{d}</Button.Secondary>
             ))
         }
       </div>

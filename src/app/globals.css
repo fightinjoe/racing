@@ -73,11 +73,11 @@
 
   /* Submit button styling */
 
-  .ButtonCancel {
+  /* .ButtonCancel {
 
   }
 
-  .ButtonCancel:hover { @apply bg-gray-100; }
+  .ButtonCancel:hover { @apply bg-gray-100; } */
 
   /* Styling for context menu buttons */
   /* .ContextMenuPrimary {
@@ -103,8 +103,8 @@
     margin: 0;
   } */
 
-  .Modal::backdrop {
+  /* .Modal::backdrop {
     background-color: rgba(0,0,0,0.4);
-  }
+  } */
 }
 

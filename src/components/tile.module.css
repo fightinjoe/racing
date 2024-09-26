@@ -17,4 +17,18 @@
 .modal {
   @apply absolute m-0 rounded overflow-hidden shadow-lg;
   @apply border-2 border-white;
+
+  &[open]::backdrop {
+    background-color: rgba(0,0,0,0.4);
+    animation: show 150ms ease forwards;
+  }
+
+  &[open] {
+    -webkit-animation: show 150ms ease normal;
+  }
+}
+
+@-webkit-keyframes show{
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
