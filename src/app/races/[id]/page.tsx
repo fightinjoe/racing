@@ -222,7 +222,27 @@ function StillRacingTile({racer, race, finishRacer}:
     e.preventDefault()
     e.stopPropagation()
 
+    // get the dialog node
+    let parent = e.target as any
+
+    while( parent.nodeName !== 'DIALOG' ) {
+      parent = parent.parentNode
+    }
+
+    // get the height of the parent
+    const dialog = parent as HTMLDialogElement
+    const r1 = dialog.getBoundingClientRect()
+
+    // show the buttons
     setHide( false )
+
+    // shift the dialog up by the difference in height, with a timeout
+    // to make sure the DOM has updated
+    setTimeout(() => {
+      const r2 = dialog.getBoundingClientRect()
+      dialog.style.top = `${ r1.top - (r2.height - r1.height) }px`
+    }, 50)
+
   }
 
   return (
