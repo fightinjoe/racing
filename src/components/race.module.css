@@ -10,3 +10,28 @@
     @apply border-2 border-dashed border-gray-300 text-gray-400 bg-white;
   }
 }
+
+.runningRace {
+  @apply block p-2;
+  @apply flex flex-row gap-4 items-center;
+  @apply bg-aqua-400 hover:bg-aqua-500 text-ocean-800;
+
+  & .timer {
+    @apply font-mono text-right;
+    @apply w-[5em]
+  }
+
+  & .title {
+    @apply row-wrap-0;
+    @apply text-left;
+    @apply overflow-hidden;
+
+    & strong {
+      margin-right: 1ex;
+    }
+
+    & span {
+      @apply truncate;
+    }
+  }
+}

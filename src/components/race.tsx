@@ -41,20 +41,21 @@ function StartRacePartial({fleet, course, count, disabled}:
  * @param param.race - RaceSchema object to display
  * @returns 
  */
-function RunRacePartial({race}:{race:RaceSchema}) {
+function RunningRacePartial({race}:{race:RaceSchema}) {
   const router = useRouter()
 
   return (
     <button
-      className="block flex flex-col p-4 bg-aqua-400 hover:bg-aqua-500 text-ocean-800"
+      className={styles.runningRace}
       onClick={ () => router.push(`/races/${race.id}`) }
     >
-      <HTML.H1 className="flex flex-row gap-4">
+      <HTML.H1 className={styles.timer}>
         <Timer start={ race.startTime } />
-        <span>•</span>
-        <span>Race { race.id }</span>
       </HTML.H1>
-      <HTML.Small>{ race.course }</HTML.Small>
+      <HTML.Small className={ styles.title }>
+        <strong>Race { race.id }</strong>
+        <span>{ race.course }</span>
+      </HTML.Small>
     </button>
   )
 }
@@ -64,7 +65,7 @@ function RunRacePartial({race}:{race:RaceSchema}) {
  * @param param.race - RaceSchema object to display
  * @returns 
  */
-function ShowRacePartial({race}:{race:RaceSchema}) {
+function ViewRacePartial({race}:{race:RaceSchema}) {
   const first = race.finishers[0]
   const duration = printDuration( race.startTime, first.finishedAt )
 
@@ -88,9 +89,9 @@ function ShowRacePartial({race}:{race:RaceSchema}) {
 }
 
 const Race = {
-  start: StartRacePartial,
-  run: RunRacePartial,
-  show: ShowRacePartial
+  Start: StartRacePartial,
+  Running: RunningRacePartial,
+  View: ViewRacePartial
 }
 
 export default Race

@@ -130,7 +130,7 @@ function RacesPartial({raceDay, onStartRace}:
   return (
     <div className="p-2">
       <CurrentRacesPartial {...{raceDay, onStartRace}} />
-      { showScores && <ViewScoresButton /> }
+      { showScores ? <ViewScoresButton /> : <div className="h-2" /> }
       <FinishedRacesPartial {...{raceDay}} />
     </div>
   )
@@ -149,7 +149,7 @@ function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStart
       {
         fleets.map( (fleet, i) => (
           currentRaces.get(fleet)
-          ? <Race.run race={ currentRaces.get(fleet)! } key={i} />
+          ? <Race.Running race={ currentRaces.get(fleet)! } key={i} />
           : <NextRaceButton {...{fleet, raceDay, onStartRace}} key={i} />
         ))
       }
@@ -200,7 +200,7 @@ function FinishedRacesPartial({raceDay}: {raceDay: RaceDay}) {
       {
         fleets.map( (fleet, i) => (
           <div className="col-2" key={i}>
-            { finishedRaces.get(fleet)!.map( r => <Race.show race={r} key={r.id} /> ) }
+            { finishedRaces.get(fleet)!.map( r => <Race.View race={r} key={r.id} /> ) }
           </div>
         ))
       }
@@ -253,7 +253,7 @@ function CourseModal({fleet, count, onCancel}:
         ) ) }
       </div>
 
-      <Race.start fleet={fleet} course={course!} count={count} disabled={ !course } />
+      <Race.Start fleet={fleet} course={course!} count={count} disabled={ !course } />
     </div>
   )
 }
