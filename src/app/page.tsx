@@ -33,11 +33,11 @@ export default function Home() {
     <>
       <main className="m-2 mt-44 rounded overflow-hidden">
 
-        {/* Banner communicating what the next steps are */}
-        <NextStep />
-
         {/* Shows the races once configuration is done. Otherwise shows configuration setup */}
-        <section className="bg-white p-4">
+        <section className="bg-white rounded">
+          {/* Banner communicating what the next steps are */}
+          <NextStep />
+
           { raceDay.canRace()
             // Show START RACE / CURRENT RACE and past races
             ? <RacesPartial {...{raceDay}} onStartRace={setModalConfig} />
@@ -48,7 +48,7 @@ export default function Home() {
         </section>
         
         {/* Config settings, only shown once racing can start */}
-        <section className="bg-gray-100 px-4">
+        <section className="bg-clear-100 mt-4 rounded">
           { raceDay.canRace() && <SetupPartial {...{raceDay}} /> }
         </section>
       </main>
@@ -71,7 +71,7 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
     return (
       count === 0 ? <NavTile.Todo title="+" subtitle="Add racers" href="/racers" /> :
       count < 5 ? <NavTile.Highlight title="Racers" subtitle={ subtitle } href="/racers" /> :
-      <NavTile.Base title="Racers" subtitle={ subtitle } href="/racers" className="bg-ocean-100" />
+      <NavTile.Base title="Racers" subtitle={ subtitle } href="/racers" />
     )
   }
 
@@ -99,7 +99,7 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
   }
 
   return (
-    <div className="py-4 col-2">
+    <div className="p-4 col-2">
       <HTML.H1>Setup</HTML.H1>
 
       <div className="row-2">
@@ -128,11 +128,11 @@ function RacesPartial({raceDay, onStartRace}:
     .reduce( (agg, c) => agg && c>0, true )
   
   return (
-    <>
+    <div className="p-2">
       <CurrentRacesPartial {...{raceDay, onStartRace}} />
       { showScores && <ViewScoresButton /> }
       <FinishedRacesPartial {...{raceDay}} />
-    </>
+    </div>
   )
 }
 
