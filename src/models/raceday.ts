@@ -129,7 +129,9 @@ export class RaceDay {
     const lookup = new Map<string, RacerScoresSchema>()
 
     // init lookup map
-    racers.forEach( r => lookup.set(r.id, {racer:r, points:0, positions:[]}) )
+    racers.forEach( r =>
+      lookup.set(r.id, {racer:r, points:0, positionCounts: [], positions:[]})
+    )
 
     // For each race and each finisher, append finish data to the RacerScores object
     races.map( (race, race_i) => {
@@ -149,6 +151,11 @@ export class RaceDay {
         let position: number | FailureSchema = finisher.positionOverride || (finisher.failure || pos)
         let points = finisher.failure ? failurePoints : pos
 
+        let counts = [...scores.positionCounts]
+        counts[ points-1 ] = counts[ points-1 ] ? counts[ points-1 ]+1 : 1
+
+        console.log(finisher.name, points, counts)
+
         if( !finisher.failure ) pos++
 
         // The ScoringPosition the the current race
@@ -157,19 +164,26 @@ export class RaceDay {
         lookup.set(finisher.id, {
           ...scores,
           points: scores.points + points,
+          positionCounts: counts,
           positions: [...scores.positions, score]
         })
       })
     })
 
+    
     const racerScores: RacerScoresSchema[] = Array.from(lookup.values())
-      .sort( (a,b) => a.points < b.points ? -1 : 1)
+      .map( rs => ({...rs, tiebreak: helpCreateTiebreak(rs, lookup.size)}) )
+      .sort( (a,b) => 
+        a.points < b.points ? -1 :
+        a.points > b.points ? 1 :
+        a.tiebreak > b.tiebreak ? -1 :
+        1
+      )
 
     return { fleet, racerScores }
   }
 
   emailScores(): string {
-    // race_fleet	is_rc	name	sail_number	start_fleet ...races
     const fleets = this.scoringFleets.length ? this.scoringFleets : [undefined]
 
     const scores = fleets.map( fleet => this.scores(fleet) )
@@ -189,4 +203,41 @@ export class RaceDay {
 
     return out
   }
+}
+
+// Create a number for each racer that can be compared to
+// break ties for a race day. The LARGER number should
+// be the winner. In general, the racer with more lower
+// finishes (e.g. more 2nd place finishes than 4th) breaks
+// the tie
+function helpCreateTiebreak( r: RacerScoresSchema, racerCount: number ) {
+  // The number of races run
+  const zeroes = Math.ceil( racerCount / 10 )
+
+  // First, convert the array of positionCounts into a
+  // number that can be compared between racers such that
+  // the larger number (i.e. the number with the most lowest scoring races)
+  // represents the winner of the tie. A racer finishing 1,2,1,4 would
+  // return "2101"
+  let positionCounts = ""
+  for(let j=0; j<=racerCount; j++) {
+    const ps = r.positionCounts[j] || 0
+    positionCounts +=
+      ps.toString().padStart(zeroes,'0')
+    
+  }
+
+  // For racers that have the same positionCounts, the order
+  // of finishes matters, with the last finish taking precedence.
+  // For example, if racer A has finishes 1,2,3 and racer B has
+  // finishes 3,2,1, Racer B wins. To remain consistent with positionCounts,
+  // the larger string should represent the winner 
+  let finishes = [...r.positions]
+    .reverse()
+    .map( (pos,i) => (
+      (racerCount + 1 - pos.points).toString().padStart(zeroes,'0')
+    ))
+    .join('')
+  
+  return `${positionCounts}.${finishes}`
 }

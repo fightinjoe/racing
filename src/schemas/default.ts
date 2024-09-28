@@ -23,7 +23,7 @@ export const courseSchema = z.enum([
 // DNS = Did not start
 // TLE = Time limit expired
 // RCS = Recourse (used with finisher.positionOverrid)
-export const failureSchema = z.enum(['DSQ', 'DNF', 'DNS', 'TLE', 'RCS'])
+export const failureSchema = z.enum(['DSQ', 'DNF', 'DNS', 'TLE', 'Recourse'])
 
 /**
  * A single sailor and member of the fleet. Can be a volunteer or a racer
@@ -134,14 +134,30 @@ export const weatherSchema = z.object({
 
 export const scoringPositionSchema = z.object({
   points: z.number(),
+
+  // The finishing position, either a number for the
+  // position, or a `failureSchema` for the type of failure
   position: z.union([z.number(), failureSchema]),
   failure: failureSchema.optional()
 })
 
 export const racerScoresSchema = z.object({
   racer: racerSchema,
+
+  // The total aggregate number of points received
   points: z.number(),
-  positions: z.array(scoringPositionSchema)
+
+  // The count of how many finishes a racer has for a given
+  // position, where the index is the position and the value
+  // is the count. For example, a racer finishing 1st, 3rd, 4th,
+  // 3rd, and DNF (of 6 racers) would have
+  // positionCounts = [1,undefined,2,1,undefined,undefined,1].
+  // This is used for breaking ties.
+  positionCounts: z.array( z.number() ),
+  
+  positions: z.array(scoringPositionSchema),
+
+  tiebreak: z.string().optional()
 })
 
 export const fleetScoresSchema = z.object({

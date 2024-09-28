@@ -21,10 +21,11 @@ declare global {
   type SailorSchema = z.infer<typeof Schemas.sailorSchema>
   type RacerSchema = z.infer<typeof Schemas.racerSchema>
   
+  type FinisherBaseSchema = z.infer<typeof Schemas.finisherBase>
   type FinisherSchema = z.infer<typeof Schemas.finisherSchema>
   type RaceSchema = z.infer<typeof Schemas.raceSchema>
   
-  type RaceDayConfigSchema = z.infer<typeof Schemas.raceDayConfigSchema>
+  // type RaceDayConfigSchema = z.infer<typeof Schemas.raceDayConfigSchema>
   type WeatherSchema = z.infer<typeof Schemas.weatherSchema>
   type WindDirectionSchema = z.infer<typeof Schemas.windDirectionSchema>
 

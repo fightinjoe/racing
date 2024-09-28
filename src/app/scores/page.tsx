@@ -14,7 +14,7 @@ export default function ScoresPage() {
   if( !raceDay.racingFleets ) return (<strong>404: No races found</strong>)
 
   return (
-    <main>
+    <main className="bg-white">
       <HTML.Header>
         <HTML.Back>Scores</HTML.Back>
       </HTML.Header>
