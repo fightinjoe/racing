@@ -104,19 +104,6 @@ export const raceSchema = raceBase.merge( z.object({
   finishers: z.array( finisherSchema )
 }))
 
-/**
- * Configuration settings for the race day
- */
-export const raceDayConfigSchema = z.object({
-  // True / false for whether the fleets are sailing together or separately. Any two or more fleets
-  // that start and finish at the same time are considered 'combined.' Scoring for the two fleets
-  // is still performed separately
-  combinedFleets: z.boolean(),
-
-  // Size of the sail
-  sailSize: z.enum(['small', 'large'])
-})
-
 export const windDirectionSchema = z.enum(['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'])
 
 /**
