@@ -154,8 +154,6 @@ export class RaceDay {
         let counts = [...scores.positionCounts]
         counts[ points-1 ] = counts[ points-1 ] ? counts[ points-1 ]+1 : 1
 
-        console.log(finisher.name, points, counts)
-
         if( !finisher.failure ) pos++
 
         // The ScoringPosition the the current race

@@ -43,8 +43,6 @@ export default function AddPartial({ racer, onSave, onCancel }:
     return false
   }
 
-  console.log('Errors', errors)
-
   return (
     <form className="col-2 items-start" onSubmit={handleSubmit(onSubmit)}>
       <Form.Text

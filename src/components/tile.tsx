@@ -153,7 +153,6 @@ export function ModalTile({racer, children, className}:
   }
 
   const onDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    console.log('onDialogClick')
     e.preventDefault()
     e.stopPropagation()
 
