@@ -69,9 +69,9 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
     </>
 
     return (
-      count === 0 ? <NavTile.Todo title="+" subtitle="Add racers" href="/racers" /> :
-      count < 5 ? <NavTile.Highlight title="Racers" subtitle={ subtitle } href="/racers" /> :
-      <NavTile.Base title="Racers" subtitle={ subtitle } href="/racers" />
+      count === 0 ? <NavTile.Todo title="+" subtitle="Add racers" href="/setup/racers" /> :
+      count < 5 ? <NavTile.Highlight title="Racers" subtitle={ subtitle } href="/setup/racers" /> :
+      <NavTile.Base title="Racers" subtitle={ subtitle } href="/setup/racers" />
     )
   }
 
@@ -88,12 +88,12 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
       ? <NavTile.Base
           title={ title }
           subtitle={ `${ capitalize(raceDay.sailSize) } sails` }
-          href="/details"
+          href="/setup/details"
         />
       : <NavTile.Todo
           title="+"
           subtitle="Race details"
-          href="/details"
+          href="/setup/details"
         />
     )
   }
@@ -110,7 +110,7 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
         <NavTile.Base
           title="Reset"
           subtitle="Clear data"
-          href="/reset"
+          href="/setup/reset"
         />
       </div>
     </div>
