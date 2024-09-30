@@ -10,8 +10,9 @@
 @container meat (min-width: 300px) {
   .Tile {
     /* Determine the width and height of a tile relative to the container size */
-    width: calc( (100cqw - 16px*2 - 8px*2) / 3);
-    height: calc( (100cqw - 16px*2 - 8px*2) / 3);
+    /* parent width - primary gutters - padding - column gaps */
+    width: calc( (100cqw - 8px*2 - 16px*2 - 8px*2) / 3);
+    height: calc( (100cqw - 8px*2 - 16px*2 - 8px*2) / 3);
   }
 }
 
