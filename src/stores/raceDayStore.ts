@@ -7,9 +7,14 @@ import { RaceDay } from '@/models/raceday'
 import { sailSizeSchema } from '@/schemas/default'
 
 interface RaceDayState {
+  volunteers: VolunteerSchema[],
   racers: RacerSchema[],
   races: RaceSchema[],
   config: ConfigSchema,
+
+  addVolunteer: (name: string, role: RoleSchema) => VolunteerSchema,
+  editVolunteer: (volunteer: VolunteerSchema, data: {name:string, role:RoleSchema}) => void,
+  deleteVolunteer: (volunteer: VolunteerSchema) => void,
 
   addRacer: (name: string, sailNumber: string, fleet: FleetSchema) => RacerSchema,
   editRacer: (racer: RacerSchema, data: {name:string, sailNumber: string, fleet: FleetSchema}) => void,
@@ -25,6 +30,8 @@ interface RaceDayState {
   clearConfig: () => void
 }
 
+const DEFAULT_VOLUNTEERS: VolunteerSchema[] = []
+
 const DEFAULT_RACERS: RacerSchema[] = []
 
 const DEFAULT_RACES: RaceSchema[] = []
@@ -36,6 +43,8 @@ const DEFAULT_CONFIG: ConfigSchema = {
 }
 
 export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
+  volunteers: DEFAULT_VOLUNTEERS,
+  
   racers: DEFAULT_RACERS,
   /**
    * Array of races across all fleets in unpredictable order
@@ -43,6 +52,32 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
   races: DEFAULT_RACES,
 
   config: DEFAULT_CONFIG,
+
+  addVolunteer: (name, role) => {
+    const volunteer = {
+      id: Date.now() + name,
+      name,
+      role
+    }
+
+    set({volunteers: [...get().volunteers, volunteer]})
+    return volunteer
+  },
+
+  editVolunteer: (volunteer, data) => {
+    const volunteers = get().volunteers.map( v => {
+      return v.id === volunteer.id
+      ? { ...v, name: data.name, role: data.role }
+      : v
+    })
+
+    set({ volunteers })
+  },
+
+  deleteVolunteer: (volunteer) => {
+    const volunteers = get().volunteers.filter( v => v.id !== volunteer.id )
+    set({volunteers})
+  },
 
   addRacer: (name, sailNumber, fleet) => {
     const racer: RacerSchema = {

@@ -21,7 +21,7 @@ type ModalConfig = {
 } | undefined
 
 export default function Home() {
-  const [racers, races, config] = useRaceDayStore(s=>[s.racers, s.races, s.config])
+  const [racers, races, config, volunteers] = useRaceDayStore(s=>[s.racers, s.races, s.config, s.volunteers])
 
   const raceDay = new RaceDay(racers, races, config)
 
@@ -43,13 +43,13 @@ export default function Home() {
             ? <RacesPartial {...{raceDay}} onStartRace={setModalConfig} />
 
             // Or only show the SETUP tiles if racing can't yet be started
-            : <SetupPartial {...{raceDay}} />
+            : <SetupPartial {...{raceDay, volunteers}} />
           }
         </section>
         
         {/* Config settings, only shown once racing can start */}
         <section className="bg-clear-100 mt-4 rounded">
-          { raceDay.canRace() && <SetupPartial {...{raceDay}} /> }
+          { raceDay.canRace() && <SetupPartial {...{raceDay, volunteers}} /> }
         </section>
       </main>
 
@@ -58,7 +58,7 @@ export default function Home() {
   );
 }
 
-function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
+function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: VolunteerSchema[]}) {
   function _AddRacers() {
     const count = raceDay._racers.length
 
@@ -72,6 +72,18 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
       count === 0 ? <NavTile.Todo title="+" subtitle="Add racers" href="/setup/racers" /> :
       count < 5 ? <NavTile.Highlight title="Racers" subtitle={ subtitle } href="/setup/racers" /> :
       <NavTile.Base title="Racers" subtitle={ subtitle } href="/setup/racers" />
+    )
+  }
+
+  function _AddVolunteers() {
+    const count = volunteers.length
+
+    const chair = volunteers.find( v => v.role === 'Race committee' )
+
+    return (
+      count === 0 ? <NavTile.Todo title="+" subtitle="Committee volunteers" href="/setup/volunteers" /> :
+      !chair ? <NavTile.Highlight title="No Chair" subtitle={`${count} volunteer${count!==1 ? 's' : ''}`} href="/setup/volunteers" /> :
+      <NavTile.Base title="Chair" subtitle={`${chair.name} + ${count} other${count!==1 ? 's' : ''}`} href="/setup/volunteers" />
     )
   }
 
@@ -102,8 +114,10 @@ function SetupPartial({ raceDay }: { raceDay: RaceDay}) {
     <div className="p-4 col-2">
       <HTML.H1>Setup</HTML.H1>
 
-      <div className="row-2">
+      <div className="row-wrap-2">
         <_AddRacers />
+
+        <_AddVolunteers />
 
         <_Details />
 

@@ -132,8 +132,8 @@ export function FailureTile({racer}:{racer: FinisherSchema}) {
   )
 }
 
-export function ModalTile({racer, children, className}:
-  {racer: RacerSchema, children?:React.ReactNode, className?:string}) {
+export function ModalTile({sailor, children, className}:
+  {sailor: RacerSchema | VolunteerSchema, children?:React.ReactNode, className?:string}) {
   const dialog = useRef(null)
 
   const onClick = () => {
@@ -160,20 +160,62 @@ export function ModalTile({racer, children, className}:
     modal.close()
   }
 
-  return (
-    <div>
+  const _RacerTile = () => {
+    const racer = sailor as RacerSchema
+
+    return (
       <Tile
         title={ racer.sailNumber || '?' }
         subtitle={ `${racer.name} (${racer.fleet} fleet)` }
         className={`relative ${className}`}
         onClick={ onClick }
       />
+    )
+  }
+
+  const _VolunteerTile = () => {
+    const volunteer = sailor as VolunteerSchema
+
+    const title =
+      volunteer.role === 'Race committee' ? 'RC chair' :
+      volunteer.role === 'Volunteer' ? 'RC' :
+      volunteer.role === 'Crash boat' ? 'CB' :
+      '?'
+
+    return (
+      <Tile
+        title={ title }
+        subtitle={ `${volunteer.name}` }
+        className={`relative ${className}`}
+        onClick={ onClick }
+      />
+    )
+  }
+
+  return (
+    <div>
+      {
+        (sailor as RacerSchema).sailNumber !== undefined
+        ? <_RacerTile />
+        : <_VolunteerTile />
+      }
       <dialog ref={dialog} className={styles.modal} onClick={ onDialogClick }>
         { children }
       </dialog>
     </div>
   ) 
 }
+
+// function ModalRacerTile({racer, onClick}: {racer:RacerSchema, onClick: ()=>void}) {
+//   return (
+//     <Tile
+//       title={ racer.sailNumber || '?' }
+//       subtitle={ `${sailor.name} (${sailor.fleet} fleet)` }
+//       className={`relative ${className}`}
+//       onClick={ onClick }
+//     />
+//   )
+// }
 
 const Todo = (props: TileProps) => (
   <Tile {...props} className={styles.Todo+' '+props.className} />

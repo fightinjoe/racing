@@ -34,6 +34,12 @@ export const sailorSchema = z.object({
   name: z.string()
 })
 
+export const volunteerSchema = sailorSchema.merge(
+  z.object({
+    role: roleSchema
+  })
+)
+
 /**
  * A single sailor participating in a single race day
  */
