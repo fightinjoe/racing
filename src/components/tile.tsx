@@ -59,7 +59,7 @@ interface NavTileProps {
 export const NavTile = {
   Base: (props: NavTileProps) => {
     const router = useRouter()
-    return <Tile {...props} onClick={ () => router.push(props.href) } />
+    return <Tile {...props} onClick={ () => router.push(props.href) } className={ props.className || styles.Base } />
   },
 
   Todo: (props: NavTileProps) => (
