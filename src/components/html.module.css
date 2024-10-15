@@ -4,6 +4,9 @@
 
 .Header {
   @apply sticky;
+  @apply h-20;
+  @apply border-0 border-b-[1px] border-white;
+  @apply text-white;
 }
 
 .Header h1 {

@@ -5,4 +5,8 @@
 
 .wrapper {
   @apply mx-auto max-w-[390px] w-full h-full shadow-2xl;
+
+  background:
+    url("/imgs/background.png") bottom no-repeat,
+    radial-gradient(circle at 50% 0, #003E7D, #7DA8E5);
 }

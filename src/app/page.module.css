@@ -1,9 +1,3 @@
-.main {
-  background:
-    url("/imgs/background.png") bottom no-repeat,
-    radial-gradient(circle at 50% 0, #003E7D, #7DA8E5);
-}
-
 .header {
   @apply h-20;
   @apply row-2 items-center justify-center;
