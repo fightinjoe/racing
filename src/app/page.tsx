@@ -31,10 +31,14 @@ export default function Home() {
 
   return (
     <>
-      <main className="m-2 mt-44 rounded overflow-hidden">
+      <main className={ `${styles.main} h-full` }>
+        <HTML.Header className={ styles.header }>
+          <img src="/imgs/logo-snowflake.png" alt="MFA logo" />
+          <h1>MFA Racing</h1>
+        </HTML.Header>
 
         {/* Shows the races once configuration is done. Otherwise shows configuration setup */}
-        <section className="bg-white rounded">
+        <section className="">
           {/* Banner communicating what the next steps are */}
           <NextStep />
 

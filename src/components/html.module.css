@@ -3,5 +3,9 @@
 }
 
 .Header {
-  @apply bg-white sticky;
+  @apply sticky;
+}
+
+.Header h1 {
+  @apply text-white text-[22px] font-medium leading-loose tracking-wide;
 }

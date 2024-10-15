@@ -1,6 +1,5 @@
 .body {
   @apply bg-gray-50 absolute inset-0;
-  background: #5B7088 url('/MFA_splash.png') top no-repeat;
   overflow: hidden;
 }
 

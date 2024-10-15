@@ -6,7 +6,7 @@ import styles from "./html.module.css"
 type HeadingProps = React.PropsWithChildren<React.HTMLAttributes<HTMLHeadingElement>>
 
 function H1({children, ...rest}: HeadingProps) {
-  const className = `font-medium ${rest.className}`
+  const className = `font-medium text-white text-xl ${rest.className}`
 
   return (
     <h1 className={className}>{ children }</h1>
