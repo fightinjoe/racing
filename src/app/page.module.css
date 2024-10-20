@@ -24,3 +24,19 @@
     @apply bg-ocean-100;
   }
 }
+
+section.races {
+  @apply p-2;
+}
+
+section.currentRaces {
+  @apply p-4 col-2;
+  background:
+    linear-gradient(#102452, #003E7D);
+}
+
+button.startRace {
+  @apply block flex flex-col items-stretch p-4;
+  @apply text-white bg-ocean-400 hover:bg-ocean-500;
+  @apply rounded border-white border-[1px];
+}

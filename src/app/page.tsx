@@ -37,24 +37,10 @@ export default function Home() {
           <h1>MFA Racing</h1>
         </HTML.Header>
 
-        {/* Shows the races once configuration is done. Otherwise shows configuration setup */}
-        <section className="">
-          {/* Banner communicating what the next steps are */}
-          <NextStep />
+        {/* Display the races once the setup requirements are complete */}
+        { raceDay.canRace() && <RacesPartial {...{raceDay}} onStartRace={setModalConfig} /> }
 
-          { raceDay.canRace()
-            // Show START RACE / CURRENT RACE and past races
-            ? <RacesPartial {...{raceDay}} onStartRace={setModalConfig} />
-
-            // Or only show the SETUP tiles if racing can't yet be started
-            : <SetupPartial {...{raceDay, volunteers}} />
-          }
-        </section>
-        
-        {/* Config settings, only shown once racing can start */}
-        <section className="mt-4">
-          { raceDay.canRace() && <SetupPartial {...{raceDay, volunteers}} /> }
-        </section>
+        <SetupPartial {...{raceDay, volunteers}} />
       </main>
 
       { modalConfig && <CourseModal {...modalConfig!} onCancel={onCancelModal} /> }
@@ -72,11 +58,36 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
       <strong>{ raceDay.racers('B').length }</strong> B fleet
     </>
 
+    if (raceDay.canRace()) return (
+      <NavTile.Done
+        title="Racers"
+        subtitle={ subtitle }
+        href="/setup/racers"
+      />
+    )
+
+    if (count === 0) return (
+      <NavTile.Todo
+        title="+"
+        subtitle="Add racers"
+        href="/setup/racers"
+      />
+    )
+
+    if (count < 5) return (
+      <NavTile.Highlight
+        title="Racers"
+        subtitle={ subtitle }
+        href="/setup/racers"
+      />
+    )
+
     return (
-      raceDay.canRace() ? <NavTile.Done  title="Racers" subtitle={ subtitle } href="/setup/racers" /> :
-      count === 0 ? <NavTile.Todo title="+" subtitle="Add racers" href="/setup/racers" /> :
-      count < 5 ? <NavTile.Highlight title="Racers" subtitle={ subtitle } href="/setup/racers" /> :
-      <NavTile.Base title="Racers" subtitle={ subtitle } href="/setup/racers" />
+      <NavTile.Base
+        title="Racers"
+        subtitle={ subtitle }
+        href="/setup/racers"
+      />
     )
   }
 
@@ -85,11 +96,35 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
 
     const chair = volunteers.find( v => v.role === 'Race committee' )
 
+    // If we can race, then all of the setup is complete
+    if(raceDay.canRace()) return (
+      <NavTile.Done
+        title="Chair"
+        subtitle={`${chair!.name} + ${count} other${count!==1 ? 's' : ''}`}
+        href="/setup/volunteers" />
+    )
+
+    // If there are no volunteers, then print the TODO tile
+    if(count === 0) return (
+      <NavTile.Todo
+        title="+"
+        subtitle="Committee volunteers"
+        href="/setup/volunteers" />
+    )
+
+    // If there is no RC chair but there are volunteers, then highlight 
+    if(!chair) return (
+      <NavTile.Highlight
+        title="No Chair"
+        subtitle={`${count} volunteer${count!==1 ? 's' : ''}`}
+        href="/setup/volunteers" />
+    )
+
     return (
-      raceDay.canRace() ? <NavTile.Done title="Chair" subtitle={`${chair!.name} + ${count} other${count!==1 ? 's' : ''}`} href="/setup/volunteers" /> :
-      count === 0 ? <NavTile.Todo title="+" subtitle="Committee volunteers" href="/setup/volunteers" /> :
-      !chair ? <NavTile.Highlight title="No Chair" subtitle={`${count} volunteer${count!==1 ? 's' : ''}`} href="/setup/volunteers" /> :
-      <NavTile.Base title="Chair" subtitle={`${chair.name} + ${count} other${count!==1 ? 's' : ''}`} href="/setup/volunteers" />
+      <NavTile.Base
+        title="Chair"
+        subtitle={`${chair.name} + ${count} other${count!==1 ? 's' : ''}`}
+        href="/setup/volunteers" />
     )
   }
 
@@ -105,15 +140,34 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
 
     const href = "/setup/details"
     
-    return (
-      raceDay.canRace() ? <NavTile.Done title={ title } subtitle={ subtitle } href={href} /> :
-      raceDay._config.hasSaved ? <NavTile.Base title={ title } subtitle={ subtitle } href={href} /> :
-      <NavTile.Todo title="+" subtitle="Race details" href={href} />
+    if (raceDay.canRace()) return (
+      <NavTile.Done
+        title={ title }
+        subtitle={ subtitle }
+        href={href}
+      />
     )
+
+    if (raceDay._config.hasSaved) return (
+      <NavTile.Base
+        title={ title }
+        subtitle={ subtitle }
+        href={href}
+      />
+    )
+
+    return <NavTile.Todo
+      title="+"
+      subtitle="Race details"
+      href={href}
+    />
   }
 
   return (
     <section>
+      {/* Banner communicating what the next steps are */}
+      <NextStep />
+
       <div className="p-4 col-2">
         <HTML.H1>Setup</HTML.H1>
 
@@ -146,14 +200,19 @@ function RacesPartial({raceDay, onStartRace}:
     .reduce( (agg, c) => agg && c>0, true )
   
   return (
-    <div className="p-2">
+    <>
       <CurrentRacesPartial {...{raceDay, onStartRace}} />
+
       { showScores ? <ViewScoresButton /> : <div className="h-2" /> }
+
       <FinishedRacesPartial {...{raceDay}} />
-    </div>
+    </>
   )
 }
 
+/** Main section showing either the START RACE button or the currently
+ *  running race for each fleet
+ */
 function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStartRace:(c:ModalConfig)=>void}) {
   const fleets: (FleetSchema | undefined)[] = raceDay.racingFleets || []
   const cols = 'grid-cols-' + fleets.length
@@ -163,30 +222,34 @@ function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStart
   fleets.forEach( fleet => currentRaces.set(fleet, raceDay.unfinishedRaces(fleet)[0]) )
 
   return (
-    <div className={className}>
+    <section className={styles.currentRaces}>
+      <HTML.H1>Current race</HTML.H1>
+      <div className={className}>
       {
         fleets.map( (fleet, i) => (
           currentRaces.get(fleet)
           ? <Race.Running race={ currentRaces.get(fleet)! } key={i} />
-          : <NextRaceButton {...{fleet, raceDay, onStartRace}} key={i} />
+          : <StartRaceButton {...{fleet, raceDay, onStartRace}} key={i} />
         ))
       }
     </div>
+    </section>
   )
 }
 
-function NextRaceButton({fleet, raceDay, onStartRace}:
+/** Button for starting a new race */
+function StartRaceButton({fleet, raceDay, onStartRace}:
   {fleet:FleetSchema|undefined, raceDay:RaceDay, onStartRace:(c:ModalConfig)=>void}
 ) {
   const nextRaceCount = raceDay.races(fleet).length + 1
 
   return (
     <button
-      className="block flex flex-col items-stretch p-4 text-white bg-ocean-400 hover:bg-ocean-500"
+      className={ styles.startRace }
       onClick={ () => onStartRace({fleet, count: nextRaceCount}) }
     >
-      <HTML.H1>New { fleet } race</HTML.H1>
-      <HTML.Small>Start race #{ nextRaceCount }</HTML.Small>
+      <HTML.H1>Start race  { `${nextRaceCount}${fleet}` }</HTML.H1>
+      <HTML.Small>{fleet} fleet</HTML.Small>
     </button>
   )
 }
@@ -205,6 +268,7 @@ function ViewScoresButton() {
   )
 }
 
+/** Main section containing all of the completed races */
 function FinishedRacesPartial({raceDay}: {raceDay: RaceDay}) {
   const fleets: (FleetSchema | undefined)[] = raceDay.racingFleets || []
   const cols = 'grid-cols-'+fleets.length
@@ -214,15 +278,18 @@ function FinishedRacesPartial({raceDay}: {raceDay: RaceDay}) {
   fleets.forEach( fleet => finishedRaces.set(fleet, raceDay.finishedRaces(fleet)) )
 
   return (
-    <div className={className}>
-      {
-        fleets.map( (fleet, i) => (
-          <div className="col-2" key={i}>
-            { finishedRaces.get(fleet)!.map( r => <Race.View race={r} key={r.id} /> ) }
-          </div>
-        ))
-      }
-    </div>
+    <section className="p-4 col-2">
+      <HTML.H1>Finished races</HTML.H1>
+      <div className={className}>
+        {
+          fleets.map( (fleet, i) => (
+            <div className="col-2" key={i}>
+              { finishedRaces.get(fleet)!.map( r => <Race.View race={r} key={r.id} /> ) }
+            </div>
+          ))
+        }
+      </div>
+    </section>
   )
 }
 

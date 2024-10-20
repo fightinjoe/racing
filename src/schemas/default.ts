@@ -41,7 +41,7 @@ export const volunteerSchema = sailorSchema.merge(z.object({
 /**
  * A single sailor participating in a single race day
  */
-const racerSchema = sailorSchema.merge(z.object({
+export const racerSchema = sailorSchema.merge(z.object({
   // The fleet is only required for role: 'racer'
   fleet: fleetSchema,
   role: roleSchema,

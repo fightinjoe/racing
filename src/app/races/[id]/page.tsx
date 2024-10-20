@@ -122,6 +122,8 @@ export default function RacePage({params}: {params: {id: string}}) {
   }
 
   function _StillRacing() {
+    const racers = race!.unfinishedRacers.sort( helpSortRacers )
+
     return (
       <div className="col-4">
         <h2><strong>Still racing</strong></h2>
@@ -130,13 +132,11 @@ export default function RacePage({params}: {params: {id: string}}) {
 
         <div className="row-wrap-2 w-full">
           {
-            race!.unfinishedRacers
-              .sort( helpSortRacers )
-              .map( r => (
-                race!.raceState === 'racing'
-                ? <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
-                : <Tiles.Todo key={r.id} title={r.sailNumber} subtitle={r.name} />
-              ) )
+            racers.map( r => (
+              race!.raceState === 'racing'
+              ? <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
+              : <Tiles.Todo key={r.id} title={r.sailNumber} subtitle={r.name} />
+            ))
           }
         </div>
       </div>
@@ -211,9 +211,13 @@ function FinishersPartial({race}: {race:Race}) {
   )
 }
 
-function StillRacingTile({racer, race, finishRacer}:
-  {racer: RacerSchema, race: RaceSchema, finishRacer: (racer: RacerSchema, race: RaceSchema, failure?: FailureSchema) => void}
-) {
+type StillRacingTileProps = {
+  racer: RacerSchema,
+  race: RaceSchema,
+  finishRacer: (racer: RacerSchema, race: RaceSchema, failure?: FailureSchema) => void
+}
+
+function StillRacingTile({racer, race, finishRacer}: StillRacingTileProps) {
   const [hide, setHide] = useState<boolean>(true)
 
   const failures: FailureSchema[] = ['DSQ','DNF','DNS','TLE']
@@ -246,7 +250,7 @@ function StillRacingTile({racer, race, finishRacer}:
   }
 
   return (
-    <ModalTile racer={racer}>
+    <ModalTile sailor={racer}>
       <div className="col-0 gap-[1px] bg-gray-300">
         <Button.Primary onClick={ () => finishRacer(racer, race) }>
           Finish

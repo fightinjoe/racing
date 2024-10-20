@@ -15,9 +15,10 @@
   @apply block p-2;
   @apply flex flex-row gap-4 items-center;
   @apply bg-aqua-400 hover:bg-aqua-500 text-ocean-800;
+  @apply border-white border-[1px] rounded;
 
   & .timer {
-    @apply font-mono text-right;
+    @apply font-mono text-right text-ocean-800;
     @apply w-[5em]
   }
 
@@ -33,5 +34,20 @@
     & span {
       @apply truncate;
     }
+  }
+}
+
+.viewRace {
+  @apply block flex flex-col p-4;
+  @apply bg-ocean-100 hover:bg-ocean-200;
+  @apply rounded;
+
+  & .title {
+    @apply text-ocean-800;
+    @apply row-2 items-center w-full text-left;
+  }
+
+  & .subtitle {
+    @apply text-left truncate w-full text-ocean-500 font-light;
   }
 }
