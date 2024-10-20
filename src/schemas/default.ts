@@ -34,16 +34,14 @@ export const sailorSchema = z.object({
   name: z.string()
 })
 
-export const volunteerSchema = sailorSchema.merge(
-  z.object({
-    role: roleSchema
-  })
-)
+export const volunteerSchema = sailorSchema.merge(z.object({
+  role: roleSchema
+}))
 
 /**
  * A single sailor participating in a single race day
  */
-const participantBase = z.object({
+const racerSchema = sailorSchema.merge(z.object({
   // The fleet is only required for role: 'racer'
   fleet: fleetSchema,
   role: roleSchema,
@@ -60,9 +58,7 @@ const participantBase = z.object({
 
   // Notes about the participant, such as crew
   note: z.string().optional()
-})
-
-export const racerSchema = participantBase.merge( sailorSchema )
+}))
 
 /**
  * A single finish for a single sailor for a single race
