@@ -3,7 +3,7 @@
   @apply text-ocean-200;
   
   &:hover, &:active {
-    @apply border-gray-500 text-gray-600;
+    @apply border-gray-500 text-gray-600 bg-ocean-300;
   }
 }
 
@@ -13,7 +13,8 @@
   @apply bg-yellow-200/20;
 
   &:hover, &:active {
-    @apply bg-yellow-200;
+    @apply bg-yellow-200 text-black;
+    @apply border-solid border-yellow-500;
   }
 }
 
