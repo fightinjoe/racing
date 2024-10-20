@@ -18,6 +18,10 @@
   }
 }
 
+.Done {
+  @apply bg-clear-100;
+}
+
 .Base {
   @apply bg-ocean-100;
 }

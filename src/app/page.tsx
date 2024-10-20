@@ -52,7 +52,7 @@ export default function Home() {
         </section>
         
         {/* Config settings, only shown once racing can start */}
-        <section className="bg-clear-100 mt-4 rounded">
+        <section className="mt-4">
           { raceDay.canRace() && <SetupPartial {...{raceDay, volunteers}} /> }
         </section>
       </main>
@@ -73,6 +73,7 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
     </>
 
     return (
+      raceDay.canRace() ? <NavTile.Done  title="Racers" subtitle={ subtitle } href="/setup/racers" /> :
       count === 0 ? <NavTile.Todo title="+" subtitle="Add racers" href="/setup/racers" /> :
       count < 5 ? <NavTile.Highlight title="Racers" subtitle={ subtitle } href="/setup/racers" /> :
       <NavTile.Base title="Racers" subtitle={ subtitle } href="/setup/racers" />
@@ -85,6 +86,7 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
     const chair = volunteers.find( v => v.role === 'Race committee' )
 
     return (
+      raceDay.canRace() ? <NavTile.Done title="Chair" subtitle={`${chair!.name} + ${count} other${count!==1 ? 's' : ''}`} href="/setup/volunteers" /> :
       count === 0 ? <NavTile.Todo title="+" subtitle="Committee volunteers" href="/setup/volunteers" /> :
       !chair ? <NavTile.Highlight title="No Chair" subtitle={`${count} volunteer${count!==1 ? 's' : ''}`} href="/setup/volunteers" /> :
       <NavTile.Base title="Chair" subtitle={`${chair.name} + ${count} other${count!==1 ? 's' : ''}`} href="/setup/volunteers" />
@@ -99,39 +101,37 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
     ? `${f} fleet${ f===1 ? '' : 's'}`
     : '1 fleet'
 
+    const subtitle = `${ capitalize(raceDay.sailSize) } sails`
+
+    const href = "/setup/details"
+    
     return (
-      raceDay._config.hasSaved
-      ? <NavTile.Base
-          title={ title }
-          subtitle={ `${ capitalize(raceDay.sailSize) } sails` }
-          href="/setup/details"
-        />
-      : <NavTile.Todo
-          title="+"
-          subtitle="Race details"
-          href="/setup/details"
-        />
+      raceDay.canRace() ? <NavTile.Done title={ title } subtitle={ subtitle } href={href} /> :
+      raceDay._config.hasSaved ? <NavTile.Base title={ title } subtitle={ subtitle } href={href} /> :
+      <NavTile.Todo title="+" subtitle="Race details" href={href} />
     )
   }
 
   return (
-    <div className="p-4 col-2">
-      <HTML.H1>Setup</HTML.H1>
+    <section>
+      <div className="p-4 col-2">
+        <HTML.H1>Setup</HTML.H1>
 
-      <div className="row-wrap-2">
-        <_AddRacers />
+        <div className="row-wrap-2">
+          <_AddRacers />
 
-        <_AddVolunteers />
+          <_AddVolunteers />
 
-        <_Details />
+          <_Details />
 
-        <NavTile.Base
-          title="Reset"
-          subtitle="Clear data"
-          href="/setup/reset"
-        />
+          {/* <NavTile.Base
+            title="Reset"
+            subtitle="Clear data"
+            href="/setup/reset"
+          /> */}
+        </div>
       </div>
-    </div>
+    </section>
   )
 }
 
