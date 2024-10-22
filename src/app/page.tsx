@@ -241,7 +241,7 @@ function CurrentRacesPartial({ raceDay }: {raceDay:RaceDay}) {
           : <StartRaceButton {...{fleet, raceDay}} key={i} />
         ))
       }
-    </div>
+      </div>
     </section>
   )
 }

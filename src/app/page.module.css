@@ -39,7 +39,7 @@ section.currentRaces {
 }
 
 button.startRace {
-  @apply block flex flex-col items-stretch p-4;
+  @apply block flex flex-col items-stretch p-4 w-full;
   @apply text-white bg-ocean-400 hover:bg-ocean-500;
   @apply rounded border-white border-[1px];
 }
