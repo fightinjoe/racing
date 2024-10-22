@@ -94,7 +94,7 @@ export default function RacePage({params}: {params: {id: string}}) {
     return (
       <div className={`row-2 items-center pr-4 ${background}`}>
 
-        <strong className={`w-[100px] p-4 border border-white border-0 border-r-2 bg-clear-100`}>
+        <strong className={`w-[100px] p-4 border border-ocean-900 border-0 border-r-2 bg-clear-100`}>
           <Timer start={ race!.startTime } />
         </strong>
 
@@ -144,7 +144,7 @@ export default function RacePage({params}: {params: {id: string}}) {
   }
 
   return (
-    <div className="col-0 h-full bg-white">
+    <div className="col-0 h-full">
       <HTML.Header>
         <HTML.Back>
           Single race { _race!.id } { _race.fleet ? '' : '(combined)'}

@@ -3,5 +3,6 @@
 }
 
 .finishers {
-  @apply m-2 py-2 col-2 bg-ocean-200 rounded-xl;
+  @apply py-2 col-2;
+  background: linear-gradient(#102452, #003E7D);
 }
