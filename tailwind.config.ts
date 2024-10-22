@@ -39,6 +39,7 @@ const config: Config = {
         'aqua-300': '#80F6DD',
         'aqua-400': '#2CF0C6',
         'aqua-500': '#04E0B1',
+        'sky-300': '#7DA8E5',
         'clear-100': '#FFFFFF1A',
         'clear-400': '#FFFFFF66',
         'clear-500': '#FFFFFF88'
@@ -52,6 +53,10 @@ const config: Config = {
       addUtilities({
         '.bg-ocean-linear': {
           background: `linear-gradient(${theme('colors.ocean-950')}, ${theme('colors.ocean-900')})`,
+        },
+
+        '.bg-ocean-radial': {
+          background: `radial-gradient(circle at 50% 0, ${theme('colors.ocean-900')}, ${theme('colors.sky-300')})`
         }
       })
 
