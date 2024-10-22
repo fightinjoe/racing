@@ -69,23 +69,21 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
 
   return (
     <main>
-      <HTML.Header>
-        <HTML.Back>Race details</HTML.Back>
-      </HTML.Header>
+      <HTML.BackHeader>Race details</HTML.BackHeader>
 
-      <main className="p-4 bg-white">
+      <main className="m-2 p-2 rounded bg-white">
         <form
           className="col-2"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <HTML.H1>Sail size</HTML.H1>
+          <HTML.H2 className="!text-black">Sail size</HTML.H2>
 
           <fieldset className="RadioSlider mb-4">
             <Form.Radio name="sailSize" value="small" register={register}>Small</Form.Radio>
             <Form.Radio name="sailSize" value="large" register={register}>Large</Form.Radio>
           </fieldset>
 
-          <HTML.H1>Fleet size</HTML.H1>
+          <HTML.H2 className="!text-black">Fleet size</HTML.H2>
 
           <fieldset className="RadioSlider">
             <Form.Radio name="raceSeparateFleets" value={'false'} register={register}>Single fleet</Form.Radio>
