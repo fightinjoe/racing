@@ -49,8 +49,11 @@ export default function RacersPage() {
               sailor={racer}
               className={racerToEdit && racer.id === racerToEdit.id ? 'bg-yellow-100' : 'bg-ocean-200'}
             >
-              <div className="col-0 gap-[1px] bg-gray-300">
-                <Button.Primary onClick={ () => setRacerToEdit(racer) }>
+              <div className="col-0 gap-[1px]">
+                <Button.Primary
+                  onClick={ () => setRacerToEdit(racer) }
+                  className={ styles.editButton }
+                >
                   Edit
                 </Button.Primary>
                 
