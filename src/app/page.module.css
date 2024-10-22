@@ -1,3 +1,7 @@
+.main {
+  background: url("/imgs/background.png") bottom no-repeat;
+}
+
 .header {
   @apply h-20;
   @apply row-2 items-center justify-center;
