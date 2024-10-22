@@ -31,9 +31,7 @@ export default function RacersPage() {
 
   return (
     <main className="h-full col-0">
-      <HTML.Header>
-        <HTML.Back>Racers</HTML.Back>
-      </HTML.Header>
+      <HTML.BackHeader>Racers</HTML.BackHeader>
 
       <section className={`m-2 p-2 rounded-lg ${racerToEdit ? 'bg-yellow-100' : 'bg-white'}`}>
         <AddPartial racer={racerToEdit} {...{onSave, onCancel}} />

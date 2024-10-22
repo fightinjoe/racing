@@ -5,7 +5,7 @@
 .header {
   @apply h-20;
   @apply row-2 items-center justify-center;
-  @apply bg-gradient-to-t from-[#003e7d] to-[#102351];
+  @apply bg-ocean-linear;
 }
 
 .RadioTile {
@@ -35,8 +35,7 @@ section.races {
 
 section.currentRaces {
   @apply p-4 col-2;
-  background:
-    linear-gradient(#102452, #003E7D);
+  @apply bg-ocean-linear;
 }
 
 button.startRace {

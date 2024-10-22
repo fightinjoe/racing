@@ -48,7 +48,13 @@ const config: Config = {
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
-    plugin( function({addComponents, matchComponents, theme}) {      
+    plugin( function({addComponents, addUtilities, matchComponents, theme}) {      
+      addUtilities({
+        '.bg-ocean-linear': {
+          background: `linear-gradient(${theme('colors.ocean-950')}, ${theme('colors.ocean-900')})`,
+        }
+      })
+
       addComponents({
         '.tile': {
           background: theme('colors.ocean-100'),

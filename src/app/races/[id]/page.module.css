@@ -4,5 +4,5 @@
 
 .finishers {
   @apply py-4 col-2;
-  background: linear-gradient(#102452, #003E7D);
+  @apply bg-ocean-linear;
 }
