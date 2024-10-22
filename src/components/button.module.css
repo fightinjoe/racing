@@ -2,6 +2,7 @@
   @apply bg-ocean-400 text-white text-sm;
   @apply px-6 py-3 rounded;
   @apply cursor-pointer;
+  @apply font-medium;
 
   &:hover, &:active {
     @apply bg-ocean-500 shadow;

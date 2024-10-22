@@ -1,0 +1,6 @@
+.textInput {
+  @apply w-full;
+  @apply border-0 border-b border-gray-300 mb-[1px];
+  @apply focus:outline-none focus:ring-0;
+  @apply focus:border-ocean-800 focus:border-b-[2px] focus:mb-0;
+}

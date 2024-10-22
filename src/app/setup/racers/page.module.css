@@ -1,0 +1,10 @@
+.modal {
+  @apply mx-2 p-2 rounded-tl-lg rounded-tr-lg;
+  width: calc(100% - 2*0.5rem);
+  @apply absolute bottom-0 z-50;
+  @apply shadow-top;
+}
+
+.editButton {
+  @apply !bg-yellow-400 !text-ocean-800;
+}

@@ -8,6 +8,8 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Form from "@/components/form"
 import Button from "@/components/button"
 
+import styles from "./page.module.css"
+
 export default function AddPartial({ racer, onSave, onCancel }:
   {racer: RacerSchema | null, onSave: (d:RacerFormSchema)=>void, onCancel: ()=>void}) {
   
@@ -71,7 +73,10 @@ export default function AddPartial({ racer, onSave, onCancel }:
           ? <Button.Cancel onClick={ handleCancel } />
           : ''
         }
-        <Button.Submit value={ racer ? 'Save changes' : 'Add' } />
+        <Button.Submit
+          value={ racer ? 'Save changes' : 'Add' }
+          className={ racer ? styles.editButton : ''}
+        />
       </div>
     </form>
   )

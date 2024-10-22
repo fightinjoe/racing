@@ -2,6 +2,8 @@ import React from "react"
 import { FieldValues, useForm, UseFormRegister, Path } from "react-hook-form"
 import { toId } from "@/lib/string"
 
+import styles from "./form.module.css"
+
 interface RadioProps<T extends FieldValues> {
   name: Path<T>,
   register?: UseFormRegister<T>,
@@ -35,7 +37,7 @@ function Text<T extends FieldValues>({ name, register, ...props }: TextProps<T>)
   return (
     <input
       type="text"
-      className={ `FormText ${props.className}`}
+      className={ `${styles.textInput} ${props.className}`}
       {...(register ? register(name) : {})}
       { ...props }
     />

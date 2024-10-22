@@ -9,6 +9,8 @@ import HTML from "@/components/html"
 import Button from "@/components/button"
 import { ModalTile } from "@/components/tile"
 
+import styles from './page.module.css'
+
 export default function RacersPage() {
   const [racers, addRacer, editRacer, deleteRacer] =
     useRaceDayStore(s => [s.racers, s.addRacer, s.editRacer, s.deleteRacer])
@@ -30,10 +32,10 @@ export default function RacersPage() {
   }
 
   return (
-    <main className="h-full col-0">
+    <main className="h-full col-0 relative">
       <HTML.BackHeader>Racers</HTML.BackHeader>
 
-      <section className={`m-2 p-2 rounded-lg ${racerToEdit ? 'bg-yellow-100' : 'bg-white'}`}>
+      <section className={`${ styles.modal } ${racerToEdit ? 'bg-yellow-100' : 'bg-white'}`}>
         <AddPartial racer={racerToEdit} {...{onSave, onCancel}} />
       </section>
 
