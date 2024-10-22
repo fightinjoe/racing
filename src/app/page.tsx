@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, ChangeEventHandler } from "react"
+import { useRef, useState, ChangeEventHandler } from "react"
 
 import { NavTile } from "@/components/tile"
 import HTML from "@/components/html"
@@ -14,6 +14,7 @@ import { capitalize, toId } from "@/lib/string"
 import { useRouter } from "next/navigation"
 
 import styles from "./page.module.css"
+import modalStyles from "@/components/tile.module.css"
 
 type ModalConfig = {
   fleet?: FleetSchema,
@@ -25,10 +26,6 @@ export default function Home() {
 
   const raceDay = new RaceDay(racers, races, config)
 
-  const [modalConfig, setModalConfig] = useState<ModalConfig>()
-
-  const onCancelModal = () => setModalConfig(undefined)
-
   return (
     <>
       <main className={ `${styles.main} h-full` }>
@@ -37,12 +34,12 @@ export default function Home() {
           <h1>MFA Racing</h1>
         </HTML.Header>
 
-        <RacesPartial {...{raceDay}} onStartRace={setModalConfig} />
+        <RacesPartial {...{raceDay}} />
 
         <SetupPartial {...{raceDay, volunteers}} />
       </main>
 
-      { modalConfig && <CourseModal {...modalConfig!} onCancel={onCancelModal} /> }
+      {/* { modalConfig && <CourseModal {...modalConfig!} onCancel={onCancelModal} /> } */}
     </>
   );
 }
@@ -193,20 +190,20 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
 
 interface RacesPartialProps {
   raceDay: RaceDay,
-  onStartRace: (config:ModalConfig)=>void
+  
 }
 
 /** Displays the current and finished races.
  *  Will print nothing if raceDay.canRace() is false
  */
-function RacesPartial({raceDay, onStartRace}: RacesPartialProps) {
+function RacesPartial({raceDay}: RacesPartialProps) {
   if (!raceDay.canRace()) return null
 
   return (
     <>
-      <CurrentRacesPartial {...{raceDay, onStartRace}} />
+      <CurrentRacesPartial raceDay={raceDay} />
 
-      <FinishedRacesPartial {...{raceDay}} />
+      <FinishedRacesPartial raceDay={raceDay} />
     </>
   )
 }
@@ -214,7 +211,7 @@ function RacesPartial({raceDay, onStartRace}: RacesPartialProps) {
 /** Main section showing either the START RACE button or the currently
  *  running race for each fleet
  */
-function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStartRace:(c:ModalConfig)=>void}) {
+function CurrentRacesPartial({ raceDay }: {raceDay:RaceDay}) {
   const fleets: (FleetSchema | undefined)[] = raceDay.racingFleets || []
   const cols = 'grid-cols-' + fleets.length
   const className = `gap-2 grid ${ cols }`
@@ -241,7 +238,7 @@ function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStart
         fleets.map( (fleet, i) => (
           currentRaces.get(fleet)
           ? <Race.Running race={ currentRaces.get(fleet)! } key={i} />
-          : <StartRaceButton {...{fleet, raceDay, onStartRace}} key={i} />
+          : <StartRaceButton {...{fleet, raceDay}} key={i} />
         ))
       }
     </div>
@@ -249,20 +246,60 @@ function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStart
   )
 }
 
+
+interface StartRaceButtonProps {
+  fleet: FleetSchema|undefined
+  raceDay: RaceDay
+}
 /** Button for starting a new race */
-function StartRaceButton({fleet, raceDay, onStartRace}:
-  {fleet:FleetSchema|undefined, raceDay:RaceDay, onStartRace:(c:ModalConfig)=>void}
-) {
+function StartRaceButton({fleet, raceDay}: StartRaceButtonProps) {
   const nextRaceCount = raceDay.races(fleet).length + 1
 
+  const dialog = useRef(null)
+
+  // Tile onClick handler
+  const onClick = () => {
+    if(!dialog || !dialog.current) return
+    
+    const modal: HTMLDialogElement = dialog.current
+
+    modal.style.visibility = 'hidden'
+
+    // Make the modal appear on the screen
+    modal!.showModal()
+
+    // Position the modal
+    const dims = modal.getBoundingClientRect()
+    modal.style.top = `${ window.innerHeight - dims.height }px`
+    modal.style.left = `${ (window.innerWidth - dims.width)/2 }px`
+    modal.style.visibility = 'visible'
+  }
+
+  const onDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
+    if (e.target === e.currentTarget) {
+      closeModal()
+    }
+  }
+
+  const closeModal = () => {
+    const modal:HTMLDialogElement = dialog!.current!
+    modal.close()
+  }
+
   return (
-    <button
-      className={ styles.startRace }
-      onClick={ () => onStartRace({fleet, count: nextRaceCount}) }
-    >
-      <HTML.H1>Start race  { `${nextRaceCount}${fleet}` }</HTML.H1>
-      <HTML.Small>{fleet} fleet</HTML.Small>
-    </button>
+    <div>
+      <dialog ref={dialog} onClick={ onDialogClick } className={ modalStyles.modal }>
+        <CourseChooser fleet={fleet} count={nextRaceCount} onCancel={closeModal} />
+      </dialog>
+
+      <button
+        className={ styles.startRace }
+        onClick={ onClick }
+      >
+        <HTML.H1>Start race  { `${nextRaceCount}${fleet}` }</HTML.H1>
+        <HTML.Small>{fleet} fleet</HTML.Small>
+      </button>
+    </div>
   )
 }
 
@@ -305,7 +342,7 @@ function FinishedRacesPartial({raceDay}: {raceDay: RaceDay}) {
   )
 }
 
-function CourseModal({fleet, count, onCancel}:
+function CourseChooser({fleet, count, onCancel}:
   {fleet?:FleetSchema, count:number, onCancel: ()=>void}) {
   const [course, setCourse] = useState<CourseSchema | undefined>()
 
@@ -319,37 +356,39 @@ function CourseModal({fleet, count, onCancel}:
   ]
 
   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    // setCourse( courseSchema.parse(e.target.value) )
     setCourse(e.target.value as CourseSchema)
   }
 
-  return (
-    <div className="col-4 absolute inset-0 bg-ocean-radial">
-      <HTML.BackHeader onClick={ onCancel }>
-        Race {count} {fleet && `- ${fleet} fleet`}
-      </HTML.BackHeader>
-      
-      <div className="bg-white mx-2 p-2 rounded col-2">
-        <div className="grid grid-cols-3 gap-2 px-2">
-          { imgs.map( ([img, title],i) => (
-              <div className={ styles.RadioTile } key={i}>
-                <input
-                  type="radio"
-                  id={ toId(title) }
-                  name="course"
-                  value={title}
-                  checked={course === title}
-                  onChange={onChange}
-                />
-                <label htmlFor={ toId(title) } className="col-2 items-center">
-                  <img src={`/imgs/${img}`} className="h-[87px]" alt={title} />
-                  <small className="text-center">{ title }</small>
-                </label>
-              </div>
-          ) ) }
-        </div>
+  const handleCancel = () => {
+    onCancel()
+    setCourse(undefined)
+  }
 
+  return (
+    <div className="bg-white mx-2 p-2 py-4 rounded col-4 items-end max-w-[390px]">
+      <HTML.H2 className="!text-black w-full">Choose course</HTML.H2>
+      <div className="grid grid-cols-3 gap-2 px-2">
+        { imgs.map( ([img, title],i) => (
+            <div className={ styles.RadioTile } key={i}>
+              <input
+                type="radio"
+                id={ toId(title) }
+                name="course"
+                value={title}
+                checked={course === title}
+                onChange={onChange}
+              />
+              <label htmlFor={ toId(title) } className="col-2 items-center">
+                <img src={`/imgs/${img}`} className="h-[87px]" alt={title} />
+                <small className="text-center">{ title }</small>
+              </label>
+            </div>
+        ) ) }
+      </div>
+
+      <div className="row-4 flex-row-reverse">
         <Race.Start fleet={fleet} course={course!} count={count} disabled={ !course } />
+        <button onClick={handleCancel} className="text-gray-400">Cancel</button>
       </div>
     </div>
   )

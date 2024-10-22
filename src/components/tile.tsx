@@ -137,10 +137,19 @@ export function FailureTile({racer}:{racer: FinisherSchema}) {
   )
 }
 
+/**
+ * A tile that displays a sailor and opens a contextual modal when clicked
+ * (for example, to edit the sailor or disqualify the racer)
+ * @param sailor The sailor to display
+ * @param children The contents of the contextual menu
+ * @param className Additional classes to apply to the tile
+ * @returns 
+ */
 export function ModalTile({sailor, children, className}:
   {sailor: RacerSchema | VolunteerSchema, children?:React.ReactNode, className?:string}) {
   const dialog = useRef(null)
 
+  // Tile onClick handler
   const onClick = () => {
     if(!dialog || !dialog.current) return
     
@@ -210,17 +219,6 @@ export function ModalTile({sailor, children, className}:
     </div>
   ) 
 }
-
-// function ModalRacerTile({racer, onClick}: {racer:RacerSchema, onClick: ()=>void}) {
-//   return (
-//     <Tile
-//       title={ racer.sailNumber || '?' }
-//       subtitle={ `${sailor.name} (${sailor.fleet} fleet)` }
-//       className={`relative ${className}`}
-//       onClick={ onClick }
-//     />
-//   )
-// }
 
 const Todo = (props: TileProps) => (
   <Tile {...props} className={styles.Todo+' '+props.className} />

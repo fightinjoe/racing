@@ -1,13 +1,13 @@
 .startRace {
-  @apply block flex flex-col items-stretch p-4;
-  @apply text-white bg-ocean-400;
+  /* @apply block flex flex-col items-stretch p-4; */
+  @apply text-white bg-ocean-400 p-2 px-4 rounded;
 
   &:hover {
     @apply bg-ocean-500;
   }
 
   &:disabled {
-    @apply border-2 border-dashed border-gray-300 text-gray-400 bg-white;
+    @apply text-white bg-gray-300;
   }
 }
 
