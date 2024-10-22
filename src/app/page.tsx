@@ -37,8 +37,7 @@ export default function Home() {
           <h1>MFA Racing</h1>
         </HTML.Header>
 
-        {/* Display the races once the setup requirements are complete */}
-        { raceDay.canRace() && <RacesPartial {...{raceDay}} onStartRace={setModalConfig} /> }
+        <RacesPartial {...{raceDay}} onStartRace={setModalConfig} />
 
         <SetupPartial {...{raceDay, volunteers}} />
       </main>
@@ -192,21 +191,20 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
   )
 }
 
-function RacesPartial({raceDay, onStartRace}:
-  {raceDay: RaceDay, onStartRace: (config:ModalConfig)=>void}) {
+interface RacesPartialProps {
+  raceDay: RaceDay,
+  onStartRace: (config:ModalConfig)=>void
+}
 
-  // Decide if scores should be shown
-  const showScores = raceDay.racingFleets && raceDay.racingFleets
-    // Get the array of finished races for each fleet...
-    .map( fleet => raceDay.finishedRaces(fleet).length )
-    // ...then make sure each fleet has at least 1 finished race
-    .reduce( (agg, c) => agg && c>0, true )
-  
+/** Displays the current and finished races.
+ *  Will print nothing if raceDay.canRace() is false
+ */
+function RacesPartial({raceDay, onStartRace}: RacesPartialProps) {
+  if (!raceDay.canRace()) return null
+
   return (
     <>
       <CurrentRacesPartial {...{raceDay, onStartRace}} />
-
-      { showScores ? <ViewScoresButton /> : <div className="h-2" /> }
 
       <FinishedRacesPartial {...{raceDay}} />
     </>
@@ -224,9 +222,20 @@ function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStart
   let currentRaces = new Map<FleetSchema|undefined, RaceSchema|undefined>()
   fleets.forEach( fleet => currentRaces.set(fleet, raceDay.unfinishedRaces(fleet)[0]) )
 
+  // Decide if scores should be shown
+  const showScores = raceDay.racingFleets && raceDay.racingFleets
+    // Get the array of finished races for each fleet...
+    .map( fleet => raceDay.finishedRaces(fleet).length )
+    // ...then make sure each fleet has at least 1 finished race
+    .reduce( (agg, c) => agg && c>0, true )
+
   return (
     <section className={styles.currentRaces}>
-      <HTML.H2>Current race</HTML.H2>
+      <div className="row-2">
+        <HTML.H2 className="grow">Current race</HTML.H2>
+        { showScores && <ViewScoresButton /> }
+      </div>
+
       <div className={className}>
       {
         fleets.map( (fleet, i) => (
@@ -265,8 +274,8 @@ function ViewScoresButton() {
   }
 
   return (
-    <button className="w-full text-center py-4 text-ocean-500" onClick={ handleClick }>
-      <small>View scores for the day</small>
+    <button className="text-aqua-500" onClick={ handleClick }>
+      <small>View scores</small>
     </button>
   )
 }
