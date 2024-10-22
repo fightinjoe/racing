@@ -127,10 +127,10 @@ export function FailureTile({racer}:{racer: FinisherSchema}) {
     <Tile
       title={ racer.sailNumber || '?' }
       subtitle={ racer.name }
-      className="bg-white border-gray-300 shrink-0"
+      className="bg-white border-gray-300 shrink-0 mt-2 mr-2"
     >
       {/* Position badge */}
-      <div className={`absolute border border-2 border-red-600 bg-red-100 text-red-600 top-[-8px] left-[-8px] rounded-full text-xs w-12 py-1`}>
+      <div className={`absolute border border border-white bg-red-500 text-white top-[-8px] left-[-8px] rounded-full text-xs w-12 py-1`}>
         { racer.failure }
       </div>
     </Tile>

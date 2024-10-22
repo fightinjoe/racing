@@ -196,13 +196,14 @@ function FinishersPartial({race}: {race:Race}) {
       {
         race!.failedFinishers.length > 0 &&
         <>
-          <HTML.H1 className="px-4">Disqualified</HTML.H1>
-          <div className="py-4 overflow-x-scroll scroll-smooth">
+          <HTML.H2 className="px-4 mt-4">Disqualified</HTML.H2>
+          <div className="overflow-x-scroll scroll-smooth">
             <div className="row-2 mx-4">
               { race!.failedFinishers.reverse().map( (f,i) => (
                   <FailureTile key={i} racer={ f } />
                 ))
               }
+              <div>&nbsp;</div>
             </div>
           </div>
         </>
