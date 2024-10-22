@@ -188,6 +188,7 @@ function FinishersPartial({race}: {race:Race}) {
               ))
             : <Tile title="..." subtitle="No finishers" className="tile-todo" />
           }
+          <div>&nbsp;</div>
         </div>
       </div>
 

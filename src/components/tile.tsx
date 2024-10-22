@@ -103,19 +103,19 @@ export function FinisherTile({racer, position}:{racer: RacerSchema, position: nu
     `${position+1}th`
 
   const bgColor = 
-    position === 0 ? 'bg-blue-800' :
-    position === 1 ? 'bg-blue-600' :
-    position === 2 ? 'bg-blue-400' :
+    position === 0 ? 'text-white bg-blue-800' :
+    position === 1 ? 'text-white bg-blue-600' :
+    position === 2 ? 'text-white bg-blue-400' :
     'bg-gray-300 text-black'
 
   return (
     <Tile
       title={ racer.sailNumber || '?' }
       subtitle={ racer.name }
-      className="bg-white border-gray-300 shrink-0"
+      className="bg-white border-gray-300 shrink-0 mt-2 mr-2"
     >
       {/* Position badge */}
-      <div className={`absolute ${bgColor} text-white top-[-8px] left-[-8px] rounded-full text-xs w-8 h-8 leading-8`}>
+      <div className={`absolute ${bgColor} top-[-8px] left-[-8px] rounded-full text-xs w-8 h-8 leading-8`}>
         { pos }
       </div>
     </Tile>
