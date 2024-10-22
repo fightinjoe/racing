@@ -40,6 +40,12 @@
   }
 }
 
+.position {
+  @apply absolute top-[-8px] left-[-8px];
+  @apply rounded-full text-xs w-8 h-8 leading-8;
+  @apply border border-white;
+}
+
 @-webkit-keyframes show{
   from { opacity: 0; }
   to { opacity: 1; }

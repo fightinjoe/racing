@@ -110,12 +110,13 @@ export default function RacePage({params}: {params: {id: string}}) {
   // Final time for a race displayed as a banner after the race is complete
   function _DurationBanner() {
     return (
-      <div className="row-2 items-center">
-        <strong className="w-[100px] p-4">
-          <Duration start={ race!.startTime } finish={ race!.finishTime! } />
-        </strong>
+      <div className="row-2 items-center bg-white">
+        <HTML.H1 className="w-[100px] p-4 border-0 border-r-2 border-r-ocean-900 !text-black">
+          Done!
+        </HTML.H1>
         <small>
-          Finished • { race!.course }
+          <span>{ race!.course }</span>
+          <span><Duration start={ race!.startTime } finish={ race!.finishTime! } /></span>
         </small>
       </div>
     )

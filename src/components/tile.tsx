@@ -115,7 +115,7 @@ export function FinisherTile({racer, position}:{racer: RacerSchema, position: nu
       className="bg-white border-gray-300 shrink-0 mt-2 mr-2"
     >
       {/* Position badge */}
-      <div className={`absolute ${bgColor} top-[-8px] left-[-8px] rounded-full text-xs w-8 h-8 leading-8`}>
+      <div className={`${styles.position} ${bgColor}`}>
         { pos }
       </div>
     </Tile>
