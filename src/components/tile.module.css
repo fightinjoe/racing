@@ -1,11 +1,11 @@
-.Todo {
+/* .Todo {
   @apply border border-2 border-dashed border-ocean-300;
   @apply text-ocean-200;
   
   &:hover, &:active {
     @apply border-gray-500 text-gray-600 bg-ocean-300;
   }
-}
+} */
 
 .Highlight {
   @apply border border-2 border-dashed border-yellow-200;
@@ -19,7 +19,7 @@
 }
 
 .Done {
-  @apply bg-clear-100;
+  @apply bg-clear-400;
 }
 
 .Base {

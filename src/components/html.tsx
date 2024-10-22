@@ -13,6 +13,14 @@ function H1({children, ...rest}: HeadingProps) {
   )
 }
 
+function H2({children, ...rest}: HeadingProps) {
+  const className = `font-medium text-white text-l ${rest.className}`
+
+  return (
+    <h2 className={className}>{ children }</h2>
+  )
+}
+
 type SmallProps = React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>
 
 function Small({children, ...rest}: SmallProps) {
@@ -67,8 +75,20 @@ function Header(props: HeaderProps) {
   )
 }
 
+function BackHeader(props: HeaderProps) {
+  const className = [styles.Header, props.className].join(' ')
+
+  return (
+    <Header {...props} className={className}>
+      <Back className="text-xl items-center">
+        <H1>{ props.children }</H1>
+      </Back>
+    </Header>
+  )
+}
+
 const HTML = {
-  H1, Small, Back, Header
+  H1, H2, Small, Back, Header, BackHeader
 }
 
 export default HTML

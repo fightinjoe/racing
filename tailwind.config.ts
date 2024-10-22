@@ -39,7 +39,8 @@ const config: Config = {
         'aqua-300': '#80F6DD',
         'aqua-400': '#2CF0C6',
         'aqua-500': '#04E0B1',
-        'clear-100': '#FFFFFF66',
+        'clear-100': '#FFFFFF1A',
+        'clear-400': '#FFFFFF66',
         'clear-500': '#FFFFFF88'
       },
     },
@@ -47,9 +48,34 @@ const config: Config = {
   plugins: [
     require('@tailwindcss/forms'),
     require('@tailwindcss/typography'),
-    plugin( function({matchComponents, theme}) {
-      matchComponents({
+    plugin( function({addComponents, matchComponents, theme}) {      
+      addComponents({
+        '.tile': {
+          background: theme('colors.ocean-100'),
+          /* Determine the width and height of a tile relative to the container size */
+          /* parent width - primary gutters - padding - column gaps */
+          width: 'calc( (100cqw - 16px*2 - 8px*2) / 3)',
+          height: 'calc( (100cqw - 16px*2 - 8px*2) / 3)',
+          position: 'relative',
+          'text-align': 'center',
+          'border-radius': '4px',
+        },
 
+        '.tile-todo': {
+          border: `2px dashed ${theme('colors.ocean-300')}`,
+          background: 'none',
+          color: theme('colors.ocean-200'),
+          '&:hover, &:active': {
+            'border-color': theme('colors.gray-500'),
+            text: theme('colors.gray-600'),
+            'background-color': theme('colors.clear-100')
+          }
+        },
+
+
+      })
+
+      matchComponents({
         /**
          * Shortcut for a flexbox row
          * @param value theme.gapSize number representing the gap between items

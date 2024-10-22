@@ -33,14 +33,11 @@ export default function Tile({ title, subtitle, className, onClick, children }: 
   )
 
   return (
-    <div
-      className={`Tile relative text-center rounded ${ className }`}
-    >
+    <div className={`tile ${ className }`} >
       { onClick
         ? <_ClickWrapper><_Content>{children}</_Content></_ClickWrapper>
         : <_Content>{children}</_Content>
       }
-      
     </div>
   )
 }
@@ -63,9 +60,9 @@ export const NavTile = {
   },
 
   // A tile that has yet to be completed
-  Todo: (props: NavTileProps) => (
-    <NavTile.Base {...{...props, className: `${props.className} ${styles.Todo}`}} />
-  ),
+  // Todo: (props: NavTileProps) => (
+  //   <NavTile.Base {...{...props, className: `${props.className} tile-todo`}} />
+  // ),
 
   // Tile to draw attention to, usually together with a Todo banner
   Highlight: (props: NavTileProps) => (

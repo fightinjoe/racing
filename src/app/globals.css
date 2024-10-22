@@ -7,14 +7,12 @@
   container-name: meat;
 }
 
-@container meat (min-width: 300px) {
-  .Tile {
-    /* Determine the width and height of a tile relative to the container size */
-    /* parent width - primary gutters - padding - column gaps */
+/* @container meat (min-width: 300px) {
+  .TilePAUSE {
     width: calc( (100cqw - 8px*2 - 16px*2 - 8px*2) / 3);
     height: calc( (100cqw - 8px*2 - 16px*2 - 8px*2) / 3);
   }
-}
+} */
 
 @layer components {
   body * {

@@ -94,7 +94,7 @@ export default function RacePage({params}: {params: {id: string}}) {
     return (
       <div className={`row-2 items-center pr-4 ${background}`}>
 
-        <strong className={`w-[100px] p-4 border border-ocean-900 border-0 border-r-2 bg-clear-100`}>
+        <strong className={`w-[100px] p-4 border border-ocean-900 border-0 border-r-2 bg-clear-400`}>
           <Timer start={ race!.startTime } />
         </strong>
 
@@ -145,11 +145,9 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   return (
     <div className="col-0 h-full">
-      <HTML.Header>
-        <HTML.Back>
-          Single race { _race!.id } { _race.fleet ? '' : '(combined)'}
-        </HTML.Back>
-      </HTML.Header>
+      <HTML.BackHeader>
+          Race { _race!.id } { _race.fleet ? '' : '(combined)'}
+      </HTML.BackHeader>
 
       {/* Timer + race course */}
       <_Banner />
@@ -180,15 +178,15 @@ function FinishersPartial({race}: {race:Race}) {
   return (
     <section className={styles.finishers}>
 
-      <HTML.H1 className="px-4">Finshers</HTML.H1>
-      <div className="py-4 overflow-x-scroll scroll-smooth" ref={wrapper}>
+      <HTML.H2 className="px-4">Finshers</HTML.H2>
+      <div className="overflow-x-scroll scroll-smooth" ref={wrapper}>
         <div className="row-2 mx-4">
           { 
             race!.qualifiedFinishers.length > 0
             ? race!.qualifiedFinishers.map( (f,i) => (
                 <FinisherTile key={i} position={i} racer={ f } />
               ))
-            : <Tile title="..." subtitle="No finishers" className="TileTodo bg-white" />
+            : <Tile title="..." subtitle="No finishers" className="tile-todo" />
           }
         </div>
       </div>

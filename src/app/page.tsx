@@ -67,10 +67,11 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
     )
 
     if (count === 0) return (
-      <NavTile.Todo
+      <NavTile.Base
         title="+"
         subtitle="Add racers"
         href="/setup/racers"
+        className="tile-todo"
       />
     )
 
@@ -106,10 +107,11 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
 
     // If there are no volunteers, then print the TODO tile
     if(count === 0) return (
-      <NavTile.Todo
+      <NavTile.Base
         title="+"
         subtitle="Committee volunteers"
-        href="/setup/volunteers" />
+        href="/setup/volunteers"
+        className="tile-todo" />
     )
 
     // If there is no RC chair but there are volunteers, then highlight 
@@ -156,10 +158,11 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
       />
     )
 
-    return <NavTile.Todo
+    return <NavTile.Base
       title="+"
       subtitle="Race details"
       href={href}
+      className="tile-todo"
     />
   }
 
@@ -169,7 +172,7 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
       <NextStep />
 
       <div className="p-4 col-2">
-        <HTML.H1>Setup</HTML.H1>
+        <HTML.H2>Setup</HTML.H2>
 
         <div className="row-wrap-2">
           <_AddRacers />
@@ -223,7 +226,7 @@ function CurrentRacesPartial({ raceDay, onStartRace }: {raceDay:RaceDay, onStart
 
   return (
     <section className={styles.currentRaces}>
-      <HTML.H1>Current race</HTML.H1>
+      <HTML.H2>Current race</HTML.H2>
       <div className={className}>
       {
         fleets.map( (fleet, i) => (
@@ -279,7 +282,7 @@ function FinishedRacesPartial({raceDay}: {raceDay: RaceDay}) {
 
   return (
     <section className="p-4 col-2">
-      <HTML.H1>Finished races</HTML.H1>
+      <HTML.H2>Finished races</HTML.H2>
       <div className={className}>
         {
           fleets.map( (fleet, i) => (
