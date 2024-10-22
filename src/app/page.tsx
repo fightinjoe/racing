@@ -324,33 +324,33 @@ function CourseModal({fleet, count, onCancel}:
   }
 
   return (
-    <div className="p-4 col-4 absolute inset-0 bg-white">
-      <HTML.Header>
-        <HTML.Back onClick={ onCancel }>
-          Race {count} {fleet && `- ${fleet} fleet`}
-        </HTML.Back>
-      </HTML.Header>
+    <div className="col-4 absolute inset-0 bg-ocean-radial">
+      <HTML.BackHeader onClick={ onCancel }>
+        Race {count} {fleet && `- ${fleet} fleet`}
+      </HTML.BackHeader>
       
-      <div className="grid grid-cols-3 gap-2">
-        { imgs.map( ([img, title],i) => (
-            <div className={ styles.RadioTile } key={i}>
-              <input
-                type="radio"
-                id={ toId(title) }
-                name="course"
-                value={title}
-                checked={course === title}
-                onChange={onChange}
-              />
-              <label htmlFor={ toId(title) } className="col-2 items-center">
-                <img src={`/imgs/${img}`} className="h-[87px]" alt={title} />
-                <small className="text-center">{ title }</small>
-              </label>
-            </div>
-        ) ) }
-      </div>
+      <div className="bg-white mx-2 p-2 rounded col-2">
+        <div className="grid grid-cols-3 gap-2 px-2">
+          { imgs.map( ([img, title],i) => (
+              <div className={ styles.RadioTile } key={i}>
+                <input
+                  type="radio"
+                  id={ toId(title) }
+                  name="course"
+                  value={title}
+                  checked={course === title}
+                  onChange={onChange}
+                />
+                <label htmlFor={ toId(title) } className="col-2 items-center">
+                  <img src={`/imgs/${img}`} className="h-[87px]" alt={title} />
+                  <small className="text-center">{ title }</small>
+                </label>
+              </div>
+          ) ) }
+        </div>
 
-      <Race.Start fleet={fleet} course={course!} count={count} disabled={ !course } />
+        <Race.Start fleet={fleet} course={course!} count={count} disabled={ !course } />
+      </div>
     </div>
   )
 }

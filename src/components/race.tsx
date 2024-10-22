@@ -30,7 +30,7 @@ function StartRacePartial({fleet, course, count, disabled}:
       onClick={ handleClick }
       disabled={ disabled }
     >
-      <HTML.H1>Begin start sequence</HTML.H1>
+      <HTML.H1 className={ disabled ? 'text-gray-400' : '' }>Begin start sequence</HTML.H1>
       <small>Race {count}{ fleet && ` - ${fleet} fleet` }</small>
     </button>
   )
