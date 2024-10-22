@@ -126,9 +126,9 @@ export default function RacePage({params}: {params: {id: string}}) {
 
     return (
       <div className="col-4">
-        <h2><strong>Still racing</strong></h2>
+        <HTML.H2>Still racing</HTML.H2>
 
-        <Tabs />
+        <Tabs darkMode={true} />
 
         <div className="row-wrap-2 w-full">
           {
