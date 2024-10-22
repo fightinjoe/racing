@@ -20,15 +20,15 @@
 
   &.dark {
     & label {
-      @apply text-white;
+      @apply text-ocean-300;
       @apply border-x-red-200 border-y-transparent;
-      @apply font-light;
+      @apply font-medium;
     }
 
     & input:checked + label {
       @apply bg-transparent;
-      @apply border-aqua-300;
-      @apply font-medium text-aqua-300;
+      @apply border-white;
+      @apply text-white;
     }
   }
 }
