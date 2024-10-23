@@ -64,9 +64,7 @@ function Back({url, ...props}: BackProps) {
   )
 }
 
-type HeaderProps = React.PropsWithChildren<React.HTMLAttributes<HTMLElement>> & {
-  title: String
-}
+type HeaderProps = React.PropsWithChildren<React.HTMLAttributes<HTMLElement>>
 
 function Header(props: HeaderProps) {
   const className = [styles.Header, props.className].join(' ')
@@ -78,7 +76,7 @@ function Header(props: HeaderProps) {
   )
 }
 
-function BackHeader(props: HeaderProps) {
+function BackHeader(props: HeaderProps & { title: String }) {
   const className = [styles.Header, 'bg-ocean-linear', props.className].join(' ')
 
   return (

@@ -219,12 +219,10 @@ function CurrentRacesPartial({ raceDay }: {raceDay:RaceDay}) {
   let currentRaces = new Map<FleetSchema|undefined, RaceSchema|undefined>()
   fleets.forEach( fleet => currentRaces.set(fleet, raceDay.unfinishedRaces(fleet)[0]) )
 
-  // Decide if scores should be shown
+  // VIEW SCORES link should be shown only when each fleet has at least 1 finished race
   const showScores = raceDay.racingFleets && raceDay.racingFleets
-    // Get the array of finished races for each fleet...
     .map( fleet => raceDay.finishedRaces(fleet).length )
-    // ...then make sure each fleet has at least 1 finished race
-    .reduce( (agg, c) => agg && c>0, true )
+    .reduce( (agg, raceCount) => agg && raceCount>0, true )
 
   return (
     <section className={styles.currentRaces}>
@@ -296,8 +294,8 @@ function StartRaceButton({fleet, raceDay}: StartRaceButtonProps) {
         className={ styles.startRace }
         onClick={ onClick }
       >
-        <HTML.H1>Start race  { `${nextRaceCount}${fleet}` }</HTML.H1>
-        <HTML.Small>{fleet} fleet</HTML.Small>
+        <HTML.H1>Start race  { `${nextRaceCount}${fleet || ''}` }</HTML.H1>
+        <HTML.Small>{fleet || 'Combined'} fleet</HTML.Small>
       </button>
     </div>
   )
