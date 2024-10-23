@@ -1,0 +1,14 @@
+.emailButton {
+  @apply bg-yellow-200 text-ocean-800;
+  @apply px-4 py-2 rounded-md;
+}
+
+.position {
+  @apply w-[2em] inline-block text-right pr-2 font-normal;
+}
+
+.points {
+  @apply py-2 pr-4;
+  @apply text-left text-yellow-200;
+  @apply font-bold font-mono;
+}

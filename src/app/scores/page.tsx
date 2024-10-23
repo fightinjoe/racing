@@ -6,6 +6,8 @@ import { RaceDay } from "@/models/raceday"
 
 import HTML from "@/components/html"
 
+import styles from "./scoresPage.module.css"
+
 export default function ScoresPage() {
   const [races, racers, config] = useRaceDayStore(s=>[s.races, s.racers, s.config])
 
@@ -14,16 +16,14 @@ export default function ScoresPage() {
   if( !raceDay.racingFleets ) return (<strong>404: No races found</strong>)
 
   return (
-    <main className="bg-white">
-      <HTML.Header>
-        <HTML.Back>Scores</HTML.Back>
-      </HTML.Header>
+    <main className="">
+      <HTML.BackHeader>Scores</HTML.BackHeader>
 
       { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
 
       <div className="col-0 flex-row p-4">
         <a
-          className="ButtonSubmit"
+          className={ styles.emailButton }
           href={`mailto:fightinjoe@gmail.com?subject=Scores&body=${ encodeURI(raceDay.emailScores()) }`}
         >
           Email all scores
@@ -42,20 +42,20 @@ function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema
 
   return (
     <div className="p-4 col-2">
-      <HTML.H1>Fleet { fleet } scores</HTML.H1>
+      <HTML.H2>Fleet { fleet } scores</HTML.H2>
 
-      <table>
-        <tr className="text-right bg-ocean-800 text-white text-sm">
+      <table className="text-white">
+        <tr className="text-right bg-ocean-950 text-sm">
           {/* Position + Fleet? + Name header */}
 
           <th className="font-light text-left py-2">
-            <span className="w-[2em] inline-block text-right pr-2 font-normal"></span>
+            <span className={ styles.position }></span>
             { fleet ? '' : <span></span>}
             Name
           </th>
 
           {/* Total header */}
-          <th className="font-light pr-4">Total</th>
+          <th className="font-light pr-4 text-left">Total</th>
 
           {/* Races header*/}
           {
@@ -66,21 +66,21 @@ function FleetScoresPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema
         </tr>
       {
         scores.racerScores.map( (s,i) => (
-          <tr key={i} className={`${ i%2 ? 'bg-gray-100' : ''}`}>
+          <tr key={i} className={ i%2 ? 'bg-clear-100' : ''}>
             {/* Position + Name */}
-            <th className="py-2 text-left pr-2">
-              <span className="w-[2em] inline-block text-right pr-2 font-normal font-mono text-sm">{i+1}</span>
+            <th className="py-2 text-left pr-2 font-medium">
+              <span className={ styles.position + ' font-mono text-sm'}>{i+1}</span>
               { fleet ? '' : <small className="font-light pr-2">({ s.racer.fleet })</small>}
               {s.racer.name}
             </th>
 
             {/* Total points */}
-            <td className="py-2 text-right font-bold font-mono pr-4">{s.points}</td>
+            <td className={ styles.points }>{s.points}</td>
 
             {/* Races */}
             { s.positions.map( (p,i) => (<>
               <td className={`py-2 text-center text-sm font-mono ${s.positions.length === i+1 && 'pr-2'}`}>
-                <span className={`inline-block w-[1.25rem] rounded-full ${p.position===1 && 'bg-aqua-400'} ${p.position.toString().length > 2 && 'text-red-600'}`}>{p.position}</span>
+                <span className={`inline-block w-[1.25rem] rounded-full ${p.position===1 && 'bg-aqua-400 text-ocean-900'} ${p.position.toString().length > 2 && 'text-red-300'}`}>{p.position}</span>
               </td>
             </>))}
           </tr>

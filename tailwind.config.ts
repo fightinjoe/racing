@@ -42,7 +42,8 @@ const config: Config = {
         'sky-300': '#7DA8E5',
         'clear-100': '#FFFFFF1A',
         'clear-400': '#FFFFFF66',
-        'clear-500': '#FFFFFF88'
+        'clear-500': '#FFFFFF88',
+        'smoke-100': '#0000001A'
       },
     },
   },
