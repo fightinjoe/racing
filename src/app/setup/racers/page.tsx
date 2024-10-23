@@ -33,7 +33,7 @@ export default function RacersPage() {
 
   return (
     <main className="h-full col-0 relative">
-      <HTML.BackHeader>Racers</HTML.BackHeader>
+      <HTML.BackHeader title="Racers" />
 
       <section className={`${ styles.modal } ${racerToEdit ? 'bg-yellow-100' : 'bg-white'}`}>
         <AddPartial racer={racerToEdit} {...{onSave, onCancel}} />

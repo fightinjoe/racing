@@ -29,7 +29,7 @@ export default function VolunteersPage() {
 
   return (
     <main className="h-full col-0">
-      <HTML.BackHeader>Volunteers</HTML.BackHeader>
+      <HTML.BackHeader title="Volunteers" />
 
       <section className={`m-2 p-2 rounded-lg ${volunteerToEdit ? 'bg-yellow-100' : 'bg-white'}`}>
         <AddPartial volunteer={volunteerToEdit} {...{onSave, onCancel}} />

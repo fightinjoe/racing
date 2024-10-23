@@ -17,18 +17,16 @@ export default function ScoresPage() {
 
   return (
     <main className="">
-      <HTML.BackHeader>Scores</HTML.BackHeader>
-
-      { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
-
-      <div className="col-0 flex-row p-4">
+      <HTML.BackHeader title="Scores">
         <a
           className={ styles.emailButton }
           href={`mailto:fightinjoe@gmail.com?subject=Scores&body=${ encodeURI(raceDay.emailScores()) }`}
         >
-          Email all scores
+          Email scores
         </a>
-      </div>
+      </HTML.BackHeader>
+
+      { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
     </main>
   )
 }

@@ -146,9 +146,7 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   return (
     <div className="col-0 h-full">
-      <HTML.BackHeader>
-          Race { _race!.id } { _race.fleet ? '' : '(combined)'}
-      </HTML.BackHeader>
+      <HTML.BackHeader title={`Race ${ _race!.id } ${ _race.fleet ? '' : '(combined)'}`} />
 
       {/* Timer + race course */}
       <_Banner />

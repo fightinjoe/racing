@@ -64,7 +64,10 @@ function Back({url, ...props}: BackProps) {
   )
 }
 
-type HeaderProps = React.PropsWithChildren<React.HTMLAttributes<HTMLElement>>
+type HeaderProps = React.PropsWithChildren<React.HTMLAttributes<HTMLElement>> & {
+  title: String
+}
+
 function Header(props: HeaderProps) {
   const className = [styles.Header, props.className].join(' ')
 
@@ -79,10 +82,11 @@ function BackHeader(props: HeaderProps) {
   const className = [styles.Header, 'bg-ocean-linear', props.className].join(' ')
 
   return (
-    <Header {...props} className={className}>
+    <Header {...props} className={className+' row-2 justify-between items-center'}>
       <Back className="text-xl items-center">
-        <H1>{ props.children }</H1>
+        <H1>{ props.title }</H1>
       </Back>
+      { props.children }
     </Header>
   )
 }

@@ -69,7 +69,7 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
 
   return (
     <main>
-      <HTML.BackHeader>Race details</HTML.BackHeader>
+      <HTML.BackHeader title="Race details" />
 
       <main className="m-2 p-2 rounded bg-white">
         <form

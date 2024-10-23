@@ -12,11 +12,7 @@ export default function ResetPage() {
 
   return (
     <div>
-      <HTML.Header>
-        <HTML.Back>
-          Clear data
-        </HTML.Back>
-      </HTML.Header>
+      <HTML.BackHeader title="Clear data" />
 
       <section className="m-2 p-2 rounded-lg  grid grid-cols-2 gap-4 items-center bg-white">
         <HTML.H1 className="text-center">{ races.length } races</HTML.H1>
