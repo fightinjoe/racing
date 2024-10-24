@@ -43,8 +43,6 @@ function Text<T extends FieldValues>({ name, register, ...props }: TextProps<T>)
     valueAsNumber: props.type === 'number'
   }
 
-  console.log(registerOptions)
-
   return (
     <input
       type="text"
