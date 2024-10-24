@@ -61,7 +61,7 @@ export default function RacePage({params}: {params: {id: string}}) {
     return () => {
       intervals.map( i => clearTimeout(i) )
     }
-  }, [race, raceState])
+  }, [_race, raceState])
 
   if (!_race) return (<strong>404: Race not found</strong>)
 

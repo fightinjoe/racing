@@ -59,7 +59,7 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
   // when the param changes, however, so `useEffect` is used to force
   // a reset of the form values. Zustan's `onFinishHydration` was
   // attempted to be used, but `useDetailsStore.persis` was undefined 🤷
-  useEffect(() => { reset(formData) }, [reset, formData])
+  useEffect(() => { reset(formData) }, [formData])
 
   const handleReset = () => {
     reset(formData)
