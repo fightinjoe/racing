@@ -34,7 +34,7 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   // Setup the timeouts to change the racing state, from 'before-start' to 'can-recall' to 'racing'
   useEffect(() => {
-    const [initialState, duration] = _race ? race!.fullRaceState : []
+    const [initialState, duration] = race ? race!.fullRaceState : []
 
     if (!initialState) return
 
@@ -61,7 +61,7 @@ export default function RacePage({params}: {params: {id: string}}) {
     return () => {
       intervals.map( i => clearTimeout(i) )
     }
-  }, [_race, raceState])
+  }, [race, raceState])
 
   if (!_race) return (<strong>404: Race not found</strong>)
 

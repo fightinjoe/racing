@@ -24,7 +24,7 @@ export default function ConditionsPage() {
   // when the param changes, however, so `useEffect` is used to force
   // a reset of the form values. Zustan's `onFinishHydration` was
   // attempted to be used, but `useDetailsStore.persis` was undefined 🤷
-  useEffect(() => { reset(conditions) }, [conditions])
+  useEffect(() => { reset(conditions) }, [reset, conditions])
 
   const onSubmit = (data: ConditionsSchema) => {
     let newConditions = {} as ConditionsSchema

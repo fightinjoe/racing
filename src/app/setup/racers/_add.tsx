@@ -28,7 +28,7 @@ export default function AddPartial({ racer, onSave, onCancel }:
     setValue('name', racer.name)
     setValue('sailNumber', racer.sailNumber)
     setValue('fleet', racer.fleet)
-  }, [racer])
+  }, [racer, setValue])
 
   const onSubmit = (data: RacerFormSchema) => {
     onSave(data)

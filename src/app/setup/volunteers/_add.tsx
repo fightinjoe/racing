@@ -25,7 +25,7 @@ export default function AddPartial({ volunteer, onSave, onCancel }:
 
     setValue('name', volunteer.name)
     setValue('role', volunteer.role)
-  }, [volunteer])
+  }, [volunteer, setValue])
 
   const onSubmit = (data: VolunteerFormSchema) => {
     onSave(data)
