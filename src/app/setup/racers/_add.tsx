@@ -23,8 +23,13 @@ export default function AddPartial({ racer, onSave, onCancel }:
   })
 
   useEffect(() => {
-    if( !racer ) return
+    // If there is no racer, set the default fleet to 'A'
+    if( !racer ) {
+      setValue('fleet', 'A')
+      return
+    }
 
+    // If there is a racer (editing), set the form values to the racer's values
     setValue('name', racer.name)
     setValue('sailNumber', racer.sailNumber)
     setValue('fleet', racer.fleet)
