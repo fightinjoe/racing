@@ -24,7 +24,8 @@ const config: Config = {
     gapSize: {
       0: '0px',
       2: '0.5rem',
-      4: '1rem'
+      4: '1rem',
+      6: '1.5rem',
     },
     extend: {
       colors: {

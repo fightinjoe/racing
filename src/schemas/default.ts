@@ -111,12 +111,24 @@ export const windDirectionSchema = z.enum(['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 
 /**
  * Details about the weather conditions
  */
-export const weatherSchema = z.object({
-  windSpeed: z.number().optional(),
-  gustSpeed: z.number().optional(),
+export const conditionsSchema = z.object({
+  windSpeed: z.number({
+    invalid_type_error: "Please enter a wind speed",
+  }).optional(),
+  gustSpeed: z.number({
+    invalid_type_error: "Please enter a wind speed",
+  }).optional(),
+
   windDirectionMin: windDirectionSchema.optional(),
   windDirectionMax: windDirectionSchema.optional(),
-  temperature: z.number().optional(),
+
+  temperatureMax: z.number({
+    invalid_type_error: "Please enter a temperature",
+  }).optional(),
+  temperatureMin: z.number({
+    invalid_type_error: "Please enter a temperature",
+  }).optional(),
+  
   condition: z.string().optional(),
   current: z.enum(['high tide', 'low tide', 'ebb', 'flood']).optional()
 })

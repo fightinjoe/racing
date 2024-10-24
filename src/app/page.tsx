@@ -22,7 +22,8 @@ type ModalConfig = {
 } | undefined
 
 export default function Home() {
-  const [racers, races, config, volunteers] = useRaceDayStore(s=>[s.racers, s.races, s.config, s.volunteers])
+  const [racers, races, config, volunteers, conditions] =
+    useRaceDayStore(s=>[s.racers, s.races, s.config, s.volunteers, s.conditions])
 
   const raceDay = new RaceDay(racers, races, config)
 
@@ -36,7 +37,7 @@ export default function Home() {
 
         <RacesPartial {...{raceDay}} />
 
-        <SetupPartial {...{raceDay, volunteers}} />
+        <SetupPartial {...{raceDay, volunteers, conditions}} />
       </main>
 
       {/* { modalConfig && <CourseModal {...modalConfig!} onCancel={onCancelModal} /> } */}
@@ -44,7 +45,7 @@ export default function Home() {
   );
 }
 
-function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: VolunteerSchema[]}) {
+function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, volunteers: VolunteerSchema[], conditions: ConditionsSchema}) {
   function _AddRacers() {
     const count = raceDay._racers.length
 
@@ -126,6 +127,19 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
     )
   }
 
+  function _Conditions() {
+    const tempMin = conditions.temperatureMin
+    const tempMax = conditions.temperatureMax
+    const windMin = conditions.windSpeed
+    const windMax = conditions.gustSpeed
+
+    const href = "/setup/conditions"
+
+    return tempMin
+    ? <NavTile.Base title={ `${tempMin} - ${tempMax}°F` } subtitle={ `${windMin} - ${windMax}kts` } href={href} />
+    : <NavTile.Base title="+" subtitle="Weather conditions" href={href} className="tile-todo" />
+  }
+
   function _Details() {
     // If there is a single fleet, then print "1 fleet". Otherwise, count
     // the number of fleets and print "0 fleets", "1 fleet", "2 fleets", etc.
@@ -172,10 +186,9 @@ function SetupPartial({ raceDay, volunteers }: { raceDay: RaceDay, volunteers: V
 
         <div className="row-wrap-2">
           <_AddRacers />
-
           <_AddVolunteers />
-
           <_Details />
+          <_Conditions />
 
           {/* <NavTile.Base
             title="Reset"

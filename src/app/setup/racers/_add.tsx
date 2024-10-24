@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect } from "react"
-import { useForm, FieldErrors } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { racerFormSchema } from "@/schemas/forms"
 import { zodResolver } from "@hookform/resolvers/zod"
 
@@ -52,20 +52,20 @@ export default function AddPartial({ racer, onSave, onCancel }:
         register={register}
         name="name"
       />
-      <ErrorMessage name="name" errors={errors} />
+      <Form.Error name="name" errors={errors} />
 
       <Form.Text
         placeholder="Sail number"
         register={register}
         name="sailNumber"
       />
-      <ErrorMessage name="sailNumber" errors={errors} />
+      <Form.Error name="sailNumber" errors={errors} />
 
       <fieldset className="RadioSlider">
         <Form.Radio name="fleet" value={'A'} register={register}>A fleet</Form.Radio>
         <Form.Radio name="fleet" value={'B'} register={register}>B fleet</Form.Radio>
       </fieldset>
-      {<ErrorMessage name="fleet" errors={errors}>Please choose a racing fleet</ErrorMessage>}
+      {<Form.Error name="fleet" errors={errors}>Please choose a racing fleet</Form.Error>}
 
       <div className="row-0 w-full justify-end">
         {
@@ -79,14 +79,5 @@ export default function AddPartial({ racer, onSave, onCancel }:
         />
       </div>
     </form>
-  )
-}
-
-function ErrorMessage({name, errors, children}:
-  {name:keyof RacerFormSchema, errors: FieldErrors<RacerFormSchema>, children?: React.ReactNode}) {
-  return (
-    errors[name]
-    ? <span className="text-red-500 text-sm">{ children || errors[name].message }</span>
-    : ''
   )
 }

@@ -3,7 +3,7 @@ import styles from "./button.module.css"
 type ButtonProps = React.PropsWithChildren<React.HTMLAttributes<HTMLButtonElement>>
 type SubmitProps = {
   value: string,
-  className: string
+  className?: string
 }
 
 function Base(props: ButtonProps) {
@@ -13,7 +13,7 @@ function Base(props: ButtonProps) {
 }
 
 function Submit(props: SubmitProps) {
-  const className = `${styles.submit} ${props.className}`
+  const className = `${styles.submit} ${props.className || ''}`
   return (
     <input {...props} type="submit" className={className} />
   )

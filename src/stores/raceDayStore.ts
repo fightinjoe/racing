@@ -4,13 +4,14 @@ import { persist } from 'zustand/middleware'
 import { Race } from '@/models/race'
 import { RaceDay } from '@/models/raceday'
 
-import { sailSizeSchema } from '@/schemas/default'
+import { conditionsSchema, sailSizeSchema } from '@/schemas/default'
 
 interface RaceDayState {
   volunteers: VolunteerSchema[],
   racers: RacerSchema[],
   races: RaceSchema[],
   config: ConfigSchema,
+  conditions: ConditionsSchema,
 
   addVolunteer: (name: string, role: RoleSchema) => VolunteerSchema,
   editVolunteer: (volunteer: VolunteerSchema, data: {name:string, role:RoleSchema}) => void,
@@ -27,7 +28,9 @@ interface RaceDayState {
   clearRaces: () => void,
 
   updateConfig: (newConfig: ConfigSchema) => void,
-  clearConfig: () => void
+  clearConfig: () => void,
+
+  updateConditions: (data: ConditionsSchema) => void
 }
 
 const DEFAULT_VOLUNTEERS: VolunteerSchema[] = []
@@ -42,6 +45,8 @@ const DEFAULT_CONFIG: ConfigSchema = {
   hasSaved: false
 }
 
+const DEFAULT_CONDITIONS: ConditionsSchema = {}
+
 export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
   volunteers: DEFAULT_VOLUNTEERS,
   
@@ -52,6 +57,8 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
   races: DEFAULT_RACES,
 
   config: DEFAULT_CONFIG,
+
+  conditions: DEFAULT_CONDITIONS,
 
   addVolunteer: (name, role) => {
     const volunteer = {
@@ -208,5 +215,14 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
 
   clearConfig: () => {
     set({ config: DEFAULT_CONFIG })
+  }, 
+  
+  updateConditions: (data) => {
+    set({
+      conditions: {
+        ...get().conditions,
+        ...conditionsSchema.parse(data)
+      }
+    })
   }
 }), { name: 'race-day-storage' }))
