@@ -23,7 +23,7 @@ function Cancel(props: ButtonProps) {
   const className = styles.cancel + ' ' + props.className
 
   return (
-    <button {...props} className={className}>{props.children || 'Cancel'}</button>
+    <button {...props} type="button" className={className}>{props.children || 'Cancel'}</button>
   )
 }
 

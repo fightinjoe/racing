@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { useRaceDayStore } from "@/stores/raceDayStore"
 import { useRacerSort } from "@/lib/useRacerSort"
 
-import AddPartial from "./_add"
+import AddRacer from "./_add"
 import HTML from "@/components/html"
 import Button from "@/components/button"
 import { ModalTile } from "@/components/tile"
@@ -15,8 +15,12 @@ export default function RacersPage() {
   const [racers, addRacer, editRacer, deleteRacer] =
     useRaceDayStore(s => [s.racers, s.addRacer, s.editRacer, s.deleteRacer])
 
+  const formRef = useRef<HTMLElement>(null)
+  const addRef = useRef<HTMLButtonElement>(null)
+
   const {Tabs, helpSortRacers} = useRacerSort()
 
+  const [showAddForm, setShowAddForm] = useState(false)
   const [racerToEdit, setRacerToEdit] = useState<RacerSchema | null>(null)
 
   const onSave = (data: RacerFormSchema) => {
@@ -27,22 +31,58 @@ export default function RacersPage() {
     setRacerToEdit(null)
   }
 
-  const onCancel = () => {
-    setRacerToEdit(null)
+  const handleOutsideClick = (e: MouseEvent) => {
+    // Make sure that the outside click is not confused with clicking on the
+    // CANCEL button
+    if( e.target === addRef.current ) return
+
+    if( formRef.current && !formRef.current.contains(e.target as Node) ) {
+      onCancel()
+    }
   }
+
+  const onAdd = () => {
+    if( showAddForm ) return onCancel()
+      
+    console.log('add')
+    setShowAddForm(true)
+    document.querySelector('body')?.addEventListener('click', handleOutsideClick)
+  }
+
+  const onCancel = () => {
+    console.log('cancel')
+    setShowAddForm(false)
+    setRacerToEdit(null)
+    document.querySelector('body')?.removeEventListener('click', handleOutsideClick)
+  }
+
+  const onEditHandler = (racer: RacerSchema) => {
+    return () => {
+      setRacerToEdit(racer)
+      onAdd()
+    }
+  }
+
+  let classNames = [styles.modal]
+  if( showAddForm ) classNames.push(styles.visible)
+  if( racerToEdit ) classNames.push("!bg-yellow-100")
 
   return (
     <main className="h-full col-0 relative">
-      <HTML.BackHeader title="Racers" />
+      <HTML.BackHeader title="Racers">
+      <button ref={addRef} className="button-header" onClick={onAdd}>
+          {showAddForm ? 'Cancel' : 'Add' }
+        </button>
+      </HTML.BackHeader>
 
-      <section className={`${ styles.modal } ${racerToEdit ? 'bg-yellow-100' : 'bg-white'}`}>
-        <AddPartial racer={racerToEdit} {...{onSave, onCancel}} />
+      <section ref={formRef} className={ classNames.join(' ')}>
+        <AddRacer racer={racerToEdit} {...{onSave, onCancel}} />
       </section>
 
-      <section className="p-4 col-4 shadow-inner overflow-scroll">
+      <section className="p-4 pb-0 col-4 shadow-inner shrink overflow-y-hidden">
         { racers.length > 0 && <Tabs darkMode={true} /> }
 
-        <div className="row-wrap-2 overflow-scroll">{
+        <div className="row-wrap-2 pb-4 overflow-scroll">{
           racers.sort( helpSortRacers ).map( (racer,i) => (
             <ModalTile
               key={i}
@@ -51,7 +91,7 @@ export default function RacersPage() {
             >
               <div className="col-0 gap-[1px]">
                 <Button.Primary
-                  onClick={ () => setRacerToEdit(racer) }
+                  onClick={ onEditHandler(racer) }
                   className={ styles.editButton }
                 >
                   Edit
@@ -65,7 +105,9 @@ export default function RacersPage() {
               </div>
             </ModalTile>
           ))
-        }</div>
+        }<div className="h-4">&nbsp;</div>
+        </div>
+
       </section>
     </main>
   )

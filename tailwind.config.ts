@@ -44,7 +44,8 @@ const config: Config = {
         'clear-100': '#FFFFFF1A',
         'clear-400': '#FFFFFF66',
         'clear-500': '#FFFFFF88',
-        'smoke-100': '#0000001A'
+        'smoke-100': '#0000001A',
+        'smoke-500': '#00000088',
       },
     },
   },
@@ -66,6 +67,7 @@ const config: Config = {
         }
       })
 
+      /** Tile styles */
       addComponents({
         '.tile': {
           background: theme('colors.ocean-100'),
@@ -88,8 +90,19 @@ const config: Config = {
             'background-color': theme('colors.clear-100')
           }
         },
+      })
 
-
+      /** Button styles */
+      addComponents({
+        '.button-header': {
+            'color': theme('colors.aqua-500'),
+            'padding': '1rem 0.5rem',
+        },
+        '.button-cancel': {
+          'color': theme('colors.smoke-500'),
+          'padding': '1rem',
+          'font-size': '0.875rem',
+        }
       })
 
       matchComponents({

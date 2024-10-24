@@ -80,7 +80,7 @@ function BackHeader(props: HeaderProps & { title: String }) {
   const className = [styles.Header, 'bg-ocean-linear', props.className].join(' ')
 
   return (
-    <Header {...props} className={className+' row-2 justify-between items-center'}>
+    <Header {...props} className={className+' pr-4 row-2 justify-between items-center'}>
       <Back className="text-xl items-center">
         <H1>{ props.title }</H1>
       </Back>

@@ -10,7 +10,7 @@ import Button from "@/components/button"
 
 import styles from "./page.module.css"
 
-export default function AddPartial({ racer, onSave, onCancel }:
+export default function AddRacer({ racer, onSave, onCancel }:
   {racer: RacerSchema | null, onSave: (d:RacerFormSchema)=>void, onCancel: ()=>void}) {
   
   const {
@@ -51,7 +51,10 @@ export default function AddPartial({ racer, onSave, onCancel }:
   }
 
   return (
-    <form className="col-2 items-start" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className={ styles.form }
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <Form.Text
         placeholder="Name"
         register={register}
@@ -72,12 +75,8 @@ export default function AddPartial({ racer, onSave, onCancel }:
       </fieldset>
       {<Form.Error name="fleet" errors={errors}>Please choose a racing fleet</Form.Error>}
 
-      <div className="row-0 w-full justify-end">
-        {
-          racer
-          ? <Button.Cancel onClick={ handleCancel } />
-          : ''
-        }
+      <div className="row-2 w-full justify-end">
+        <button type="button" onClick={ handleCancel } className="button-cancel">Cancel</button>
         <Button.Submit
           value={ racer ? 'Save changes' : 'Add' }
           className={ racer ? styles.editButton : ''}
