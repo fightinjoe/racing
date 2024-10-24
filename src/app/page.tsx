@@ -68,7 +68,7 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
         title="+"
         subtitle="Add racers"
         href="/setup/racers"
-        className="tile-todo"
+        className="tile-todo animate-[mfabounce_3s_ease-in-out_infinite]"
       />
     )
 
@@ -77,6 +77,7 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
         title="Racers"
         subtitle={ subtitle }
         href="/setup/racers"
+        className="animate-[mfabounce_3s_ease-in-out_infinite]"
       />
     )
 

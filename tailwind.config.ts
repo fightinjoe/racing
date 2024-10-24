@@ -47,6 +47,22 @@ const config: Config = {
         'smoke-100': '#0000001A',
         'smoke-500': '#00000088',
       },
+
+      keyframes: {
+        mfabounce: {
+          "0%":  { transform: "translateY(0)" },
+          "6%":  { transform: "translateY(0)" },
+          "10%": { transform: "translateY(-8px)" },
+          "12%": { transform: "translateY(0)" },
+          "14%": { transform: "translateY(-6px)" },
+          "16%": { transform: "translateY(0)" },
+          "18%": { transform: "translateY(-3px)" },
+          "20%": { transform: "translateY(0)" },
+          "22%": { transform: "translateY(-2px)" },
+          "24%": { transform: "translateY(0)" },
+          "100%": { transform: "translateY(0)" },
+        }
+      }
     },
   },
   plugins: [

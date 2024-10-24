@@ -19,7 +19,6 @@ export default function RootLayout({children}: RootLayoutProps): React.ReactNode
   return (
     <html lang="en">
       <body className={ `${inter.className} ${styles.body}`}>
-
         <div className={`ContainerMeat ${ styles.wrapper }`}>
           {children}
         </div>
