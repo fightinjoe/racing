@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import Tile from './tile'
+import Tile from '@/components/tile'
 
 const meta = {
   title: 'MFA/Tile',
