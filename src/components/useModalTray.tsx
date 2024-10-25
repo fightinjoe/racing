@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 
-import styles from './useModalTray.module.css'
+import styles from '@/components/styles/useModalTray.module.css'
 
 export type ModalTrayProps = {
   doForce: () => boolean,

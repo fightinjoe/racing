@@ -2,7 +2,7 @@ import React from "react"
 import { FieldValues, FieldErrors, UseFormRegister, Path } from "react-hook-form"
 import { toId } from "@/lib/string"
 
-import styles from "./form.module.css"
+import styles from "@/components/styles/form.module.css"
 
 interface RadioProps<T extends FieldValues> {
   name: Path<T>,

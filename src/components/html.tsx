@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from "next/navigation"
-import styles from "./html.module.css"
+import styles from "@/components/styles/html.module.css"
 
 type HeadingProps = React.PropsWithChildren<React.HTMLAttributes<HTMLHeadingElement>>
 

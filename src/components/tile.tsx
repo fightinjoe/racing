@@ -3,7 +3,7 @@
 import { useRef } from "react"
 import { useRouter } from "next/navigation"
 
-import styles from './tile.module.css'
+import styles from '@/components/styles/tile.module.css'
 
 interface TileProps {
   title: string | React.ReactNode,

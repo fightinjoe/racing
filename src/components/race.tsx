@@ -5,11 +5,11 @@ import { useRaceDayStore } from "@/stores/raceDayStore"
 
 import HTML from '@/components/html'
 import { printDuration } from "@/lib/printer"
-import { Timer } from "./timer"
+import { Timer } from "@/components/timer"
 
-import styles from "./race.module.css"
+import styles from "@/components/styles/race.module.css"
 
-function StartRacePartial({fleet, course, count, disabled}:
+export function StartRacePartial({fleet, course, count, disabled}:
   {fleet?:FleetSchema, course:CourseSchema, count: number, disabled?: boolean}) {
   const router = useRouter()
   const startRace = useRaceDayStore(s=>s.startRace)
@@ -40,7 +40,7 @@ function StartRacePartial({fleet, course, count, disabled}:
  * @param param.race - RaceSchema object to display
  * @returns 
  */
-function RunningRacePartial({race}:{race:RaceSchema}) {
+export function RunningRacePartial({race}:{race:RaceSchema}) {
   const router = useRouter()
 
   return (
@@ -64,7 +64,7 @@ function RunningRacePartial({race}:{race:RaceSchema}) {
  * @param param.race - RaceSchema object to display
  * @returns 
  */
-function ViewRacePartial({race}:{race:RaceSchema}) {
+export function ViewRacePartial({race}:{race:RaceSchema}) {
   const first = race.finishers[0]
   const duration = printDuration( race.startTime, first.finishedAt )
 
