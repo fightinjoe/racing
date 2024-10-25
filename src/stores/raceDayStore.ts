@@ -16,6 +16,7 @@ interface RaceDayState {
   addVolunteer: (name: string, role: RoleSchema) => VolunteerSchema,
   editVolunteer: (volunteer: VolunteerSchema, data: {name:string, role:RoleSchema}) => void,
   deleteVolunteer: (volunteer: VolunteerSchema) => void,
+  clearVolunteers: () => void,
 
   addRacer: (name: string, sailNumber: string, fleet: FleetSchema) => RacerSchema,
   editRacer: (racer: RacerSchema, data: {name:string, sailNumber: string, fleet: FleetSchema}) => void,
@@ -84,6 +85,14 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
   deleteVolunteer: (volunteer) => {
     const volunteers = get().volunteers.filter( v => v.id !== volunteer.id )
     set({volunteers})
+  },
+
+  clearVolunteers: () => {
+    const consent = `Are you sure you want to permanently delete ${ get().volunteers.length } volunteers?`
+
+    if (!confirm(consent)) return
+
+    set({ volunteers: [] })
   },
 
   addRacer: (name, sailNumber, fleet) => {

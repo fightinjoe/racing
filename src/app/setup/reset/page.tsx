@@ -8,8 +8,8 @@ import Button from "@/components/button"
 import HTML from "@/components/html"
 
 export default function ResetPage() {
-  const [races, racers, addRacer, clearRaces, clearRacers, clearConfig] =
-    useRaceDayStore( s=>[s.races, s.racers, s.addRacer, s.clearRaces, s.clearRacers, s.clearConfig])
+  const [races, racers, volunteers, addRacer, clearRaces, clearRacers, clearVolunteers, clearConfig] =
+    useRaceDayStore( s=>[s.races, s.racers, s.volunteers, s.addRacer, s.clearRaces, s.clearRacers, s.clearVolunteers, s.clearConfig])
 
   const loadRacers = () => {
     const names = racers.map( r=>r.name )
@@ -29,6 +29,9 @@ export default function ResetPage() {
       
         <HTML.H1 className="text-center !text-black">{ racers.length } racers</HTML.H1>
         <Button.Primary onClick={ clearRacers }>Clear all racers</Button.Primary>
+
+        <HTML.H1 className="text-center !text-black">{ volunteers.length } volunteers</HTML.H1>
+        <Button.Primary onClick={ clearVolunteers }>Clear all volunteers</Button.Primary>
       
         <HTML.H1 className="text-center !text-black">Race day</HTML.H1>
         <Button.Primary onClick={ clearConfig }>Clear details</Button.Primary>
