@@ -35,3 +35,13 @@ export function sortSailNumbers(sn1: string, sn2: string) {
     s1.toLowerCase() === s2.toLowerCase() ? -1 :
     s1.toLowerCase() < s2.toLowerCase() ? -1 : 1
 }
+
+export function hexToRBG(hex: string) {
+  const [r,g,b] = hex.match(/.{2}/g)!.map( x => parseInt(x, 16) )
+  return `rgb(${r},${g},${b})`
+}
+
+export function hexToRGBA(hex: string, alpha: number) {
+  const [r,g,b] = hex.match(/.{2}/g)!.map( x => parseInt(x, 16) )
+  return `rgba(${r},${g},${b},${alpha})`
+}

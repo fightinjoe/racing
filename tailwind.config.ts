@@ -48,21 +48,27 @@ const config: Config = {
         'smoke-500': '#00000088',
       },
 
-      keyframes: {
-        mfabounce: {
-          "0%":  { transform: "translateY(0)" },
-          "6%":  { transform: "translateY(0)" },
-          "10%": { transform: "translateY(-8px)" },
-          "12%": { transform: "translateY(0)" },
-          "14%": { transform: "translateY(-6px)" },
-          "16%": { transform: "translateY(0)" },
-          "18%": { transform: "translateY(-3px)" },
-          "20%": { transform: "translateY(0)" },
-          "22%": { transform: "translateY(-2px)" },
-          "24%": { transform: "translateY(0)" },
-          "100%": { transform: "translateY(0)" },
-        }
-      }
+      /* Tailwind bug: a theme.animation referencing a theme.keyframe */
+      /* does not trigger the compilation of the animation, so it shows up */
+      /* as undefined. Adding it explicitly to globals.css makes it accessible */
+      // keyframes: {
+      //   mfabounce: {
+      //     "0%":  { transform: "translateY(0)" },
+      //     "6%":  { transform: "translateY(0)" },
+      //     "10%": { transform: "translateY(-8px)" },
+      //     "12%": { transform: "translateY(0)" },
+      //     "14%": { transform: "translateY(-6px)" },
+      //     "16%": { transform: "translateY(0)" },
+      //     "18%": { transform: "translateY(-3px)" },
+      //     "20%": { transform: "translateY(0)" },
+      //     "22%": { transform: "translateY(-2px)" },
+      //     "24%": { transform: "translateY(0)" },
+      //     "100%": { transform: "translateY(0)" },
+      //   }
+      // },
+      // animation: {
+      //   mfabounce: 'mfabounce 3s ease-in-out infinite'
+      // }
     },
   },
   plugins: [
@@ -101,11 +107,29 @@ const config: Config = {
           background: 'none',
           color: theme('colors.ocean-200'),
           '&:hover, &:active': {
-            'border-color': theme('colors.gray-500'),
-            text: theme('colors.gray-600'),
+            'border-color': theme('colors.gray.500'),
+            color: theme('colors.gray-600'),
             'background-color': theme('colors.clear-100')
+          },
+        },
+
+        '.tile-emphasize': {
+          border: `2px dashed ${theme('colors.yellow.200')}`,
+          background: hexToRGBA(theme('colors.yellow.200'), 0.2),
+          color: theme('colors.yellow.200'),
+          animation: `mfabounce 5s ease-in-out infinite`,
+          '&:hover, &:active': {
+            'border-color': theme('colors.yellow.500'),
+            'border-style': 'solid',
+            color: theme('colors.black'),
+            'background-color': theme('colors.yellow.200'),
+            animation: 'none'
           }
         },
+
+        '.tile-done': {
+          background: theme('colors.clear-400'),
+        }
       })
 
       /** Button styles */
@@ -153,6 +177,11 @@ const config: Config = {
       })
     } )
   ],
+}
+
+export function hexToRGBA(hex: string, alpha: number) {
+  const [r,g,b] = hex.match(/\w{2}/g)!.map( x => parseInt(x, 16) )
+  return `rgba(${r},${g},${b},${alpha})`
 }
 
 export default config

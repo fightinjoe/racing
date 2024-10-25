@@ -5,7 +5,8 @@ import { useRef, useState, ChangeEventHandler } from "react"
 import { NavTile } from "@/components/tile"
 import HTML from "@/components/html"
 import Race from "@/components/race"
-import NextStep from "@/components/nextStep"
+// import NextStep from "@/components/nextStep"
+import { useNextSteps } from "@/lib/useNextSteps"
 
 import { useRaceDayStore } from "@/stores/raceDayStore"
 import { RaceDay } from "@/models/raceday"
@@ -15,6 +16,7 @@ import { useRouter } from "next/navigation"
 
 import styles from "./page.module.css"
 import modalStyles from "@/components/tile.module.css"
+import { title } from "process"
 
 type ModalConfig = {
   fleet?: FleetSchema,
@@ -39,13 +41,13 @@ export default function Home() {
 
         <SetupPartial {...{raceDay, volunteers, conditions}} />
       </main>
-
-      {/* { modalConfig && <CourseModal {...modalConfig!} onCancel={onCancelModal} /> } */}
     </>
   );
 }
 
 function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, volunteers: VolunteerSchema[], conditions: ConditionsSchema}) {
+  const { state, NextStep } = useNextSteps()
+
   function _AddRacers() {
     const count = raceDay._racers.length
 
@@ -55,39 +57,20 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
       <strong>{ raceDay.racers('B').length }</strong> B fleet
     </>
 
-    if (raceDay.canRace()) return (
-      <NavTile.Done
-        title="Racers"
-        subtitle={ subtitle }
-        href="/setup/racers"
-      />
-    )
+    const className = 
+      state === 'Ready'             ? "tile-done" :
+      state === 'Not enough racers' ? "tile-emphasize" :
+      state === 'No racers'         ? "tile-emphasize" :
+                                      "tile"
 
-    if (count === 0) return (
-      <NavTile.Base
-        title="+"
-        subtitle="Add racers"
-        href="/setup/racers"
-        className="tile-todo animate-[mfabounce_3s_ease-in-out_infinite]"
-      />
-    )
+    const props = {
+      href: "/setup/racers",
+      title: state === 'No racers' ? '+' : 'Racers',
+      subtitle: state === 'No racers' ? 'Add racers' : subtitle,
+      className
+    }
 
-    if (count < 5) return (
-      <NavTile.Highlight
-        title="Racers"
-        subtitle={ subtitle }
-        href="/setup/racers"
-        className="animate-[mfabounce_3s_ease-in-out_infinite]"
-      />
-    )
-
-    return (
-      <NavTile.Base
-        title="Racers"
-        subtitle={ subtitle }
-        href="/setup/racers"
-      />
-    )
+    return <NavTile.Base {...props} />
   }
 
   function _AddVolunteers() {
@@ -95,37 +78,22 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
 
     const chair = volunteers.find( v => v.role === 'Race committee' )
 
-    // If we can race, then all of the setup is complete
-    if(raceDay.canRace()) return (
-      <NavTile.Done
-        title="Chair"
-        subtitle={`${chair!.name} + ${count} other${count!==1 ? 's' : ''}`}
-        href="/setup/volunteers" />
-    )
+    const className =
+      state === 'Ready' ? "tile-done" :
+      state === 'No RC' ? "tile-emphasize" :
+      count === 0       ? "tile-todo" :
+                          "tile"
 
-    // If there are no volunteers, then print the TODO tile
-    if(count === 0) return (
-      <NavTile.Base
-        title="+"
-        subtitle="Committee volunteers"
-        href="/setup/volunteers"
-        className="tile-todo" />
-    )
+    const props = {
+      href: "/setup/volunteers",
+      title: chair ? 'RC' : '+',
+      subtitle: chair
+        ? `${chair!.name} + ${count} other${count===1?'':'s'}`
+        : 'Add volunteers',
+      className
+    }
 
-    // If there is no RC chair but there are volunteers, then highlight 
-    if(!chair) return (
-      <NavTile.Highlight
-        title="No Chair"
-        subtitle={`${count} volunteer${count!==1 ? 's' : ''}`}
-        href="/setup/volunteers" />
-    )
-
-    return (
-      <NavTile.Base
-        title="Chair"
-        subtitle={`${chair.name} + ${count} other${count!==1 ? 's' : ''}`}
-        href="/setup/volunteers" />
-    )
+    return <NavTile.Base {...props} />
   }
 
   function _Conditions() {
@@ -136,45 +104,41 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
 
     const href = "/setup/conditions"
 
+    const className = 
+      !tempMin          ? "tile-todo" :
+      state === 'Ready' ? "tile-done" :
+                          "tile"
+
     return tempMin
-    ? <NavTile.Base title={ `${tempMin} - ${tempMax}°F` } subtitle={ `${windMin} - ${windMax}kts` } href={href} />
-    : <NavTile.Base title="+" subtitle="Weather conditions" href={href} className="tile-todo" />
+    ? <NavTile.Base title={ `${tempMin} - ${tempMax}°F` } subtitle={ `${windMin} - ${windMax}kts` } href={href} className={ className } />
+    : <NavTile.Base title="+" subtitle="Weather conditions" href={href} className={ className } />
   }
 
   function _Details() {
     // If there is a single fleet, then print "1 fleet". Otherwise, count
     // the number of fleets and print "0 fleets", "1 fleet", "2 fleets", etc.
     const f = raceDay.racingFleets ? raceDay.racingFleets.length : 0
-    const title = raceDay.raceSeparateFleets
-    ? `${f} fleet${ f===1 ? '' : 's'}`
-    : '1 fleet'
+    const title = 
+      !raceDay._config.hasSaved  ? '+' :
+      raceDay.raceSeparateFleets ? `${f} fleet${ f===1 ? '' : 's'}` :
+                                   '1 fleet'
 
-    const subtitle = `${ capitalize(raceDay.sailSize) } sails`
+    const subtitle = raceDay._config.hasSaved
+      ? `${ capitalize(raceDay.sailSize) } sails`
+      : 'Race details'
 
-    const href = "/setup/details"
+    const className =
+      state === 'Ready'           ? "tile-done" :
+      state === 'No race details' ? "tile-emphasize" :
+      !raceDay._config.hasSaved   ? "tile-todo" :
+                                    "tile"
+
+    const props = {
+      href: "/setup/details",
+      title, subtitle, className
+    }
     
-    if (raceDay.canRace()) return (
-      <NavTile.Done
-        title={ title }
-        subtitle={ subtitle }
-        href={href}
-      />
-    )
-
-    if (raceDay._config.hasSaved) return (
-      <NavTile.Base
-        title={ title }
-        subtitle={ subtitle }
-        href={href}
-      />
-    )
-
-    return <NavTile.Base
-      title="+"
-      subtitle="Race details"
-      href={href}
-      className="tile-todo"
-    />
+    return <NavTile.Base {...props} />
   }
 
   return (
@@ -190,12 +154,6 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
           <_AddVolunteers />
           <_Details />
           <_Conditions />
-
-          {/* <NavTile.Base
-            title="Reset"
-            subtitle="Clear data"
-            href="/setup/reset"
-          /> */}
         </div>
       </div>
     </section>

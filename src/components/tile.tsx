@@ -59,16 +59,6 @@ export const NavTile = {
     return <Tile {...props} onClick={ () => router.push(props.href) } className={ props.className || styles.Base } />
   },
 
-  // A tile that has yet to be completed
-  // Todo: (props: NavTileProps) => (
-  //   <NavTile.Base {...{...props, className: `${props.className} tile-todo`}} />
-  // ),
-
-  // Tile to draw attention to, usually together with a Todo banner
-  Highlight: (props: NavTileProps) => (
-    <NavTile.Base {...{...props, className: `${props.className} ${styles.Highlight}`}} />
-  ),
-
   // Tile that is complete and isn't expected to be revisited
   // e.g. racers once racing has begun
   Done: (props: NavTileProps) => (
