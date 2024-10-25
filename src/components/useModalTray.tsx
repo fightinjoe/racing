@@ -8,7 +8,7 @@ export type ModalTrayProps = {
 }
 
 export type ModalTrayHook = {
-  Tray: ({classNames, children}: {classNames?: string, children: React.ReactNode}) => JSX.Element,
+  Tray: ({className, children}: {className?: string, children: React.ReactNode}) => JSX.Element,
   show: (onlyAdd?: boolean) => void,
   hide: () => void,
   visible: boolean,
@@ -73,7 +73,7 @@ export default function useModalTray(props: ModalTrayProps = defaultProps): Moda
     document.querySelector('body')?.removeEventListener('click', handleOutsideClick)
   }
 
-  function Tray({classNames, children}: {classNames?: string, children: React.ReactNode}) {
+  function Tray({className, children}: {className?: string, children: React.ReactNode}) {
     let names = [styles.modal]
 
     // When the modal is hidden, start from the visible state
@@ -82,7 +82,7 @@ export default function useModalTray(props: ModalTrayProps = defaultProps): Moda
       names.push(styles.visible)
     }
 
-    if( classNames ) names.push(classNames)
+    if( className ) names.push(className)
 
     return (
       <section ref={modalRef} className={ names.join(' ')}>

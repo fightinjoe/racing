@@ -1,4 +1,10 @@
-import styles from "./button.module.css"
+import { RaceDay } from "@/models/raceday"
+import useModalTray from "@/components/useModalTray"
+import HTML from "@/components/html"
+import CourseChooser from "@/components/courseChooser"
+
+import buttonStyles from "@/components/styles/button.module.css"
+import raceStyles from "@/components/styles/race.module.css"
 
 type ButtonProps = React.PropsWithChildren<React.HTMLAttributes<HTMLButtonElement>>
 type SubmitProps = {
@@ -13,14 +19,14 @@ function Base(props: ButtonProps) {
 }
 
 function Submit(props: SubmitProps) {
-  const className = `${styles.submit} ${props.className || ''}`
+  const className = `${buttonStyles.submit} ${props.className || ''}`
   return (
     <input {...props} type="submit" className={className} />
   )
 }
 
 function Cancel(props: ButtonProps) {
-  const className = styles.cancel + ' ' + props.className
+  const className = buttonStyles.cancel + ' ' + props.className
 
   return (
     <button {...props} type="button" className={className}>{props.children || 'Cancel'}</button>
@@ -28,11 +34,38 @@ function Cancel(props: ButtonProps) {
 }
 
 function Primary(props: ButtonProps) {
-  return <Base {...props} className={styles.primary+' '+props.className} />
+  return <Base {...props} className={buttonStyles.primary+' '+props.className} />
 }
 
 function Secondary(props: ButtonProps) {
-  return <Base {...props} className={styles.secondary+' '+props.className} />
+  return <Base {...props} className={buttonStyles.secondary+' '+props.className} />
+}
+
+interface StartRaceButtonProps {
+  fleet: FleetSchema|undefined
+  raceDay: RaceDay
+}
+
+export function StartRaceButton({fleet, raceDay}: StartRaceButtonProps) {
+  const nextRaceCount = raceDay.races(fleet).length + 1
+
+  const courseModal = useModalTray()
+
+  return(
+    <>
+      <button
+        className={ raceStyles.startRace }
+        onClick={ () => courseModal.show() }
+      >
+        <HTML.H1>Start race  { `${nextRaceCount}${fleet || ''}` }</HTML.H1>
+        <HTML.Small>{fleet || 'Combined'} fleet</HTML.Small>
+      </button>
+
+      <courseModal.Tray className="max-w-[390px] flex flex-row items-center">
+        <CourseChooser fleet={fleet} count={nextRaceCount} onCancel={ courseModal.hide } />
+      </courseModal.Tray>
+    </>
+  )
 }
 
 const Button = { Cancel, Submit, Primary, Secondary }

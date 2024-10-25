@@ -7,15 +7,6 @@ const meta = {
   component: Race.Start,
   parameters: {},
   tags: [],
-  decorators: [
-    (Story) => (
-      <div className="bg-ocean-radial p-4 box-content">
-        <div style={{ 'containerType': 'inline-size' }}>
-          <Story />
-        </div>
-      </div>
-    )
-  ]
 } satisfies Meta<typeof Race.Start>
 
 export default meta
