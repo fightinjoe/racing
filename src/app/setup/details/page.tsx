@@ -41,6 +41,8 @@ export default function DetailsPage() {
 }
 
 function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:MyFormData) => void}) {
+  const router = useRouter()
+  
   const formData: MyFormData = {
     sailSize: data.sailSize,
     raceSeparateFleets: data.raceSeparateFleets+''
@@ -61,8 +63,9 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
   // attempted to be used, but `useDetailsStore.persis` was undefined 🤷
   useEffect(() => { reset(formData) }, [])
 
-  const handleReset = () => {
+  const onCancel = () => {
     reset(formData)
+    router.back()
     return false
   }
   
@@ -71,27 +74,32 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
     <main>
       <HTML.BackHeader title="Race details" />
 
-      <main className="m-2 p-2 rounded bg-white">
+      <main className="m-4 p-4 rounded bg-white">
         <form
           className="col-2"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <HTML.H2 className="!text-black">Sail size</HTML.H2>
+          <div className="row-2 items-center">
+            <span className="grow">Sail size</span>
 
-          <fieldset className="RadioSlider mb-4">
-            <Form.Radio name="sailSize" value="small" register={register}>Small</Form.Radio>
-            <Form.Radio name="sailSize" value="large" register={register}>Large</Form.Radio>
-          </fieldset>
+            <fieldset className="RadioSlider mb-4">
+              <Form.Radio name="sailSize" value="small" register={register}>Small</Form.Radio>
+              <Form.Radio name="sailSize" value="large" register={register}>Large</Form.Radio>
+            </fieldset>
+          </div>
 
-          <HTML.H2 className="!text-black">Fleet size</HTML.H2>
+          <div className="row-2 items-center">
+            <span className="grow">Racing fleet</span>
 
-          <fieldset className="RadioSlider">
-            <Form.Radio name="raceSeparateFleets" value={'false'} register={register}>Single fleet</Form.Radio>
-            <Form.Radio name="raceSeparateFleets" value={'true'} register={register}>Separate fleets</Form.Radio>
-          </fieldset>
+            <fieldset className="RadioSlider">
+              <Form.Radio name="raceSeparateFleets" value={'false'} register={register}>Combined A+B</Form.Radio>
+              <Form.Radio name="raceSeparateFleets" value={'true'} register={register}>Separate</Form.Radio>
+            </fieldset>
+          </div>
 
           <div className="row-4 justify-end mt-6">
-            <button onClick={ handleReset } className="ButtonCancel" type="button">Reset</button>
+            {/* <button onClick={ handleReset } className="ButtonCancel" type="button">Reset</button> */}
+            <Button.Cancel onClick={ onCancel } />
             <Button.Submit value="Save" />
           </div>
 

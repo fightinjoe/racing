@@ -45,6 +45,12 @@ export default function ConditionsPage() {
     router.back()
   }
 
+  const onCancel = () => {
+    reset(conditions)
+    router.back()
+    return false
+  }
+
   return (
     <main>
       <HTML.BackHeader title="Conditions" />
@@ -143,7 +149,7 @@ export default function ConditionsPage() {
           </div>
 
           <div className="row-0 w-full justify-end">
-            <Button.Cancel />
+            <Button.Cancel onClick={ onCancel } />
             <Button.Submit value="Save" />
           </div>
         </form>
@@ -159,23 +165,3 @@ function FormError({error}: {error?: string}) {
     : ''
   )
 }
-
-
-// function HighLow<T extends FieldValues>({name, title, register}: {name: Path<T>, title: string, register: UseFormRegister<T>}) {
-//   return (
-//     <div className="col-2">
-//       <div className="row-2">
-//         <span>{title}</span>
-
-//         <Form.Text
-//           placeholder="Temperature"
-//           register={register}
-//           name={name}
-//           type="number"
-//         />
-//       </div>
-      
-//       <Form.Error name="temperature" errors={errors} />
-//     </div>
-//   )
-// }
