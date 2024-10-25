@@ -51,7 +51,7 @@ export default function RacersPage() {
         </button>
       </HTML.BackHeader>
 
-      <modal.Tray classNames={ racerToEdit ? '!bg-yellow-100' : ''}>
+      <modal.Tray className={ racerToEdit ? '!bg-yellow-100' : ''}>
         <AddRacer racer={racerToEdit} {...{onSave, onCancel: modal.hide}} />
       </modal.Tray>
 

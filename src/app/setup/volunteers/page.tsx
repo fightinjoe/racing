@@ -60,7 +60,7 @@ export default function VolunteersPage() {
         </button>
       </HTML.BackHeader>
 
-      <modal.Tray classNames={ volunteerToEdit ? '!bg-yellow-100' : ''}>
+      <modal.Tray className={ volunteerToEdit ? '!bg-yellow-100' : ''}>
         <AddVolunteer volunteer={volunteerToEdit} {...{onSave, onCancel: modal.hide}} />
       </modal.Tray>
 
