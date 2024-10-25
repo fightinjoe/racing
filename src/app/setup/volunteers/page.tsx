@@ -2,18 +2,23 @@
 
 import { useState } from "react"
 import { useRaceDayStore } from "@/stores/raceDayStore"
-import { useRacerSort } from "@/lib/useRacerSort"
 
-import AddPartial from "./_add"
+import AddVolunteer from "./_add"
 import HTML from "@/components/html"
 import Button from "@/components/button"
 import { ModalTile } from "@/components/tile"
+import useModalTray from "@/components/useModalTray"
 
 export default function VolunteersPage() {
   const [volunteers, addVolunteer, editVolunteer, deleteVolunteer] =
     useRaceDayStore(s => [s.volunteers, s.addVolunteer, s.editVolunteer, s.deleteVolunteer])
 
   const [volunteerToEdit, setVolunteerToEdit] = useState<VolunteerSchema | null>(null)
+
+  const modal = useModalTray({
+    doForce: () => volunteers.length === 0,
+    onCancel: () => setVolunteerToEdit(null),
+  })
 
   const onSave = (data: VolunteerFormSchema) => {
     volunteerToEdit
@@ -23,17 +28,17 @@ export default function VolunteersPage() {
     setVolunteerToEdit(null)
   }
 
-  const onCancel = () => {
-    setVolunteerToEdit(null)
-  }
-
   return (
-    <main className="h-full col-0">
-      <HTML.BackHeader title="Volunteers" />
+    <main className="h-full col-0 relative">
+      <HTML.BackHeader title="Volunteers">
+        <button className="button-header" onClick={() => modal.show(true)}>
+          {modal.visible ? '' : 'Add' }
+        </button>
+      </HTML.BackHeader>
 
-      <section className={`m-2 p-2 rounded-lg ${volunteerToEdit ? 'bg-yellow-100' : 'bg-white'}`}>
-        <AddPartial volunteer={volunteerToEdit} {...{onSave, onCancel}} />
-      </section>
+      <modal.Tray classNames={ volunteerToEdit ? '!bg-yellow-100' : ''}>
+        <AddVolunteer volunteer={volunteerToEdit} {...{onSave, onCancel: modal.hide}} />
+      </modal.Tray>
 
       <section className="p-4 col-4 shadow-inner overflow-scroll">
         <div className="row-wrap-2 overflow-scroll">{

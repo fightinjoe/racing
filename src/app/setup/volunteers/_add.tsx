@@ -8,7 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import Form from "@/components/form"
 import Button from "@/components/button"
 
-export default function AddPartial({ volunteer, onSave, onCancel }:
+export default function AddVolunteer({ volunteer, onSave, onCancel }:
   {volunteer: VolunteerSchema | null, onSave: (d:VolunteerFormSchema)=>void, onCancel: ()=>void}) {
   
   const {
@@ -21,7 +21,10 @@ export default function AddPartial({ volunteer, onSave, onCancel }:
   })
 
   useEffect(() => {
-    if( !volunteer ) return
+    if( !volunteer ) {
+      setValue('role', 'Volunteer')
+      return
+    }
 
     setValue('name', volunteer.name)
     setValue('role', volunteer.role)
@@ -57,11 +60,7 @@ export default function AddPartial({ volunteer, onSave, onCancel }:
       {<ErrorMessage name="role" errors={errors}>Please choose a volunteer role</ErrorMessage>}
 
       <div className="row-0 w-full justify-end">
-        {
-          volunteer
-          ? <Button.Cancel onClick={ handleCancel } />
-          : ''
-        }
+        <Button.Cancel onClick={ handleCancel } />
         <Button.Submit value={ volunteer ? 'Save changes' : 'Add' } />
       </div>
     </form>
