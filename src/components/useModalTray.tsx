@@ -2,12 +2,30 @@ import { useEffect, useRef, useState } from "react"
 
 import styles from './useModalTray.module.css'
 
-interface Props {
+export type ModalTrayProps = {
   doForce: () => boolean,
   onCancel: () => void,
 }
 
-export default function useModalTray(props: Props) {
+export type ModalTrayHook = {
+  Tray: ({classNames, children}: {classNames?: string, children: React.ReactNode}) => JSX.Element,
+  show: (onlyAdd?: boolean) => void,
+  hide: () => void,
+  visible: boolean,
+}
+
+const defaultProps = {
+  doForce: () => false,
+  onCancel: () => {},
+}
+
+/**
+ * Hook that provides a modal tray that slides in from the bottom of the screen.
+ * @param doForce A function that returns a boolean to force the modal to show the first time
+ * @param onCancel A function to call when the modal is hidden
+ * @returns {Tray: component, show: fn(), hide: fn(), visible: boolean}
+ */
+export default function useModalTray(props: ModalTrayProps = defaultProps): ModalTrayHook {
   const modalRef = useRef<HTMLElement>(null)
   const isFirstRender = useRef(true)
 

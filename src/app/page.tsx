@@ -5,8 +5,8 @@ import { useRef, useState, ChangeEventHandler } from "react"
 import { NavTile } from "@/components/tile"
 import HTML from "@/components/html"
 import Race from "@/components/race"
-// import NextStep from "@/components/nextStep"
 import { useNextSteps } from "@/lib/useNextSteps"
+import useModalTray from "@/components/useModalTray"
 
 import { useRaceDayStore } from "@/stores/raceDayStore"
 import { RaceDay } from "@/models/raceday"
@@ -15,13 +15,6 @@ import { capitalize, toId } from "@/lib/string"
 import { useRouter } from "next/navigation"
 
 import styles from "./page.module.css"
-import modalStyles from "@/components/tile.module.css"
-import { title } from "process"
-
-type ModalConfig = {
-  fleet?: FleetSchema,
-  count: number
-} | undefined
 
 export default function Home() {
   const [racers, races, config, volunteers, conditions] =
@@ -220,51 +213,22 @@ interface StartRaceButtonProps {
 function StartRaceButton({fleet, raceDay}: StartRaceButtonProps) {
   const nextRaceCount = raceDay.races(fleet).length + 1
 
-  const dialog = useRef(null)
+  const courseModal = useModalTray()
 
-  // Tile onClick handler
-  const onClick = () => {
-    if(!dialog || !dialog.current) return
-    
-    const modal: HTMLDialogElement = dialog.current
-
-    modal.style.visibility = 'hidden'
-
-    // Make the modal appear on the screen
-    modal!.showModal()
-
-    // Position the modal
-    const dims = modal.getBoundingClientRect()
-    modal.style.top = `${ window.innerHeight - dims.height }px`
-    modal.style.left = `${ (window.innerWidth - dims.width)/2 }px`
-    modal.style.visibility = 'visible'
-  }
-
-  const onDialogClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    if (e.target === e.currentTarget) {
-      closeModal()
-    }
-  }
-
-  const closeModal = () => {
-    const modal:HTMLDialogElement = dialog!.current!
-    modal.close()
-  }
-
-  return (
-    <div>
-      <dialog ref={dialog} onClick={ onDialogClick } className={ modalStyles.modal }>
-        <CourseChooser fleet={fleet} count={nextRaceCount} onCancel={closeModal} />
-      </dialog>
-
+  return(
+    <>
       <button
         className={ styles.startRace }
-        onClick={ onClick }
+        onClick={ () => courseModal.show() }
       >
         <HTML.H1>Start race  { `${nextRaceCount}${fleet || ''}` }</HTML.H1>
         <HTML.Small>{fleet || 'Combined'} fleet</HTML.Small>
       </button>
-    </div>
+
+      <courseModal.Tray>
+        <CourseChooser fleet={fleet} count={nextRaceCount} onCancel={ courseModal.hide } />
+      </courseModal.Tray>
+    </>
   )
 }
 

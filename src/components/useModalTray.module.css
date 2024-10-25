@@ -2,7 +2,7 @@
   @apply mx-2 p-2 rounded-tl-lg rounded-tr-lg;
   @apply bg-white;
   width: calc(100% - 2*0.5rem);
-  @apply absolute bottom-0 z-50;
+  @apply absolute left-0 bottom-0 z-50;
   
   transition: all 0.2s ease-out;
 
