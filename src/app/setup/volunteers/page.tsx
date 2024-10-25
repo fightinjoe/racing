@@ -70,7 +70,7 @@ export default function VolunteersPage() {
           {
             rcVolunteers.length === 0
             ? <Tile className="tile-todo" title="+" subtitle="Add race committee" onClick={ modal.show } />
-            : rcVolunteers.map( (volunteer,key) => <Volunteer {...{volunteer, key}} /> )
+            : rcVolunteers.map( (volunteer,key) => <Volunteer key={key} {...{volunteer}} /> )
           }
         </div>
 
@@ -79,7 +79,7 @@ export default function VolunteersPage() {
           {
             cbVolunteers.length === 0
             ? <Tile className="tile-todo" title="+" subtitle="Add crash boat" onClick={ modal.show } />
-            : cbVolunteers.map( (volunteer,key) => <Volunteer {...{volunteer, key}} /> )
+            : cbVolunteers.map( (volunteer,key) => <Volunteer key={key} {...{volunteer}} /> )
           }
         </div>
       </section>

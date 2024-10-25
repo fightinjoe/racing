@@ -61,7 +61,7 @@ export default function RacersPage() {
         <div className="row-wrap-2 pb-4 overflow-scroll">
           {
             racers.length === 0 &&
-            <Tile className="tile-todo" title="+" subtitle="Add racer" onClick={onAdd} />
+            <Tile className="tile-todo" title="+" subtitle="Add racer" onClick={ modal.show } />
           }
           {
             racers.sort( helpSortRacers ).map( (racer,i) => (
