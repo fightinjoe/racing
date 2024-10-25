@@ -160,22 +160,17 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
   )
 }
 
-interface RacesPartialProps {
-  raceDay: RaceDay,
-  
-}
-
 /** Displays the current and finished races.
  *  Will print nothing if raceDay.canRace() is false
  */
-function RacesPartial({raceDay}: RacesPartialProps) {
+function RacesPartial({raceDay}: {raceDay: RaceDay}) {
   if (!raceDay.canRace()) return null
 
   return (
     <>
       <CurrentRacesPartial raceDay={raceDay} />
 
-      <FinishedRacesPartial raceDay={raceDay} />
+      {raceDay.finishedRaces().length > 0 && <FinishedRacesPartial raceDay={raceDay} />}
     </>
   )
 }
