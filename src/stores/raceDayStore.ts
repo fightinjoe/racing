@@ -92,7 +92,7 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
 
     if (!confirm(consent)) return
 
-    set({ volunteers: [] })
+    set({ volunteers: DEFAULT_VOLUNTEERS })
   },
 
   addRacer: (name, sailNumber, fleet) => {
@@ -223,7 +223,7 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
   },
 
   clearConfig: () => {
-    set({ config: DEFAULT_CONFIG })
+    set({ config: DEFAULT_CONFIG, conditions: DEFAULT_CONDITIONS })
   }, 
   
   updateConditions: (data) => {
