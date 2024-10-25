@@ -4,8 +4,10 @@
   width: calc(100% - 2*0.5rem);
   @apply absolute bottom-0 z-50;
   
+  transition: all 0.2s ease-out;
+
+  /* By default, hide the modal */
   transform: translateY(100%);
-  transition: transform 0.2s ease-out;
 }
 
 .visible {

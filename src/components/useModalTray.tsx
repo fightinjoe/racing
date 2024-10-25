@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import styles from './useModalTray.module.css'
 
@@ -9,8 +9,23 @@ interface Props {
 
 export default function useModalTray(props: Props) {
   const modalRef = useRef<HTMLElement>(null)
+  const isFirstRender = useRef(true)
 
   const [showModal, setShowModal] = useState( props.doForce())
+
+  console.log('firstRender', isFirstRender.current)
+
+  useEffect(() => {
+    if( isFirstRender.current ) {
+      isFirstRender.current = false
+      return
+    }
+
+    setTimeout(
+      () => modalRef.current?.classList.toggle(styles.visible, showModal),
+      10
+    )
+  }, [showModal])
 
   const handleOutsideClick = (e: MouseEvent) => {
     // Make sure that the outside click is not confused with clicking on the
@@ -42,7 +57,13 @@ export default function useModalTray(props: Props) {
 
   function Tray({classNames, children}: {classNames?: string, children: React.ReactNode}) {
     let names = [styles.modal]
-    if( showModal ) names.push(styles.visible)
+
+    // When the modal is hidden, start from the visible state
+    // except when rendered for the first time
+    if ( !isFirstRender.current && !showModal ) {
+      names.push(styles.visible)
+    }
+
     if( classNames ) names.push(classNames)
 
     return (
