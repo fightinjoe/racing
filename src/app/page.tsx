@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState, ChangeEventHandler } from "react"
+import { useState, ChangeEventHandler } from "react"
 
 import { NavTile } from "@/components/tile"
 import HTML from "@/components/html"
@@ -24,15 +24,21 @@ export default function Home() {
 
   return (
     <>
-      <main className={ `${styles.main} h-full` }>
+      <main className={ `${styles.main} h-full flex flex-col` }>
         <HTML.Header className={ styles.header }>
           <img src="/imgs/logo-snowflake.png" alt="MFA logo" />
           <h1>MFA Racing</h1>
         </HTML.Header>
 
-        <RacesPartial {...{raceDay}} />
+        { raceDay.canRace() &&
+         <CurrentRacesPartial raceDay={raceDay} /> }
 
-        <SetupPartial {...{raceDay, volunteers, conditions}} />
+        <div className="overflow-y-scroll">
+          { raceDay.canRace() && raceDay.finishedRaces().length > 0 &&
+            <FinishedRacesPartial raceDay={raceDay} /> }
+
+          <SetupPartial {...{raceDay, volunteers, conditions}} />
+        </div>
       </main>
     </>
   );
@@ -150,21 +156,6 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
         </div>
       </div>
     </section>
-  )
-}
-
-/** Displays the current and finished races.
- *  Will print nothing if raceDay.canRace() is false
- */
-function RacesPartial({raceDay}: {raceDay: RaceDay}) {
-  if (!raceDay.canRace()) return null
-
-  return (
-    <>
-      <CurrentRacesPartial raceDay={raceDay} />
-
-      {raceDay.finishedRaces().length > 0 && <FinishedRacesPartial raceDay={raceDay} />}
-    </>
   )
 }
 
