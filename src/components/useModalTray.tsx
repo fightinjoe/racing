@@ -40,7 +40,10 @@ export default function useModalTray(props: ModalTrayProps = defaultProps): Moda
     }
 
     setTimeout(
-      () => modalRef.current?.classList.toggle(styles.visible, showModal),
+      () => {
+        console.log('timeout called', modalRef.current)
+        modalRef.current?.classList.toggle(styles.visible, showModal)
+      },
       100
     )
   }, [showModal])
