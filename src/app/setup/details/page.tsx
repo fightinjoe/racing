@@ -92,7 +92,7 @@ function FormPartial({ data, onSubmit }: {data: ConfigSchema, onSubmit: (data:My
             <span className="grow">Racing fleet</span>
 
             <fieldset className="RadioSlider">
-              <Form.Radio name="raceSeparateFleets" value={'false'} register={register}>Combined A+B</Form.Radio>
+              <Form.Radio name="raceSeparateFleets" value={'false'} register={register}>Combined</Form.Radio>
               <Form.Radio name="raceSeparateFleets" value={'true'} register={register}>Separate</Form.Radio>
             </fieldset>
           </div>
