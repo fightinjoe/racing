@@ -12,21 +12,23 @@ export function useNextSteps() {
   const [racers, config, volunteers] = useRaceDayStore(s=>[s.racers, s.config, s.volunteers])
   const raceDay = new RaceDay(racers,[],config)
 
-  function determineState(): StateMachineSchema {
-    if (racers.length === 0) return 'No racers'
+  const state: StateMachineSchema =
+    racers.length === 0
+    ? 'No racers' :
 
-    if (config.raceSeparateFleets && !raceDay.hasEnoughRacers())
-      return 'Not enough racers'
+    config.raceSeparateFleets && !raceDay.hasEnoughRacers()
+    ? 'Not enough racers' :
 
-    if (!config.raceSeparateFleets && !raceDay.hasEnoughRacers())
-      return 'Not enough racers'
+    !config.raceSeparateFleets && !raceDay.hasEnoughRacers()
+    ? 'Not enough racers' :
 
-    if (volunteers.length === 0) return 'No RC'
+    volunteers.length === 0
+    ? 'No RC' :
 
-    if (!config.hasSaved) return 'No race details'
+    !config.hasSaved
+    ? 'No race details' :
 
-    return 'Ready'
-  }
+    'Ready'
 
   const MESSAGES: Record<StateMachineSchema, React.ReactNode> = {
     'No racers': <>Register your first <strong>racer</strong> to get started</>,
@@ -37,20 +39,19 @@ export function useNextSteps() {
     'No race details': <>Set the <strong>race details</strong> to start racing</>
   }
 
-  // React component that prints the next step banner
-  function NextStep() {
-    const state = determineState()
-
-    const message = MESSAGES[state]
-  
-    if (!message) return
-  
-    return (
-      <small className="p-4 block bg-yellow-100">
-        { message }
-      </small>
-    )
+  return {
+    props: { state, message: MESSAGES[state] },
+    FC: NextStep
   }
+}
 
-  return { state: determineState(), NextStep }
+// React component that prints the next step banner
+function NextStep({ state, message }: { state: StateMachineSchema, message: React.ReactNode }) {
+  if (!message) return
+
+  return (
+    <small className="p-4 block text-center bg-yellow-100">
+      { message }
+    </small>
+  )
 }

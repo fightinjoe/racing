@@ -4,7 +4,7 @@ import { NavTile } from "@/components/tile"
 import HTML from "@/components/html"
 import Race from "@/components/race"
 import { StartRaceButton } from "@/components/button"
-import { useNextSteps } from "@/lib/useNextSteps"
+import { useNextSteps } from "@/components/useNextSteps"
 
 import { useRaceDayStore } from "@/stores/raceDayStore"
 import { RaceDay } from "@/models/raceday"
@@ -52,7 +52,7 @@ export default function Home() {
 }
 
 function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, volunteers: VolunteerSchema[], conditions: ConditionsSchema}) {
-  const { state, NextStep } = useNextSteps()
+  const nextStep = useNextSteps()
 
   function _AddRacers() {
     const count = raceDay._racers.length
@@ -64,15 +64,15 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
     </>
 
     const className = 
-      state === 'Ready'             ? "tile-done" :
-      state === 'Not enough racers' ? "tile-emphasize" :
-      state === 'No racers'         ? "tile-emphasize" :
+      nextStep.props.state === 'Ready'             ? "tile-done" :
+      nextStep.props.state === 'Not enough racers' ? "tile-emphasize" :
+      nextStep.props.state === 'No racers'         ? "tile-emphasize" :
                                       "tile"
 
     const props = {
       href: "/setup/racers",
-      title: state === 'No racers' ? '+' : 'Racers',
-      subtitle: state === 'No racers' ? 'Add racers' : subtitle,
+      title: nextStep.props.state === 'No racers' ? '+' : 'Racers',
+      subtitle: nextStep.props.state === 'No racers' ? 'Add racers' : subtitle,
       className
     }
 
@@ -85,8 +85,8 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
     const chair = volunteers.find( v => v.role === 'Race committee' )
 
     const className =
-      state === 'Ready' ? "tile-done" :
-      state === 'No RC' ? "tile-emphasize" :
+      nextStep.props.state === 'Ready' ? "tile-done" :
+      nextStep.props.state === 'No RC' ? "tile-emphasize" :
       count === 0       ? "tile-todo" :
                           "tile"
 
@@ -112,7 +112,7 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
 
     const className = 
       !tempMin          ? "tile-todo" :
-      state === 'Ready' ? "tile-done" :
+      nextStep.props.state === 'Ready' ? "tile-done" :
                           "tile"
 
     return tempMin
@@ -134,8 +134,8 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
       : 'Race details'
 
     const className =
-      state === 'Ready'           ? "tile-done" :
-      state === 'No race details' ? "tile-emphasize" :
+      nextStep.props.state === 'Ready'           ? "tile-done" :
+      nextStep.props.state === 'No race details' ? "tile-emphasize" :
       !raceDay._config.hasSaved   ? "tile-todo" :
                                     "tile"
 
@@ -150,7 +150,7 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
   return (
     <section>
       {/* Banner communicating what the next steps are */}
-      <NextStep />
+      <nextStep.FC {...nextStep.props} />
 
       <div className="p-4 col-2">
         <HTML.H2>Setup</HTML.H2>
@@ -240,55 +240,3 @@ function FinishedRacesPartial({raceDay}: {raceDay: RaceDay}) {
     </section>
   )
 }
-
-// function CourseChooser({fleet, count, onCancel}:
-//   {fleet?:FleetSchema, count:number, onCancel: ()=>void}) {
-//   const [course, setCourse] = useState<CourseSchema | undefined>()
-
-//   const imgs = [
-//     ['1_triangle.png',         '1. Triangle'],
-//     ['2_windward_leeward.png', '2. Windward Leeward'],
-//     ['3_golden_cup.png',       '3. Golden Cup'],
-//     ['4_wl_twice_around.png',  '4. WL twice around'],
-//     ['5_no_jibe.png',          '5. No Jibe'],
-//     ['6_no_jibe_upwind.png',   '6. No Jibe upwind finish'],
-//   ]
-
-//   const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-//     setCourse(e.target.value as CourseSchema)
-//   }
-
-//   const handleCancel = () => {
-//     onCancel()
-//     setCourse(undefined)
-//   }
-
-//   return (
-//     <div className="bg-white mx-2 p-2 py-4 rounded col-4 items-end max-w-[390px]">
-//       <HTML.H2 className="!text-black w-full">Choose course</HTML.H2>
-//       <div className="grid grid-cols-3 gap-2 px-2">
-//         { imgs.map( ([img, title],i) => (
-//             <div className={ styles.RadioTile } key={i}>
-//               <input
-//                 type="radio"
-//                 id={ toId(title) }
-//                 name="course"
-//                 value={title}
-//                 checked={course === title}
-//                 onChange={onChange}
-//               />
-//               <label htmlFor={ toId(title) } className="col-2 items-center">
-//                 <img src={`/imgs/${img}`} className="h-[87px]" alt={title} />
-//                 <small className="text-center">{ title }</small>
-//               </label>
-//             </div>
-//         ) ) }
-//       </div>
-
-//       <div className="row-4 flex-row-reverse">
-//         <Race.Start fleet={fleet} course={course!} count={count} disabled={ !course } />
-//         <button onClick={handleCancel} className="text-gray-400">Cancel</button>
-//       </div>
-//     </div>
-//   )
-// }
