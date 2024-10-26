@@ -16,7 +16,7 @@ export default function ScoresPage() {
   if( !raceDay.racingFleets ) return (<strong>404: No races found</strong>)
 
   return (
-    <main className="">
+    <main className="col-0 h-full">
       <HTML.BackHeader title="Scores">
         <a
           className={ styles.emailButton }
@@ -26,7 +26,9 @@ export default function ScoresPage() {
         </a>
       </HTML.BackHeader>
 
-      { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
+      <div className="overflow-y-scroll shrink">
+        { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
+      </div>
     </main>
   )
 }
