@@ -47,6 +47,7 @@ const config: Config = {
         'smoke-100': '#0000001A',
         'smoke-400': '#00000066',
         'smoke-500': '#00000088',
+        'smoke-800': '#000000DD',
       },
 
       /* Tailwind bug: a theme.animation referencing a theme.keyframe */

@@ -60,19 +60,19 @@ export class Race {
    * State Machine for the current race
    * @returns [ RaceState, duration: number ]
    */
-  get fullRaceState(): [RaceState, number] {
+  get fullRaceState(): {state: RaceState, duration: number} {
     const duration = Date.now() - this.startTime
 
-    const s =
+    const state =
       duration < 0 ? 'before-start' :
       duration < Race.CONFIG.countdownDuration ? 'can-recall' :
       'racing'
 
-    return [s, duration]
+    return {state, duration}
   }
 
   get raceState(): RaceState {
-    return this.fullRaceState[0]
+    return this.fullRaceState.state
   }
 
   /**

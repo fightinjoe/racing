@@ -10,8 +10,10 @@ import useModalTray from "@/components/useModalTray"
 import CourseChooser from "@/components/courseChooser"
 
 import { RaceDay } from "@/models/raceday"
+import { Race } from "@/models/race"
 
 import styles from "@/components/styles/race.module.css"
+import { useRaceState } from "./useRaceState"
 
 export function StartRacePartial({fleet, course, count, disabled}:
   {fleet?:FleetSchema, course:CourseSchema, count: number, disabled?: boolean}) {
@@ -46,10 +48,14 @@ export function StartRacePartial({fleet, course, count, disabled}:
  */
 export function RunningRacePartial({race}:{race:RaceSchema}) {
   const router = useRouter()
+  const { raceState } = useRaceState(new Race(race))
+
+  let classNames = [styles.runningRace]
+  raceState === 'before-start' && classNames.push(styles.before)
 
   return (
     <button
-      className={styles.runningRace}
+      className={ classNames.join(' ')}
       onClick={ () => router.push(`/races/${race.id}`) }
     >
       <HTML.H1 className={styles.timer}>
@@ -118,11 +124,11 @@ export function NewRace({fleet, raceDay}: NewRaceProps) {
   )
 }
 
-const Race = {
+const RaceFCs = {
   Start: StartRacePartial,
   Running: RunningRacePartial,
   View: ViewRacePartial,
   New: NewRace
 }
 
-export default Race
+export default RaceFCs

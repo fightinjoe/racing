@@ -30,7 +30,7 @@ const runningArgs: {race: RaceSchema} = {
     id: '1A',
     fleet: 'A',
     course: '6. No Jibe upwind finish',
-    startTime: Date.now() + (2*60*1000),
+    startTime: Date.now() + (5*1000),//(2*60*1000),
     finishers: []
   }
 }
@@ -60,15 +60,7 @@ export const Start: StartStory = {
 
 export const Running: RunningStory = {
   render: (args) => <Race.Running {...args} />,
-  args: {
-    race: {
-      id: '1',
-      fleet: 'A',
-      course: '1. Triangle',
-      startTime: Date.now() + (2*60*1000),
-      finishers: []
-    }
-  }
+  args: runningArgs
 }
 
 export const Double: RunningStory = {

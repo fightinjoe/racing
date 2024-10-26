@@ -13,14 +13,11 @@ import HTML from "@/components/html"
 import Button from "@/components/button"
 
 import { useRacerSort } from "@/lib/useRacerSort"
+import { useRaceState } from "@/components/useRaceState"
 
 import styles from "./page.module.css"
 
 export default function RacePage({params}: {params: {id: string}}) {
-  
-  /*== Hooks ==*/
-  const [raceState, setRaceState] = useState<RaceState>('before-start')
-
   // The current race to display
   const [_races, cancelRace, finishRacer] = useRaceDayStore(s => [s.races, s.cancelRace, s.finishRacer])
   const _race = _races.find(r=>r.id===params.id)
@@ -28,42 +25,13 @@ export default function RacePage({params}: {params: {id: string}}) {
 
   const {Tabs, helpSortRacers} = useRacerSort({sorts: ['number', 'name']})
   
-  const race = _race && new Race(_race, _racers)
+  if (!_race) return (<strong>404: Race not found</strong>)
+
+  const race = new Race(_race, _racers)
+
+  const { raceState } = useRaceState(race!)
 
   const router = useRouter()
-
-  // Setup the timeouts to change the racing state, from 'before-start' to 'can-recall' to 'racing'
-  useEffect(() => {
-    const [initialState, duration] = race ? race!.fullRaceState : []
-
-    if (!initialState) return
-
-    // Tracks intervals so they can be canceled when the component is de-rendered
-    let intervals: NodeJS.Timeout[] = []
-    setRaceState(initialState)
-
-    // Set an update to the state machine when going from pre-racing to the
-    // starting gun firing (during which the start may be canceled)
-    if (raceState === 'before-start') {
-      intervals.push(setTimeout(()=>{
-        setRaceState('can-recall')
-      }, -duration!))
-    }
-
-    // Set an update to the state machine for 2 minutes after racing starts
-    // (during which a general recall can be issued)
-    if (['before-start', 'can-recall'].includes( raceState )) {
-      intervals.push(setTimeout(()=>{
-        setRaceState('racing')
-      }, Race.CONFIG.countdownDuration - duration!))
-    }
-
-    return () => {
-      intervals.map( i => clearTimeout(i) )
-    }
-  }, [_race, raceState])
-
-  if (!_race) return (<strong>404: Race not found</strong>)
 
   /*== Event handlers ==*/
   const onCancel: React.MouseEventHandler<HTMLButtonElement> = () => {
