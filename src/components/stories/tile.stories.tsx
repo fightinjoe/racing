@@ -52,3 +52,11 @@ export const Done: Story = {
     className: 'tile-done'
   }
 }
+
+export const Click: Story = {
+  args: {
+    title: 'Click',
+    subtitle: 'Will open alert',
+    onClick: () => alert('Clicked')
+  }
+}

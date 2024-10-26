@@ -45,6 +45,7 @@ const config: Config = {
         'clear-400': '#FFFFFF66',
         'clear-500': '#FFFFFF88',
         'smoke-100': '#0000001A',
+        'smoke-400': '#00000066',
         'smoke-500': '#00000088',
       },
 
@@ -97,6 +98,7 @@ const config: Config = {
           /* parent width - primary gutters - padding - column gaps */
           width: 'calc( (100cqw - 16px*2 - 8px*2) / 3)',
           height: 'calc( (100cqw - 16px*2 - 8px*2) / 3)',
+          transition: 'all 0.1s ease-in-out',
           position: 'relative',
           'text-align': 'center',
           'border-radius': '4px',
@@ -107,8 +109,7 @@ const config: Config = {
           background: 'none',
           color: theme('colors.ocean-200'),
           '&:hover, &:active': {
-            'border-color': theme('colors.gray.500'),
-            color: theme('colors.gray-600'),
+            'border-style': 'solid',
             'background-color': theme('colors.clear-100')
           },
         },
@@ -119,16 +120,19 @@ const config: Config = {
           color: theme('colors.yellow.200'),
           animation: `mfawiggle 5s linear infinite`,
           '&:hover, &:active': {
-            'border-color': theme('colors.yellow.500'),
+            'border-color': theme('colors.yellow.300'),
             'border-style': 'solid',
-            color: theme('colors.black'),
-            'background-color': theme('colors.yellow.200'),
+            color: theme('colors.yellow.300'),
+            'background-color': hexToRGBA(theme('colors.yellow.200'), 0.3),
             animation: 'none'
           }
         },
 
         '.tile-done': {
           background: theme('colors.clear-400'),
+          '&:hover, &:active': {
+            background: theme('colors.clear-500')
+          }
         }
       })
 

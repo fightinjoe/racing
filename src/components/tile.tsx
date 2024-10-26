@@ -18,26 +18,21 @@ interface TileProps {
  * @returns 
  */
 export default function Tile({ title, subtitle, className, onClick, children }: TileProps) {
-  const _ClickWrapper = ({children}: {children: React.ReactNode}) => (
-    <button onClick={ onClick } className="h-full">
-      {children}
-    </button>
-  )
-
-  const _Content = ({children}: {children: React.ReactNode}) => (
-    <div className="col-2 h-full p-1 justify-center">
-      <p className="text-xl font-medium">{ title }</p>
-      <small className="">{ subtitle }</small>
-      {children}
-    </div>
+  const _ClickWrapper = ({onClick, children}: {onClick?: ()=>void, children: React.ReactNode}) => (
+    onClick
+    ? <button onClick={ onClick } className="h-full">{children}</button>
+    : children
   )
 
   return (
     <div className={`tile ${ className }`} >
-      { onClick
-        ? <_ClickWrapper><_Content>{children}</_Content></_ClickWrapper>
-        : <_Content>{children}</_Content>
-      }
+      <_ClickWrapper onClick={ onClick }>
+        <div className="col-2 h-full p-1 justify-center">
+          <p className="text-xl font-medium">{ title }</p>
+          <small className="">{ subtitle }</small>
+          {children}
+        </div>
+      </_ClickWrapper>
     </div>
   )
 }
