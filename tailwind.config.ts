@@ -117,7 +117,7 @@ const config: Config = {
           border: `2px dashed ${theme('colors.yellow.200')}`,
           background: hexToRGBA(theme('colors.yellow.200'), 0.2),
           color: theme('colors.yellow.200'),
-          animation: `mfabounce 5s ease-in-out infinite`,
+          animation: `mfawiggle 5s linear infinite`,
           '&:hover, &:active': {
             'border-color': theme('colors.yellow.500'),
             'border-style': 'solid',
