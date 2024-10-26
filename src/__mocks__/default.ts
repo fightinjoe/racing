@@ -95,6 +95,14 @@ export const mockRacerA5: RacerSchema = {
   sailNumber: '5A'
 }
 
+export const mockRacers: RacerSchema[] = [
+  mockRacerA1,
+  mockRacerA2,
+  mockRacerA3,
+  mockRacerA4,
+  mockRacerA5
+]
+
 const finisherBase: FinisherBaseSchema = {
   finishedAt: Date.now()
 }

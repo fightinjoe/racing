@@ -6,6 +6,10 @@ import { useRaceDayStore } from "@/stores/raceDayStore"
 import HTML from '@/components/html'
 import { printDuration } from "@/lib/printer"
 import { Timer } from "@/components/timer"
+import useModalTray from "@/components/useModalTray"
+import CourseChooser from "@/components/courseChooser"
+
+import { RaceDay } from "@/models/raceday"
 
 import styles from "@/components/styles/race.module.css"
 
@@ -51,10 +55,10 @@ export function RunningRacePartial({race}:{race:RaceSchema}) {
       <HTML.H1 className={styles.timer}>
         <Timer start={ race.startTime } />
       </HTML.H1>
-      <HTML.Small className={ styles.title }>
+      <div className={ styles.title }>
         <strong>Race { race.id }</strong>
-        <span>{ race.course }</span>
-      </HTML.Small>
+        <HTML.Small className="truncate">{ race.course }</HTML.Small>
+      </div>
     </button>
   )
 }
@@ -87,10 +91,38 @@ export function ViewRacePartial({race}:{race:RaceSchema}) {
   )
 }
 
+interface NewRaceProps {
+  fleet: FleetSchema|undefined
+  raceDay: RaceDay
+}
+
+export function NewRace({fleet, raceDay}: NewRaceProps) {
+  const nextRaceCount = raceDay.races(fleet).length + 1
+
+  const courseModal = useModalTray({})
+
+  return(
+    <>
+      <button
+        className={ styles.startRace }
+        onClick={ () => courseModal.props.show() }
+      >
+        <HTML.H1>Start race  { `${nextRaceCount}${fleet || ''}` }</HTML.H1>
+        <HTML.Small>{fleet || 'Combined'} fleet</HTML.Small>
+      </button>
+
+      <courseModal.Tray {...courseModal.props} className="max-w-[390px] flex flex-row items-center">
+        <CourseChooser fleet={fleet} count={nextRaceCount} onCancel={ courseModal.props.hide } />
+      </courseModal.Tray>
+    </>
+  )
+}
+
 const Race = {
   Start: StartRacePartial,
   Running: RunningRacePartial,
-  View: ViewRacePartial
+  View: ViewRacePartial,
+  New: NewRace
 }
 
 export default Race

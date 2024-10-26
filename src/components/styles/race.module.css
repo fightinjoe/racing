@@ -19,11 +19,11 @@
 
   & .timer {
     @apply font-mono text-right text-ocean-800;
-    @apply w-[5em]
+    @apply min-w-[4rem]
   }
 
   & .title {
-    @apply row-wrap-0;
+    @apply col-0;
     @apply text-left;
     @apply overflow-hidden;
 
