@@ -10,6 +10,7 @@ import HTML from "@/components/html"
 import Button from "@/components/button"
 import { ModalTile } from "@/components/tile"
 import useModalTray from "@/components/useModalTray"
+import { Transition } from "@headlessui/react"
 
 import styles from './page.module.css'
 
@@ -19,13 +20,9 @@ export default function RacersPage() {
 
   const {Tabs, helpSortRacers} = useRacerSort()
 
-  const modal = useModalTray({
-    doForce: () => racers.length === 0,
-    onCancel: () => setRacerToEdit(null),
-  })
-
+  const modal = useModalTray({})
+  
   // Show the form by default when there are no racers
-  // const [showAddForm, setShowAddForm] = useState( racers.length === 0 )
   const [racerToEdit, setRacerToEdit] = useState<RacerSchema | null>(null)
 
   const onSave = (data: RacerFormSchema) => {
@@ -36,23 +33,27 @@ export default function RacersPage() {
     setRacerToEdit(null)
   }
 
+  const onCancel = () => {
+    setRacerToEdit(null)
+    modal.props.hide()
+  }
+
   const onEditHandler = (racer: RacerSchema) => {
     return () => {
       setRacerToEdit(racer)
-      modal.show()
     }
   }
 
   return (
     <main className="h-full col-0 relative">
       <HTML.BackHeader title="Racers">
-        <button className="button-header" onClick={() => modal.show(true)}>
-          {modal.visible ? '' : 'Add' }
+        <button className="button-header" onClick={() => modal.props.show()}>
+          {modal.props.visible ? '' : 'Add' }
         </button>
       </HTML.BackHeader>
 
-      <modal.Tray className={ racerToEdit ? '!bg-yellow-100' : ''}>
-        <AddRacer racer={racerToEdit} {...{onSave, onCancel: modal.hide}} />
+      <modal.Tray {...modal.props} className={ racerToEdit ? '!bg-yellow-100' : ''}>
+        <AddRacer racer={racerToEdit} {...{onSave, onCancel}} />
       </modal.Tray>
 
       <section className="p-4 pb-0 col-4 shadow-inner shrink overflow-y-hidden">
@@ -61,7 +62,7 @@ export default function RacersPage() {
         <div className="row-wrap-2 pb-4 overflow-scroll">
           {
             racers.length === 0 &&
-            <Tile className="tile-todo" title="+" subtitle="Add racer" onClick={ modal.show } />
+            <Tile className="tile-todo" title="+" subtitle="Add racer" onClick={ () => modal.props.show() } />
           }
           {
             racers.sort( helpSortRacers ).map( (racer,i) => (

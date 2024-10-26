@@ -5,12 +5,5 @@
   @apply absolute left-0 bottom-0 z-50;
   
   transition: all 0.2s ease-out;
-
-  /* By default, hide the modal */
-  transform: translateY(100%);
-}
-
-.visible {
-  transform: translateY(0);
-  @apply shadow-top;
+  transform: translateY(0%);
 }

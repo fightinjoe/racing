@@ -1,98 +1,63 @@
 import { useEffect, useRef, useState } from "react"
+import { Transition } from "@headlessui/react"
 
-import styles from '@/components/styles/useModalTray.module.css'
+import styles from "@/components/styles/useModalTray.module.css"
 
-export type ModalTrayProps = {
-  doForce: () => boolean,
-  onCancel: () => void,
+export default function useModalTray(props: ModalTrayProps): ModalTray {
+  const [visible, setVisible] = useState(false)
+
+  const show = () => setVisible(true)
+
+  const hide = () => setVisible(false)
+
+  return {
+    props: {show, hide, visible},
+    Tray
+  }
 }
 
-export type ModalTrayHook = {
-  Tray: ({className, children}: {className?: string, children: React.ReactNode}) => JSX.Element,
-  show: (onlyAdd?: boolean) => void,
-  hide: () => void,
-  visible: boolean,
-}
-
-const defaultProps = {
-  doForce: () => false,
-  onCancel: () => {},
-}
-
-/**
- * Hook that provides a modal tray that slides in from the bottom of the screen.
- * @param doForce A function that returns a boolean to force the modal to show the first time
- * @param onCancel A function to call when the modal is hidden
- * @returns {Tray: component, show: fn(), hide: fn(), visible: boolean}
- */
-export default function useModalTray(props: ModalTrayProps = defaultProps): ModalTrayHook {
-  const modalRef = useRef<HTMLElement>(null)
-  const isFirstRender = useRef(true)
-
-  const [showModal, setShowModal] = useState( props.doForce())
-
-  console.log('firstRender', isFirstRender.current)
+function Tray(props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> & TrayProps) {
+  const ref = useRef<HTMLDivElement>(null)
+  
+  const onOffClick = (e: MouseEvent) => {
+    // If the modal is not visible, do nothing
+    if (!props.visible) return
+  
+    if (ref.current && !ref.current.contains(e.target as Node)) {
+      props.hide()
+    }
+  }
 
   useEffect(() => {
-    if( isFirstRender.current ) {
-      isFirstRender.current = false
-      return
+    document.addEventListener('click', onOffClick)
+
+    return () => {
+      document.removeEventListener('click', onOffClick)
     }
+  }, [props.visible])
 
-    setTimeout(
-      () => {
-        console.log('timeout called', modalRef.current)
-        modalRef.current?.classList.toggle(styles.visible, showModal)
-      },
-      100
-    )
-  }, [showModal])
+  return (
+    <Transition show={ props.visible }>
+      <div
+        ref={ref}
+        className={`${styles.modal} data-[closed]:translate-y-full`}
+      >
+        { props.children }
+      </div>
+    </Transition>
+  )
+}
 
-  const handleOutsideClick = (e: MouseEvent) => {
-    // Make sure that the outside click is not confused with clicking on the
-    // CANCEL button
-    // if( e.target === addRef.current ) return
+interface ModalTrayProps {
+}
 
-    if( !props.doForce() &&
-        modalRef.current &&
-        !modalRef.current.contains(e.target as Node)
-    ) {
-      hide()
-    }
-  }
+interface ModalTray {
+  props: TrayProps,
+  Tray: typeof Tray
+}
 
-  function show(onlyAdd?: boolean) {
-    if( showModal ) return
-      
-    setShowModal(true)
-    document.querySelector('body')?.addEventListener('click', handleOutsideClick)
-  }
-
-  function hide() {
-    setShowModal(false)
-    
-    props.onCancel()
-
-    document.querySelector('body')?.removeEventListener('click', handleOutsideClick)
-  }
-
-  function Tray({className, children}: {className?: string, children: React.ReactNode}) {
-    let names = [styles.modal]
-
-    // When the modal is hidden, start from the visible state
-    // except when rendered for the first time
-    if ( !isFirstRender.current && !showModal ) {
-      names.push(styles.visible)
-    }
-
-    if( className ) names.push(className)
-
-    return (
-      <section ref={modalRef} className={ names.join(' ')}>
-        {children}
-      </section>
-    )
-  }
-
-  return {Tray, show, hide, visible: showModal}
+interface TrayProps {
+  show: () => void,
+  hide: () => void,
+  visible: boolean
 }
