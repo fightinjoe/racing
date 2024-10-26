@@ -19,10 +19,7 @@ export default function VolunteersPage() {
 
   const [volunteerToEdit, setVolunteerToEdit] = useState<VolunteerSchema | null>(null)
 
-  const modal = useModalTray({
-    doForce: () => volunteers.length === 0,
-    onCancel: () => setVolunteerToEdit(null),
-  })
+  const modal = useModalTray({})
 
   const onSave = (data: VolunteerFormSchema) => {
     volunteerToEdit
@@ -55,13 +52,13 @@ export default function VolunteersPage() {
   return (
     <main className="h-full col-0 relative">
       <HTML.BackHeader title="Volunteers">
-        <button className="button-header" onClick={() => modal.show(true)}>
-          {modal.visible ? '' : 'Add' }
+        <button className="button-header" onClick={() => modal.props.show()}>
+          {modal.props.visible ? '' : 'Add' }
         </button>
       </HTML.BackHeader>
 
-      <modal.Tray className={ volunteerToEdit ? '!bg-yellow-100' : ''}>
-        <AddVolunteer volunteer={volunteerToEdit} {...{onSave, onCancel: modal.hide}} />
+      <modal.Tray {...modal.props} className={ volunteerToEdit ? '!bg-yellow-100' : ''}>
+        <AddVolunteer volunteer={volunteerToEdit} {...{onSave, onCancel: modal.props.hide}} />
       </modal.Tray>
 
       <section className="p-4 col-4 shadow-inner overflow-scroll">
@@ -69,7 +66,7 @@ export default function VolunteersPage() {
         <div className="row-wrap-2 overflow-scroll">
           {
             rcVolunteers.length === 0
-            ? <Tile className="tile-todo" title="+" subtitle="Add race committee" onClick={ modal.show } />
+            ? <Tile className="tile-todo" title="+" subtitle="Add race committee" onClick={ modal.props.show } />
             : rcVolunteers.map( (volunteer,key) => <Volunteer key={key} {...{volunteer}} /> )
           }
         </div>
@@ -78,7 +75,7 @@ export default function VolunteersPage() {
         <div className="row-wrap-2 overflow-scroll">
           {
             cbVolunteers.length === 0
-            ? <Tile className="tile-todo" title="+" subtitle="Add crash boat" onClick={ modal.show } />
+            ? <Tile className="tile-todo" title="+" subtitle="Add crash boat" onClick={ modal.props.show } />
             : cbVolunteers.map( (volunteer,key) => <Volunteer key={key} {...{volunteer}} /> )
           }
         </div>

@@ -49,20 +49,20 @@ interface StartRaceButtonProps {
 export function StartRaceButton({fleet, raceDay}: StartRaceButtonProps) {
   const nextRaceCount = raceDay.races(fleet).length + 1
 
-  const courseModal = useModalTray()
+  const courseModal = useModalTray({})
 
   return(
     <>
       <button
         className={ raceStyles.startRace }
-        onClick={ () => courseModal.show() }
+        onClick={ () => courseModal.props.show() }
       >
         <HTML.H1>Start race  { `${nextRaceCount}${fleet || ''}` }</HTML.H1>
         <HTML.Small>{fleet || 'Combined'} fleet</HTML.Small>
       </button>
 
-      <courseModal.Tray className="max-w-[390px] flex flex-row items-center">
-        <CourseChooser fleet={fleet} count={nextRaceCount} onCancel={ courseModal.hide } />
+      <courseModal.Tray {...courseModal.props} className="max-w-[390px] flex flex-row items-center">
+        <CourseChooser fleet={fleet} count={nextRaceCount} onCancel={ courseModal.props.hide } />
       </courseModal.Tray>
     </>
   )
