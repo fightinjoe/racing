@@ -17,16 +17,24 @@ import { useRaceState } from "@/components/useRaceState"
 
 import styles from "./page.module.css"
 
-export default function RacePage({params}: {params: {id: string}}) {
-  // The current race to display
-  const [_races, cancelRace, finishRacer] = useRaceDayStore(s => [s.races, s.cancelRace, s.finishRacer])
+// Perform a check to make sure the race is available before rendering the
+// page. This is necessary because the useRaceState hook cannot run conditionally.
+export default function RacePagePrefix({params}: {params: {id: string}}) {
+  const _races = useRaceDayStore(s => s.races)
   const _race = _races.find(r=>r.id===params.id)
+
+  return _race
+  ? <RacePage _race={_race} />
+  : <strong>404: Race not found</strong>
+}
+
+function RacePage({_race}: {_race: RaceSchema}) {
+  const [cancelRace, finishRacer] = useRaceDayStore(s => [s.cancelRace, s.finishRacer])
+
   const _racers = useRaceDayStore(s=>s.racers)
 
   const {Tabs, helpSortRacers} = useRacerSort({sorts: ['number', 'name']})
   
-  if (!_race) return (<strong>404: Race not found</strong>)
-
   const race = new Race(_race, _racers)
 
   const { raceState } = useRaceState(race!)
