@@ -37,14 +37,14 @@ export default function Home() {
             <FinishedRacesPartial raceDay={raceDay} /> }
 
           <SetupPartial {...{raceDay, volunteers, conditions}} />
-        </div>
 
-        <div className="row-2 p-4">
+          <div className="row-2 p-4">
           <span className="grow">&nbsp;</span>
           <button
             onClick={ () => router.push("/setup/reset")}
             className="text-aqua-500 hover:bg-smoke-500 p-2 rounded"
           >Manage data</button>
+        </div>
         </div>
       </main>
     </>
