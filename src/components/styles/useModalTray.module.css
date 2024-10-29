@@ -3,6 +3,8 @@
   @apply bg-white;
   width: calc(100% - 2*0.5rem);
   @apply absolute left-0 bottom-0 z-50;
+  box-shadow: 0 0px 4px 0px rgba(0, 0, 0, 0.2),
+              0 -2px 6px 4px rgba(0, 0, 0, 0.1);
   
   transition: all 0.2s ease-out;
   transform: translateY(0%);

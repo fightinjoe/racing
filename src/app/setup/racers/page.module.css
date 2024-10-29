@@ -8,11 +8,6 @@
   transition: transform 0.2s ease-out;
 }
 
-.visible {
-  transform: translateY(0);
-  @apply shadow-top;
-}
-
 .editButton {
   @apply !bg-yellow-400 !text-ocean-800;
 }
