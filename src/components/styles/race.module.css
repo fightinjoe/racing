@@ -1,6 +1,6 @@
 .startRace {
   /* @apply block flex flex-col items-stretch p-4; */
-  @apply text-white bg-ocean-400 p-2 px-4 rounded;
+  @apply text-white bg-ocean-400 p-2 px-4 rounded col-0 items-center;
 
   &:hover {
     @apply bg-ocean-500;
@@ -21,13 +21,17 @@
   &.before, &:hover.before {
     @apply bg-yellow-200 hover:bg-yellow-300 text-smoke-800;
 
-    & .timer {
+    & .timer, & h1 {
       @apply text-smoke-800;
     }
   }
 
-  &:hover .timer {
+  &:hover .timer, &:hover h1 {
     @apply text-ocean-900;
+  }
+
+  & h1 {
+    @apply text-ocean-800;
   }
 
   & .timer {
@@ -51,7 +55,7 @@
 }
 
 .viewRace {
-  @apply block flex flex-col p-4;
+  @apply block flex flex-col px-4 py-2;
   @apply bg-ocean-100 hover:bg-ocean-200;
   @apply rounded;
 

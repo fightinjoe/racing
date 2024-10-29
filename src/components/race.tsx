@@ -62,7 +62,7 @@ export function RunningRacePartial({race}:{race:RaceSchema}) {
         <Timer start={ race.startTime } />
       </HTML.H1>
       <div className={ styles.title }>
-        <strong>Race { race.id }</strong>
+        <HTML.H1>Race { race.id }</HTML.H1>
         <HTML.Small className="truncate">{ race.course }</HTML.Small>
       </div>
     </button>

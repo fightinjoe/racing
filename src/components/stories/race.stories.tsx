@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import Race from '@/components/race'
 import { RaceDay } from '@/models/raceday'
-import { mockRacers } from '@/__mocks__/default'
+import { mockRacers, mockRaceA1 } from '@/__mocks__/default'
 
 const meta = {
   title: 'MFA/Race',
@@ -24,6 +24,7 @@ export default meta
 type StartStory = StoryObj<typeof Race.Start>
 type RunningStory = StoryObj<typeof Race.Running>
 type NewStory = StoryObj<typeof Race.New>
+type ViewStory = StoryObj<typeof Race.View>
 
 const runningArgs: {race: RaceSchema} = {
   race: {
@@ -41,20 +42,20 @@ const mockRaceDay = new RaceDay(mockRacers, [], {
   hasSaved: false
 })
 
-export const New: NewStory = {
-  render: (args) => <Race.New {...args} />,
-  args: {
-    fleet: 'A',
-    raceDay: mockRaceDay
-  }
-}
-
 export const Start: StartStory = {
   render: (args) => <Race.Start {...args} />,
   args: {
     fleet: 'A',
     course: '1. Triangle',
     count: 5
+  }
+}
+
+export const New: NewStory = {
+  render: (args) => <Race.New {...args} />,
+  args: {
+    fleet: 'A',
+    raceDay: mockRaceDay
   }
 }
 
@@ -72,5 +73,12 @@ export const Double: RunningStory = {
       <Race.New fleet="B" raceDay={ mockRaceDay } />
     </div>
   )
+}
+
+export const View: ViewStory = {
+  render: (args) => <Race.View {...args} />,
+  args: {
+    race: mockRaceA1
+  }
 }
 
