@@ -113,6 +113,7 @@ const config: Config = {
             'border-style': 'solid',
             'background-color': theme('colors.clear-100')
           },
+          'backdrop-filter': 'blur(12px)',
         },
 
         '.tile-emphasize': {
@@ -133,7 +134,8 @@ const config: Config = {
           background: theme('colors.clear-400'),
           '&:hover, &:active': {
             background: theme('colors.clear-500')
-          }
+          },
+          'backdrop-filter': 'blur(6px)',
         }
       })
 
