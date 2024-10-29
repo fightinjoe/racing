@@ -14,10 +14,11 @@
     @apply p-1 h-full;
     @apply border-2 border-ocean-100 rounded;
     @apply bg-ocean-100;
+    @apply transition-colors;
   }
 
   & label:hover, & label:active {
-    @apply bg-ocean-200;
+    @apply bg-ocean-200 border-ocean-300;
   }
 
   & input:checked + label {
