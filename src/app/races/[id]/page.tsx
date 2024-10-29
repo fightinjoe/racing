@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { useRouter } from "next/navigation"
 import { useRaceDayStore } from "@/stores/raceDayStore"
 
-import { Race, RaceState } from "@/models/race"
+import { Race } from "@/models/race"
 
 import Tile, { Tiles, FinisherTile, FailureTile } from "@/components/tile"
 import { Duration, Timer } from "@/components/timer"
@@ -19,7 +19,7 @@ import styles from "./page.module.css"
 
 // Perform a check to make sure the race is available before rendering the
 // page. This is necessary because the useRaceState hook cannot run conditionally.
-export default function RacePagePrefix({params}: {params: {id: string}}) {
+export default function RacePageWrapper({params}: {params: {id: string}}) {
   const _races = useRaceDayStore(s => s.races)
   const _race = _races.find(r=>r.id===params.id)
 
