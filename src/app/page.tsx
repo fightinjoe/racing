@@ -40,10 +40,6 @@ export default function Home() {
 
           <div className="row-2 p-4">
           <span className="grow">&nbsp;</span>
-          <button
-            onClick={ () => router.push("/setup/reset")}
-            className="text-aqua-500 hover:bg-smoke-500 p-2 rounded"
-          >Manage data</button>
         </div>
         </div>
       </main>
@@ -153,7 +149,10 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
       <nextStep.FC {...nextStep.props} />
 
       <div className="p-4 col-2">
-        <HTML.H2>Setup</HTML.H2>
+        <div className="row-2">
+          <HTML.H2 className="grow">Setup</HTML.H2>
+          <ManageDataButton />
+        </div>
 
         <div className="row-wrap-2">
           <_AddRacers />
@@ -163,6 +162,20 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
         </div>
       </div>
     </section>
+  )
+}
+
+function ManageDataButton() {
+  const router = useRouter()
+
+  const handleClick = () => {
+    router.push('/setup/reset')
+  }
+
+  return (
+    <button className="text-aqua-500" onClick={ handleClick }>
+      <small>Manage data</small>
+    </button>
   )
 }
 
