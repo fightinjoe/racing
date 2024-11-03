@@ -40,7 +40,7 @@ function Tray(props: React.PropsWithChildren<React.HTMLAttributes<HTMLDivElement
     <Transition show={ props.visible }>
       <div
         ref={ref}
-        className={`${styles.modal} data-[closed]:translate-y-full`}
+        className={`${styles.modal} ${props.className} data-[closed]:translate-y-full`}
       >
         { props.children }
       </div>

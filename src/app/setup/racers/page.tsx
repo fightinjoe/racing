@@ -10,7 +10,6 @@ import HTML from "@/components/html"
 import Button from "@/components/button"
 import { ModalTile } from "@/components/tile"
 import useModalTray from "@/components/useModalTray"
-import { Transition } from "@headlessui/react"
 
 import styles from './page.module.css'
 
@@ -52,7 +51,11 @@ export default function RacersPage() {
         </button>
       </HTML.BackHeader>
 
-      <modal.Tray {...modal.props} className={ racerToEdit ? '!bg-yellow-100' : ''}>
+      <modal.Tray
+        {...modal.props}
+        visible={ modal.props.visible || !!racerToEdit }
+        className={ !!racerToEdit ? '!bg-yellow-100' : ''}
+      >
         <AddRacer racer={racerToEdit} {...{onSave, onCancel}} />
       </modal.Tray>
 
