@@ -110,7 +110,7 @@ function RacePage({_race}: {_race: RaceSchema}) {
         <div className="row-wrap-2 w-full">
           {
             racers.map( r => (
-              race!.raceState === 'racing'
+              race!.raceState !== 'before-start'
               ? <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
               : <Tiles.Todo key={r.id} title={r.sailNumber} subtitle={r.name} />
             ))
@@ -128,8 +128,8 @@ function RacePage({_race}: {_race: RaceSchema}) {
       <_Banner />
 
       <div className={ styles.wrapper }>
-        {/* Show the finishers when racing */}
-        { raceState === 'racing' && race && <FinishersPartial race={race} /> }
+        {/* Show the finishers once racing starts */}
+        { raceState !== 'before-start' && race && <FinishersPartial race={race} /> }
 
         {/* Show the racers that are still racing */}
         <section className="p-4">

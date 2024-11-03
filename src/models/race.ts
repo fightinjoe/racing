@@ -9,7 +9,7 @@ export class Race {
 
   static CONFIG = {
     // Time in milliseconds for the countdown
-    countdownDuration: 10 * 1000 // 2 * 60 * 1000
+    countdownDuration: 2 * 60 * 1000
   }
 
   constructor(race: RaceSchema, racers: RacerSchema[] = []) {
