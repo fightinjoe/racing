@@ -49,6 +49,11 @@ export default function VolunteersPage() {
     </ModalTile>
   )
 
+  const onCancel = () => {
+    setVolunteerToEdit(null)
+    modal.props.hide()
+  }
+
   return (
     <main className="h-full col-0 relative">
       <HTML.BackHeader title="Volunteers">
@@ -57,8 +62,12 @@ export default function VolunteersPage() {
         </button>
       </HTML.BackHeader>
 
-      <modal.Tray {...modal.props} className={ volunteerToEdit ? '!bg-yellow-100' : ''}>
-        <AddVolunteer volunteer={volunteerToEdit} {...{onSave, onCancel: modal.props.hide}} />
+      <modal.Tray
+        {...modal.props}
+        visible={ modal.props.visible || !!volunteerToEdit }
+        className={ !!volunteerToEdit ? '!bg-yellow-100' : ''}
+      >
+        <AddVolunteer volunteer={volunteerToEdit} {...{onSave, onCancel}} />
       </modal.Tray>
 
       <section className="p-4 col-4 shadow-inner overflow-scroll">
