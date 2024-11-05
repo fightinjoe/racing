@@ -85,7 +85,7 @@ export class RaceDay {
    */
   finishedRaces(fleet?: FleetSchema): RaceSchema[] {
     return this.races(fleet).filter(
-      r => r.finishers.length === this.racers(fleet).length
+      r => r.finishers.length === this.racers( r.fleet ).length
     )
   }
 
