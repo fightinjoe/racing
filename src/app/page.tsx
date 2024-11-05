@@ -14,6 +14,11 @@ import { useRouter } from "next/navigation"
 
 import styles from "./page.module.css"
 
+/**
+ * This is the main dashboard for the app. What it shows depends on the state
+ * of the app. First, it will prompt the user to add racers, volunteers, and
+ * racing details. Once all of that is done, the user can start a race.
+ */
 export default function Home() {
   const [racers, races, config, volunteers, conditions] =
     useRaceDayStore(s=>[s.racers, s.races, s.config, s.volunteers, s.conditions])
@@ -33,8 +38,7 @@ export default function Home() {
          <CurrentRacesPartial raceDay={raceDay} /> }
 
         <div className="overflow-y-scroll">
-          { raceDay.canRace() && raceDay.finishedRaces().length > 0 &&
-            <FinishedRacesPartial raceDay={raceDay} /> }
+          <FinishedRacesPartial raceDay={raceDay} />
 
           <SetupPartial {...{raceDay, volunteers, conditions}} />
 
@@ -47,9 +51,15 @@ export default function Home() {
   );
 }
 
+/**
+ * This is the component that shows the tiles for setting up the race day, including
+ * tiles for adding / managing racers and volunteers, as well as configuring the race
+ * day and recording weather conditions.
+ */
 function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, volunteers: VolunteerSchema[], conditions: ConditionsSchema}) {
   const nextStep = useNextSteps()
 
+  // Tile for adding racers
   function _AddRacers() {
     const count = raceDay._racers.length
 
@@ -75,6 +85,7 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
     return <NavTile.Base {...props} />
   }
 
+  // Tile for adding volunteers
   function _AddVolunteers() {
     const count = volunteers.length
 
@@ -98,6 +109,7 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
     return <NavTile.Base {...props} />
   }
 
+  // Tile for managing weather conditions
   function _Conditions() {
     const tempMin = conditions.temperatureMin
     const tempMax = conditions.temperatureMax
@@ -116,6 +128,7 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
     : <NavTile.Base title="+" subtitle="Weather conditions" href={href} className={ className } />
   }
 
+  // Tile for editing race details
   function _Details() {
     // If there is a single fleet, then print "1 fleet". Otherwise, count
     // the number of fleets and print "0 fleets", "1 fleet", "2 fleets", etc.
@@ -165,6 +178,7 @@ function SetupPartial({ raceDay, volunteers, conditions }: { raceDay: RaceDay, v
   )
 }
 
+/** Button to open the screen for clearing data in the app */
 function ManageDataButton() {
   const router = useRouter()
 
@@ -179,27 +193,23 @@ function ManageDataButton() {
   )
 }
 
-/** Main section showing either the START RACE button or the currently
- *  running race for each fleet
+/** 
+ * Main section showing either the START RACE button or the currently
+ * running race for each fleet
  */
 function CurrentRacesPartial({ raceDay }: {raceDay:RaceDay}) {
   const fleets: (FleetSchema | undefined)[] = raceDay.racingFleets || []
-  const cols = 'grid-cols-' + fleets.length
-  const className = `gap-2 grid ${ cols }`
+  const className = `gap-2 grid grid-cols-${ fleets.length }`
 
+  // Create a Map object that finds the ongoing / unfinished race for each fleet, if any
   let currentRaces = new Map<FleetSchema|undefined, RaceSchema|undefined>()
   fleets.forEach( fleet => currentRaces.set(fleet, raceDay.unfinishedRaces(fleet)[0]) )
-
-  // VIEW SCORES link should be shown only when each fleet has at least 1 finished race
-  const showScores = raceDay.racingFleets && raceDay.racingFleets
-    .map( fleet => raceDay.finishedRaces(fleet).length )
-    .reduce( (agg, raceCount) => agg && raceCount>0, true )
 
   return (
     <section className={styles.currentRaces}>
       <div className="row-2">
         <HTML.H2 className="grow">Current race</HTML.H2>
-        { showScores && <ViewScoresButton /> }
+        <ViewScoresButton raceDay={raceDay} />
       </div>
 
       <div className={className}>
@@ -215,22 +225,32 @@ function CurrentRacesPartial({ raceDay }: {raceDay:RaceDay}) {
   )
 }
 
-function ViewScoresButton() {
+/** Button to view the scores for the day. Only shown when all fleets have at least completed race */
+function ViewScoresButton({ raceDay }: {raceDay:RaceDay}) {
   const router = useRouter()
+
+  // VIEW SCORES link should be shown only when each fleet has at least 1 finished race
+  const showButton = raceDay.racingFleets && raceDay.racingFleets // array of racing fleets
+    .map( fleet => raceDay.finishedRaces(fleet).length )          // array of finished race counts
+    .reduce( (agg, raceCount) => agg && raceCount>0, true )       // check that all counts are > 0
 
   const handleClick = () => {
     router.push('/scores')
   }
 
-  return (
-    <button className="text-aqua-500" onClick={ handleClick }>
+  return showButton
+  ? <button className="text-aqua-500" onClick={ handleClick }>
       <small>View scores</small>
     </button>
-  )
+  : null
 }
 
 /** Main section containing all of the completed races */
 function FinishedRacesPartial({raceDay}: {raceDay: RaceDay}) {
+  // Don't render anything if racing can't happen yet, or if no races have been run yet
+  if (!raceDay.canRace()) return "can't race"
+  if (raceDay.finishedRaces().length === 0 ) return "no finishes"
+
   const fleets: (FleetSchema | undefined)[] = raceDay.racingFleets || []
   const cols = 'grid-cols-'+fleets.length
   const className = `gap-2 grid ${ cols }`
