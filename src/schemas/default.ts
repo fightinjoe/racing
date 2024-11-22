@@ -96,7 +96,7 @@ export const raceBase = z.object({
   course: courseSchema,
 
   // The time the race starts
-  startTime: z.number(),
+  startTime: z.number().optional(),
 
   // Freeform array of string notes
   notes: z.array(z.string()).optional(),

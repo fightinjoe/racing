@@ -15,16 +15,16 @@ import { Race } from "@/models/race"
 import styles from "@/components/styles/race.module.css"
 import { useRaceState } from "./useRaceState"
 
-export function StartRacePartial({fleet, course, count, disabled}:
-  {fleet?:FleetSchema, course:CourseSchema, count: number, disabled?: boolean}) {
+function CreateRacePartial({fleet, course, disabled}:
+  {fleet?:FleetSchema, course:CourseSchema, disabled?: boolean}) {
   const router = useRouter()
-  const startRace = useRaceDayStore(s=>s.startRace)
+  const createRace = useRaceDayStore(s=>s.createRace)
 
   const handleClick = () => {
     if (disabled) return
 
     // create the race
-    const race = startRace(course, fleet)
+    const race = createRace(course, fleet)
 
     // redirect to the race
     router.push(`/races/${race.id}`)
@@ -41,25 +41,28 @@ export function StartRacePartial({fleet, course, count, disabled}:
   )
 }
 
-/**
- * Used to show a race IN PROGRESS
- * @param param.race - RaceSchema object to display
- * @returns 
- */
-export function RunningRacePartial({race}:{race:RaceSchema}) {
-  const router = useRouter()
-  const { raceState } = useRaceState(new Race(race))
+function ViewRacePartial(props:{race:RaceSchema}) {
+  const racers = useRaceDayStore(s => s.racers)
+  const race = new Race(props.race, racers)
+  const raceState = race.raceState
 
-  let classNames = [styles.runningRace]
-  raceState === 'before-start' && classNames.push(styles.before)
+  return (
+    raceState === 'before-start' ? NotStartedRacePartial(race) :
+    raceState === 'finished' ? FinishedRacePartial(race) :
+    RunningRacePartial(race)
+  )
+}
+
+function NotStartedRacePartial(race:Race) {
+  const router = useRouter()
 
   return (
     <button
-      className={ classNames.join(' ')}
+      className=""
       onClick={ () => router.push(`/races/${race.id}`) }
     >
       <HTML.H1 className={styles.timer}>
-        <Timer start={ race.startTime } />
+        ???
       </HTML.H1>
       <div className={ styles.title }>
         <HTML.H1>Race { race.id }</HTML.H1>
@@ -70,13 +73,41 @@ export function RunningRacePartial({race}:{race:RaceSchema}) {
 }
 
 /**
- * Used to show FINISHED race
+ * Component that shows a race IN PROGRESS
  * @param param.race - RaceSchema object to display
  * @returns 
  */
-export function ViewRacePartial({race}:{race:RaceSchema}) {
+function RunningRacePartial(race:Race) {
+  const router = useRouter()
+  const { raceState } = useRaceState(race)
+
+  let classNames = [styles.runningRace]
+  raceState === 'countdown' && classNames.push(styles.before)
+
+  return (
+    <button
+      className={ classNames.join(' ')}
+      onClick={ () => router.push(`/races/${race.id}`) }
+    >
+      <HTML.H1 className={styles.timer}>
+        <Timer start={ race.startTime! } />
+      </HTML.H1>
+      <div className={ styles.title }>
+        <HTML.H1>Race { race.id }</HTML.H1>
+        <HTML.Small className="truncate">{ race.course }</HTML.Small>
+      </div>
+    </button>
+  )
+}
+
+/**
+ * Component that shows a FINISHED race
+ * @param param.race - RaceSchema object to display
+ * @returns 
+ */
+function FinishedRacePartial(race:Race) {
   const first = race.finishers[0]
-  const duration = printDuration( race.startTime, first.finishedAt )
+  const duration = printDuration( race.startTime!, first.finishedAt )
 
   const router = useRouter()
 
@@ -102,7 +133,7 @@ interface NewRaceProps {
   raceDay: RaceDay
 }
 
-export function NewRace({fleet, raceDay}: NewRaceProps) {
+function NewRace({fleet, raceDay}: NewRaceProps) {
   const nextRaceCount = raceDay.races(fleet).length + 1
 
   const courseModal = useModalTray({})
@@ -125,8 +156,7 @@ export function NewRace({fleet, raceDay}: NewRaceProps) {
 }
 
 const RaceFCs = {
-  Start: StartRacePartial,
-  Running: RunningRacePartial,
+  Create: CreateRacePartial,
   View: ViewRacePartial,
   New: NewRace
 }

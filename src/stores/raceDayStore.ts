@@ -23,7 +23,8 @@ interface RaceDayState {
   deleteRacer: (racer: RacerSchema) => void,
   clearRacers: () => void,
 
-  startRace: (course:CourseSchema, fleet?:FleetSchema) => RaceSchema,
+  createRace: (course:CourseSchema, fleet?:FleetSchema) => RaceSchema,
+  startRace: (race: RaceSchema) => void,
   finishRacer: (racer: RacerSchema, race: RaceSchema, failure?: FailureSchema) => void,
   cancelRace: (race: RaceSchema) => void,
   clearRaces: () => void,
@@ -146,7 +147,7 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
    * @param fleet The racing fleet for which to start the race
    * @returns 
    */
-  startRace: (course = '1. Triangle', fleet) => {
+  createRace: (course = '1. Triangle', fleet) => {
     // Ensure that a new race for a fleet isn't started if there
     // is already an unfinished race
     const raceDay = new RaceDay(get().racers, get().races, get().config)
@@ -159,13 +160,24 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
       id: `${ raceCount+1 }${fleet || ''}`,
       fleet,
       course,
-      startTime: Date.now() + Race.CONFIG.countdownDuration,
+      // startTime: Date.now() + Race.CONFIG.countdownDuration,
       finishers: []
     }
 
     set({races:[...get().races,race]})
 
     return race
+  },
+
+  startRace: (race: RaceSchema) => {
+    set({
+      races: [
+        ...get().races.map( r => r.id === race.id
+          ? {...r, startTime: Date.now() + Race.CONFIG.countdownDuration}
+          : r
+        )
+      ]
+    })
   },
 
   /**

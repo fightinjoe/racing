@@ -21,8 +21,7 @@ const meta = {
 
 export default meta
 
-type StartStory = StoryObj<typeof Race.Start>
-type RunningStory = StoryObj<typeof Race.Running>
+type StartStory = StoryObj<typeof Race.Create>
 type NewStory = StoryObj<typeof Race.New>
 type ViewStory = StoryObj<typeof Race.View>
 
@@ -43,11 +42,10 @@ const mockRaceDay = new RaceDay(mockRacers, [], {
 })
 
 export const Start: StartStory = {
-  render: (args) => <Race.Start {...args} />,
+  render: (args) => <Race.Create {...args} />,
   args: {
     fleet: 'A',
-    course: '1. Triangle',
-    count: 5
+    course: '1. Triangle'
   }
 }
 
@@ -59,21 +57,21 @@ export const New: NewStory = {
   }
 }
 
-export const Running: RunningStory = {
-  render: (args) => <Race.Running {...args} />,
-  args: runningArgs
-}
+// export const Running: RunningStory = {
+//   render: (args) => <Race.Running {...args} />,
+//   args: runningArgs
+// }
 
-export const Double: RunningStory = {
-  args: runningArgs,
-  render: (args) => <Race.Running {...args} />,
-  decorators: (Story: any) => (
-    <div className="gap-2 grid grid-cols-2">
-      <Story />
-      <Race.New fleet="B" raceDay={ mockRaceDay } />
-    </div>
-  )
-}
+// export const Double: RunningStory = {
+//   args: runningArgs,
+//   render: (args) => <Race.Running {...args} />,
+//   decorators: (Story: any) => (
+//     <div className="gap-2 grid grid-cols-2">
+//       <Story />
+//       <Race.New fleet="B" raceDay={ mockRaceDay } />
+//     </div>
+//   )
+// }
 
 export const View: ViewStory = {
   render: (args) => <Race.View {...args} />,

@@ -216,7 +216,7 @@ function CurrentRacesPartial({ raceDay }: {raceDay:RaceDay}) {
       {
         fleets.map( (fleet, i) => (
           currentRaces.get(fleet)
-          ? <Race.Running race={ currentRaces.get(fleet)! } key={i} />
+          ? <Race.View race={ currentRaces.get(fleet)! } key={i} />
           : <StartRaceButton {...{fleet, raceDay}} key={i} />
         ))
       }
@@ -248,8 +248,8 @@ function ViewScoresButton({ raceDay }: {raceDay:RaceDay}) {
 /** Main section containing all of the completed races */
 function FinishedRacesPartial({raceDay}: {raceDay: RaceDay}) {
   // Don't render anything if racing can't happen yet, or if no races have been run yet
-  if (!raceDay.canRace()) return "can't race"
-  if (raceDay.finishedRaces().length === 0 ) return "no finishes"
+  if (!raceDay.canRace()) return // "can't race"
+  if (raceDay.finishedRaces().length === 0 ) return // "no finishes"
 
   const fleets: (FleetSchema | undefined)[] = raceDay.racingFleets || []
   const cols = 'grid-cols-'+fleets.length

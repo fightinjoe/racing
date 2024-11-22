@@ -53,7 +53,7 @@ export default function CourseChooser({fleet, count, onCancel}:
       </div>
 
       <div className="row-4 flex-row-reverse">
-        <Race.Start fleet={fleet} course={course!} count={count} disabled={ !course } />
+        <Race.Create fleet={fleet} course={course!} disabled={ !course } />
         <button onClick={handleCancel} className="text-gray-400">Cancel</button>
       </div>
     </div>

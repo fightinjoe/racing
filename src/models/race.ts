@@ -1,5 +1,17 @@
-export type RaceState = 'before-start' | 'can-recall' | 'racing'
+export type RaceState =
+  'before-start' |  // Nothing has started
+  'countdown' |     // Countdown has started but race hasn't
+  'can-recall' |    // Race has started, but is within the window for a recall
+  'racing' |        // Race has started and can't be recalled
+  'finished'        // Race is finished
 
+
+/**
+   * Race model, providing logic and printing methods for an individual race
+   * @param race 
+   * @param racers All of the racers for the race day. Instantiating the
+   * model will automatically filter the racers for the race
+   */
 export class Race {
   // The current race
   _race: RaceSchema
@@ -23,7 +35,7 @@ export class Race {
 
   /*== Simple getters ==*/
 
-  get startTime(): number { return this._race.startTime }
+  get startTime(): number | undefined { return this._race.startTime }
 
   get finishers(): FinisherSchema[] { return this._race.finishers }
   get qualifiedFinishers(): FinisherSchema[] { return this.finishers.filter( r => !r.failure )}
@@ -52,7 +64,7 @@ export class Race {
 
   get isFinished():boolean {
     // The race is finished when there are no unfinished racers
-    return this.unfinishedRacers.length === 0
+    return !!this.startTime && this.unfinishedRacers.length === 0
   }
 
   // Returns the State Machine state of the race
@@ -60,15 +72,18 @@ export class Race {
    * State Machine for the current race
    * @returns [ RaceState, duration: number ]
    */
-  get fullRaceState(): {state: RaceState, duration: number} {
+  get fullRaceState(): {state: RaceState, duration?: number} {
+    if (!this._racers.length) throw new Error('For accurate race state, instantiate the Race model with the RaceDay racers')
+
+    if (!this.startTime) return { state: 'before-start' }
+    if (this.isFinished) return { state: 'finished', duration: this.finishTime }
+
     const duration = Date.now() - this.startTime
 
-    const state =
-      duration < 0 ? 'before-start' :
-      duration < Race.CONFIG.countdownDuration ? 'can-recall' :
-      'racing'
+    if (duration < 0) return { state: 'countdown', duration }
+    if (duration < Race.CONFIG.countdownDuration) return { state: 'racing', duration}
 
-    return {state, duration}
+    return { state: 'racing', duration }
   }
 
   get raceState(): RaceState {

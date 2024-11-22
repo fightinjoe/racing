@@ -13,6 +13,7 @@ import HTML from "@/components/html"
 import Button from "@/components/button"
 
 import { useRacerSort } from "@/lib/useRacerSort"
+import { printDuration } from "@/lib/printer"
 import { useRaceState } from "@/components/useRaceState"
 
 import styles from "./page.module.css"
@@ -31,7 +32,7 @@ export default function RacePageWrapper({params}: {params: {id: string}}) {
 function RacePage({_race}: {_race: RaceSchema}) {
   const [cancelRace, finishRacer] = useRaceDayStore(s => [s.cancelRace, s.finishRacer])
 
-  const _racers = useRaceDayStore(s=>s.racers)
+  const [_racers, startRace] = useRaceDayStore(s=>[s.racers, s.startRace])
 
   const {Tabs, helpSortRacers} = useRacerSort({sorts: ['number', 'name']})
   
@@ -42,7 +43,17 @@ function RacePage({_race}: {_race: RaceSchema}) {
   const router = useRouter()
 
   /*== Event handlers ==*/
-  const onCancel: React.MouseEventHandler<HTMLButtonElement> = () => {
+  const onButtonClick: React.MouseEventHandler<HTMLButtonElement> = () => {
+    raceState === 'before-start'
+    ? handleStartRace()
+    : handleCancelRace()
+  }
+
+  const handleStartRace = () => {
+    startRace(_race)
+  }
+
+  const handleCancelRace = () => {
     if (!confirm('Are you sure?') ) return
 
     // Go back first to prevent the flashing of 404
@@ -60,10 +71,17 @@ function RacePage({_race}: {_race: RaceSchema}) {
   function _TimerBanner() {
     const background = 
       raceState === 'before-start' ? 'bg-yellow-300' :
+      raceState === 'countdown' ? 'bg-yellow-300' :
       'bg-aqua-300'
 
+    const buttonCSS =
+      raceState === 'before-start' ? 'bg-ocean-400 text-white' :
+      raceState === 'countdown' ? 'bg-white text-ocean-800' :
+      'bg-white text-ocean-800'
+
     const buttonText =
-      raceState === 'before-start' ? 'Cancel start' :
+      raceState === 'before-start' ? 'Start race' :
+      raceState === 'countdown' ? 'Cancel start' :
       raceState === 'can-recall' ? 'General recall' :
       'Cancel race'
 
@@ -71,12 +89,17 @@ function RacePage({_race}: {_race: RaceSchema}) {
       <div className={`row-2 items-center pr-4 ${background}`}>
 
         <strong className={`w-[100px] p-4 border border-ocean-900 border-0 border-r-2 bg-clear-400`}>
-          <Timer start={ race!.startTime } />
+          {
+            race.raceState === 'before-start'
+            ? <div>{ printDuration( Date.now() + Race.CONFIG.countdownDuration ) }</div>
+            : <Timer start={ race!.startTime! } />
+          }
+          
         </strong>
 
         <small className="flex-auto">{race!.course}</small>
 
-        <button className="bg-white px-2 py-1 rounded" onClick={ onCancel }>
+        <button className={`${buttonCSS} px-2 py-1 rounded`} onClick={ onButtonClick }>
           <small>{ buttonText }</small>
         </button>
       </div>
@@ -92,7 +115,7 @@ function RacePage({_race}: {_race: RaceSchema}) {
         </HTML.H1>
         <small>
           <span>{ race!.course }</span>
-          <span><Duration start={ race!.startTime } finish={ race!.finishTime! } /></span>
+          <span><Duration start={ race!.startTime! } finish={ race!.finishTime! } /></span>
         </small>
       </div>
     )
@@ -100,6 +123,10 @@ function RacePage({_race}: {_race: RaceSchema}) {
 
   function _StillRacing() {
     const racers = race!.unfinishedRacers.sort( helpSortRacers )
+
+    const isBeforeRace =
+      race!.raceState === 'before-start' ||
+      race!.raceState === 'countdown'
 
     return (
       <div className="col-4">
@@ -110,15 +137,21 @@ function RacePage({_race}: {_race: RaceSchema}) {
         <div className="row-wrap-2 w-full">
           {
             racers.map( r => (
-              race!.raceState !== 'before-start'
-              ? <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
-              : <Tiles.Todo key={r.id} title={r.sailNumber} subtitle={r.name} />
+              isBeforeRace
+              ? <Tile className="tile-todo" key={r.id} title={r.sailNumber} subtitle={r.name} />
+              : <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
             ))
           }
         </div>
       </div>
     )
   }
+
+  // Boolean for determining whether the <FinishersPartial> is shown or not.
+  const showFinishers =
+    raceState !== 'before-start' &&
+    raceState !== 'countdown' &&
+    !!race
 
   return (
     <div className="col-0 h-full">
@@ -129,7 +162,7 @@ function RacePage({_race}: {_race: RaceSchema}) {
 
       <div className={ styles.wrapper }>
         {/* Show the finishers once racing starts */}
-        { raceState !== 'before-start' && race && <FinishersPartial race={race} /> }
+        { showFinishers && <FinishersPartial race={race} /> }
 
         {/* Show the racers that are still racing */}
         <section className="p-4">
