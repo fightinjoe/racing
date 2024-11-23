@@ -214,6 +214,9 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
 
   // Takes a racer who has finished and removes them so that they are still racing
   unfinishRacer: (racer, race) => {
+    const consent = `Are you certain you want to return ${ racer.name } to racing?`
+    if (!confirm(consent)) return
+
     const finishers = race.finishers.filter( f => f.id !== racer.id )
     const otherRaces = get().races.filter(r => r.id !== race.id)
     const updatedRace = {...race, finishers}
