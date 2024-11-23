@@ -150,13 +150,17 @@ function RacePage({_race}: {_race: RaceSchema}) {
     )
   }
 
-  function _Banner() {
+  function _InstructionalBanner() {
     if (raceState === 'before-start') return (
       <Banner.Default>Just entering finishes? <button onClick={ handleForceStart }>Skip the countdown</button></Banner.Default>
     )
 
     if (raceState === 'countdown') return (
       <Banner.Default>Skip the countdown and <button onClick={ handleForceStart }>start the race</button></Banner.Default>
+    )
+
+    if (!race.hasFinishers) return (
+      <Banner.Default>Click on a racer to log their finish</Banner.Default>
     )
 
     return
@@ -175,7 +179,7 @@ function RacePage({_race}: {_race: RaceSchema}) {
       {/* Timer + race course */}
       <_RaceBanner />
 
-      <_Banner />
+      <_InstructionalBanner />
 
       <div className={ styles.wrapper }>
         {/* Show the finishers once racing starts */}
