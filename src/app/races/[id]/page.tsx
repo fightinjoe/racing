@@ -210,7 +210,7 @@ function FinishersPartial({race}: {race:Race}) {
           { 
             race!.qualifiedFinishers.length > 0
             ? race!.qualifiedFinishers.map( (f,i) => (
-                <FinisherTile key={i} position={i} racer={ f } />
+                <FinisherTile key={i} position={i} finisher={ f } />
               ))
             : <Tile title="..." subtitle="No finishers" className="tile-todo" />
           }

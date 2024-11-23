@@ -96,23 +96,27 @@ export function VolunteerTile({volunteer, onClick}: {volunteer: VolunteerSchema,
  * Tile that displays a race finisher and their position
  * @returns 
  */
-export function FinisherTile({racer, position}:{racer: RacerSchema, position: number}) {
+export function FinisherTile({finisher, position}:{finisher: FinisherSchema, position?: number}) {
+  const p = position === undefined ? finisher.positionOverride : position
+
+  if (p === undefined) throw new Error("Must provide a finishing position for a <FinisherTile>")
+
   const pos =
-    position === 0 ? '1st' :
-    position === 1 ? '2nd' :
-    position === 2 ? '3rd' :
-    `${position+1}th`
+    p === 0 ? '1st' :
+    p === 1 ? '2nd' :
+    p === 2 ? '3rd' :
+    `${p+1}th`
 
   const bgColor = 
-    position === 0 ? 'text-white bg-blue-800' :
-    position === 1 ? 'text-white bg-blue-600' :
-    position === 2 ? 'text-white bg-blue-400' :
+    p === 0 ? 'text-white bg-blue-800' :
+    p === 1 ? 'text-white bg-blue-600' :
+    p === 2 ? 'text-white bg-blue-400' :
     'bg-gray-300 text-black'
 
   return (
     <Tile
-      title={ racer.sailNumber || '?' }
-      subtitle={ racer.name }
+      title={ finisher.sailNumber || '?' }
+      subtitle={ finisher.name }
       className="bg-white border-gray-300 shrink-0 mt-2 mr-2"
     >
       {/* Position badge */}
@@ -150,7 +154,7 @@ export function SmartSailorTile({sailor, onClick}:SmartSailorTileProps) {
 
   // Finishers have a finishing time
   if ((sailor as FinisherSchema).finishedAt !== undefined)
-    return <FinisherTile racer={sailor as RacerSchema} position={(sailor as FinisherSchema).positionOverride!} />
+    return <FinisherTile finisher={sailor as RacerSchema} />
 
   // Failed finishers don't have a finish time, but have failure data
   if ((sailor as FinisherSchema).failure !== undefined)
