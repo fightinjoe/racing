@@ -80,7 +80,7 @@ function RacePage({_race}: {_race: RaceSchema}) {
       'bg-white text-ocean-800'
 
     const buttonText =
-      raceState === 'before-start' ? 'Start race' :
+      raceState === 'before-start' ? 'Start countdown' :
       raceState === 'countdown' ? 'Cancel start' :
       raceState === 'can-recall' ? 'General recall' :
       'Cancel race'
@@ -130,8 +130,6 @@ function RacePage({_race}: {_race: RaceSchema}) {
 
     return (
       <div className="col-4">
-        <HTML.H2>Still racing</HTML.H2>
-
         <Tabs darkMode={true} />
 
         <div className="row-wrap-2 w-full">

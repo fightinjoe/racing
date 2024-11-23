@@ -48,8 +48,8 @@ function ViewRacePartial(props:{race:RaceSchema}) {
 
   return (
     raceState === 'before-start' ? NotStartedRacePartial(race) :
-    raceState === 'finished' ? FinishedRacePartial(race) :
-    RunningRacePartial(race)
+    raceState === 'finished'     ? FinishedRacePartial(race) :
+      RunningRacePartial(race)
   )
 }
 
@@ -58,11 +58,11 @@ function NotStartedRacePartial(race:Race) {
 
   return (
     <button
-      className=""
+      className={`${styles.runningRace} ${styles.before}`}
       onClick={ () => router.push(`/races/${race.id}`) }
     >
       <HTML.H1 className={styles.timer}>
-        ???
+        { printDuration( Date.now() + Race.CONFIG.countdownDuration ) }
       </HTML.H1>
       <div className={ styles.title }>
         <HTML.H1>Race { race.id }</HTML.H1>
