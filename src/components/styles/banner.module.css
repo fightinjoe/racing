@@ -1,0 +1,4 @@
+.defaultBanner a {
+  @apply text-aqua-300;
+  font-weight: 500;
+}

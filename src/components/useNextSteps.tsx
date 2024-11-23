@@ -2,7 +2,7 @@
 
 import { useRaceDayStore } from "@/stores/raceDayStore"
 import { RaceDay } from "@/models/raceday"
-import { stat } from "fs"
+import Banner from "./banner"
 
 /** Hook that provides access to the state machine that determines
  *  what the user needs to do next in the app.
@@ -50,8 +50,6 @@ function NextStep({ state, message }: { state: StateMachineSchema, message: Reac
   if (!message) return
 
   return (
-    <small className="p-4 block text-center bg-yellow-100">
-      { message }
-    </small>
+    <Banner.Alert>{ message }</Banner.Alert>
   )
 }
