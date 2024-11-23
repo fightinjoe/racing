@@ -128,12 +128,13 @@ export function FinisherTile({finisher, position, onClick}:{finisher: FinisherSc
   )
 }
 
-export function FailureTile({racer}:{racer: FinisherSchema}) {
+export function FailureTile({racer, onClick}:{racer: FinisherSchema, onClick?: () => void}) {
   return (
     <Tile
       title={ racer.sailNumber || '?' }
       subtitle={ racer.name }
       className="bg-white border-gray-300 shrink-0 mt-2 mr-2"
+      onClick={onClick}
     >
       {/* Position badge */}
       <div className={`absolute border border-white bg-red-500 text-white top-[-8px] left-[-8px] rounded-full text-xs w-12 py-1`}>
@@ -149,17 +150,17 @@ interface SmartSailorTileProps {
 }
 
 export function SmartSailorTile({sailor, onClick}:SmartSailorTileProps) {
-  // Racers have sail numbers
-  if ((sailor as RacerSchema).sailNumber !== undefined)
-    return <RacerTile racer={sailor as RacerSchema} onClick={onClick} />
-
   // Finishers have a finishing time
   if ((sailor as FinisherSchema).finishedAt !== undefined)
     return <FinisherTile finisher={sailor as RacerSchema} onClick={onClick} />
 
   // Failed finishers don't have a finish time, but have failure data
   if ((sailor as FinisherSchema).failure !== undefined)
-    return <FailureTile racer={sailor as FinisherSchema} />
+    return <FailureTile racer={sailor as FinisherSchema} onClick={onClick} />
+
+  // Racers have sail numbers
+  if ((sailor as RacerSchema).sailNumber !== undefined)
+    return <RacerTile racer={sailor as RacerSchema} onClick={onClick} />
 
   // Anyone who doesn't fit is a volunteer
   return <VolunteerTile volunteer={sailor as VolunteerSchema} onClick={onClick} />

@@ -214,7 +214,7 @@ function FinishersPartial({race}: {race:Race}) {
           { 
             finisherCount > 0
             ? race!.qualifiedFinishers.map( (finisher,i) => (
-                <ModalTile sailor={ {...finisher, positionOverride: i}}>
+                <ModalTile sailor={ {...finisher, positionOverride: i}} key={i}>
                   <Button.Primary onClick={ () => unfinishRacer(finisher, race._race) } className="bg-red-700 hover:!bg-red-800">
                     Remove
                   </Button.Primary>
@@ -241,8 +241,12 @@ function FinishersPartial({race}: {race:Race}) {
           <HTML.H2 className="px-4 mt-4">Disqualified</HTML.H2>
           <div className="overflow-x-scroll scroll-smooth">
             <div className="row-2 mx-4">
-              { race!.failedFinishers.reverse().map( (f,i) => (
-                  <FailureTile key={i} racer={ f } />
+              { race!.failedFinishers.reverse().map( (finisher,i) => (
+                  <ModalTile sailor={ finisher } key={i}>
+                    <Button.Primary onClick={ () => unfinishRacer(finisher, race._race) } className="bg-red-700 hover:!bg-red-800">
+                      Remove
+                    </Button.Primary>
+                  </ModalTile>
                 ))
               }
               <div>&nbsp;</div>
