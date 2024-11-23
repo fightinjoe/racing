@@ -24,7 +24,7 @@ interface RaceDayState {
   clearRacers: () => void,
 
   createRace: (course:CourseSchema, fleet?:FleetSchema) => RaceSchema,
-  startRace: (race: RaceSchema) => void,
+  startRace: (race: RaceSchema, skipCountdown?: boolean) => void,
   finishRacer: (racer: RacerSchema, race: RaceSchema, failure?: FailureSchema) => void,
   cancelRace: (race: RaceSchema) => void,
   clearRaces: () => void,
@@ -169,11 +169,23 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
     return race
   },
 
-  startRace: (race: RaceSchema) => {
+  /**
+   * Starts an already existing race. By default will start with a countdown,
+   * which may be skipped by passing TRUE for the second parameter. NOTE: calling
+   * this method more than once will overwrite the start time. This is useful for
+   * allowing the manual skipping of the countdown
+   * @param race 
+   * @param skipCountdown Optional boolean that skips the countdown
+   */
+  startRace: (race: RaceSchema, skipCountdown?: boolean) => {
+    const startTime = skipCountdown
+    ? Date.now()
+    : Date.now() + Race.CONFIG.countdownDuration
+
     set({
       races: [
         ...get().races.map( r => r.id === race.id
-          ? {...r, startTime: Date.now() + Race.CONFIG.countdownDuration}
+          ? {...r, startTime}
           : r
         )
       ]

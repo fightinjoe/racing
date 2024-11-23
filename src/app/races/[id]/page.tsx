@@ -17,6 +17,7 @@ import { printDuration } from "@/lib/printer"
 import { useRaceState } from "@/components/useRaceState"
 
 import styles from "./page.module.css"
+import Banner from "@/components/banner"
 
 // Perform a check to make sure the race is available before rendering the
 // page. This is necessary because the useRaceState hook cannot run conditionally.
@@ -61,9 +62,13 @@ function RacePage({_race}: {_race: RaceSchema}) {
     cancelRace(_race)
   }
 
+  const handleForceStart = () => {
+    startRace(_race, true)
+  }
+
   /*== Local partials ==*/
 
-  function _Banner() {
+  function _RaceBanner() {
     return race!.isFinished ? <_DurationBanner /> : <_TimerBanner />
   }
 
@@ -145,6 +150,18 @@ function RacePage({_race}: {_race: RaceSchema}) {
     )
   }
 
+  function _Banner() {
+    if (raceState === 'before-start') return (
+      <Banner.Default>Just entering finishes? <button onClick={ handleForceStart }>Skip the countdown</button></Banner.Default>
+    )
+
+    if (raceState === 'countdown') return (
+      <Banner.Default>Skip the countdown and <button onClick={ handleForceStart }>start the race</button></Banner.Default>
+    )
+
+    return
+  }
+
   // Boolean for determining whether the <FinishersPartial> is shown or not.
   const showFinishers =
     raceState !== 'before-start' &&
@@ -156,6 +173,8 @@ function RacePage({_race}: {_race: RaceSchema}) {
       <HTML.BackHeader title={`Race ${ _race!.id } ${ _race.fleet ? '' : '(combined)'}`} />
 
       {/* Timer + race course */}
+      <_RaceBanner />
+
       <_Banner />
 
       <div className={ styles.wrapper }>

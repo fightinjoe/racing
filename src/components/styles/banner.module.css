@@ -1,4 +1,6 @@
-.defaultBanner a {
+.defaultBanner a,
+.defaultBanner button {
   @apply text-aqua-300;
   font-weight: 500;
+  display: inline;
 }
