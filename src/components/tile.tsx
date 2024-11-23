@@ -76,6 +76,22 @@ export function RacerTile({racer, onClick}: {racer: RacerSchema, onClick?: () =>
   )
 }
 
+export function VolunteerTile({volunteer, onClick}: {volunteer: VolunteerSchema, onClick?: () => void}) {
+  const title =
+    volunteer.role === 'Race committee' ? 'RC chair' :
+    volunteer.role === 'Volunteer' ? 'RC' :
+    volunteer.role === 'Crash boat' ? 'CB' :
+    '?'
+
+  return (
+    <Tile
+      title={ title }
+      subtitle={ `${volunteer.name}` }
+      onClick={ onClick }
+    />
+  )
+}
+
 /**
  * Tile that displays a race finisher and their position
  * @returns 
@@ -115,11 +131,33 @@ export function FailureTile({racer}:{racer: FinisherSchema}) {
       className="bg-white border-gray-300 shrink-0 mt-2 mr-2"
     >
       {/* Position badge */}
-      <div className={`absolute border border border-white bg-red-500 text-white top-[-8px] left-[-8px] rounded-full text-xs w-12 py-1`}>
+      <div className={`absolute border border-white bg-red-500 text-white top-[-8px] left-[-8px] rounded-full text-xs w-12 py-1`}>
         { racer.failure }
       </div>
     </Tile>
   )
+}
+
+interface SmartSailorTileProps {
+  sailor: RacerSchema | VolunteerSchema | FinisherSchema
+  onClick?: () => void
+}
+
+export function SmartSailorTile({sailor, onClick}:SmartSailorTileProps) {
+  // Racers have sail numbers
+  if ((sailor as RacerSchema).sailNumber !== undefined)
+    return <RacerTile racer={sailor as RacerSchema} onClick={onClick} />
+
+  // Finishers have a finishing time
+  if ((sailor as FinisherSchema).finishedAt !== undefined)
+    return <FinisherTile racer={sailor as RacerSchema} position={(sailor as FinisherSchema).positionOverride!} />
+
+  // Failed finishers don't have a finish time, but have failure data
+  if ((sailor as FinisherSchema).failure !== undefined)
+    return <FailureTile racer={sailor as FinisherSchema} />
+
+  // Anyone who doesn't fit is a volunteer
+  return <VolunteerTile volunteer={sailor as VolunteerSchema} onClick={onClick} />
 }
 
 /**
@@ -159,45 +197,10 @@ export function ModalTile({sailor, children, className}:
     modal.close()
   }
 
-  const _RacerTile = () => {
-    const racer = sailor as RacerSchema
-
-    return (
-      <Tile
-        title={ racer.sailNumber || '?' }
-        subtitle={ `${racer.name} (${racer.fleet} fleet)` }
-        className={`relative ${className}`}
-        onClick={ onClick }
-      />
-    )
-  }
-
-  const _VolunteerTile = () => {
-    const volunteer = sailor as VolunteerSchema
-
-    const title =
-      volunteer.role === 'Race committee' ? 'RC chair' :
-      volunteer.role === 'Volunteer' ? 'RC' :
-      volunteer.role === 'Crash boat' ? 'CB' :
-      '?'
-
-    return (
-      <Tile
-        title={ title }
-        subtitle={ `${volunteer.name}` }
-        className={`relative ${className}`}
-        onClick={ onClick }
-      />
-    )
-  }
-
   return (
     <div>
-      {
-        (sailor as RacerSchema).sailNumber !== undefined
-        ? <_RacerTile />
-        : <_VolunteerTile />
-      }
+      <SmartSailorTile sailor={sailor} onClick={onClick} />
+
       <dialog ref={dialog} className={styles.modal} onClick={ onDialogClick }>
         { children }
       </dialog>
