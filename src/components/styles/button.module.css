@@ -21,10 +21,10 @@
 
 .primary {
   @apply p-4 w-full rounded;
-  @apply font-medium text-white bg-ocean-400;
+  @apply font-medium text-white;
 
   &:hover, &:active {
-    @apply bg-ocean-500 shadow;
+    @apply shadow;
   }
 }
 

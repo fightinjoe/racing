@@ -26,6 +26,8 @@ interface RaceDayState {
   createRace: (course:CourseSchema, fleet?:FleetSchema) => RaceSchema,
   startRace: (race: RaceSchema, skipCountdown?: boolean) => void,
   finishRacer: (racer: RacerSchema, race: RaceSchema, failure?: FailureSchema) => void,
+  unfinishRacer: (racer: RacerSchema, race: RaceSchema) => void,
+  moveFinisher: (racer: RacerSchema, race: RaceSchema, position: number) => void,
   cancelRace: (race: RaceSchema) => void,
   clearRaces: () => void,
 
@@ -208,6 +210,27 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
       ...get().races.filter(r=>r.id!==race.id),
       { ...race, finishers: [...race.finishers, finisher]}
     ]})
+  },
+
+  // Takes a racer who has finished and removes them so that they are still racing
+  unfinishRacer: (racer, race) => {
+    const finishers = race.finishers.filter( f => f.id !== racer.id )
+    const otherRaces = get().races.filter(r => r.id !== race.id)
+    const updatedRace = {...race, finishers}
+
+    set({ races: [...otherRaces, updatedRace]})
+  },
+
+  // Moves the finisher in question to the updated position (indexed at 0)
+  moveFinisher: (finisher, race, position) => {
+    const finishers = race.finishers.filter( f => f.id !== finisher.id )
+    finishers.splice(position, 0, finisher)
+    
+    const otherRaces = get().races.filter(r => r.id !== race.id)
+
+    const updatedRace = {...race, finishers}
+
+    set({ races: [...otherRaces, updatedRace] })
   },
 
   /**

@@ -96,7 +96,7 @@ export function VolunteerTile({volunteer, onClick}: {volunteer: VolunteerSchema,
  * Tile that displays a race finisher and their position
  * @returns 
  */
-export function FinisherTile({finisher, position}:{finisher: FinisherSchema, position?: number}) {
+export function FinisherTile({finisher, position, onClick}:{finisher: FinisherSchema, position?: number, onClick?: () => void}) {
   const p = position === undefined ? finisher.positionOverride : position
 
   if (p === undefined) throw new Error("Must provide a finishing position for a <FinisherTile>")
@@ -118,6 +118,7 @@ export function FinisherTile({finisher, position}:{finisher: FinisherSchema, pos
       title={ finisher.sailNumber || '?' }
       subtitle={ finisher.name }
       className="bg-white border-gray-300 shrink-0 mt-2 mr-2"
+      onClick={onClick}
     >
       {/* Position badge */}
       <div className={`${styles.position} ${bgColor}`}>
@@ -154,7 +155,7 @@ export function SmartSailorTile({sailor, onClick}:SmartSailorTileProps) {
 
   // Finishers have a finishing time
   if ((sailor as FinisherSchema).finishedAt !== undefined)
-    return <FinisherTile finisher={sailor as RacerSchema} />
+    return <FinisherTile finisher={sailor as RacerSchema} onClick={onClick} />
 
   // Failed finishers don't have a finish time, but have failure data
   if ((sailor as FinisherSchema).failure !== undefined)
@@ -173,7 +174,7 @@ export function SmartSailorTile({sailor, onClick}:SmartSailorTileProps) {
  * @returns 
  */
 export function ModalTile({sailor, children, className}:
-  {sailor: RacerSchema | VolunteerSchema, children?:React.ReactNode, className?:string}) {
+  {sailor: RacerSchema | VolunteerSchema | FinisherSchema, children?:React.ReactNode, className?:string}) {
   const dialog = useRef(null)
 
   // Tile onClick handler

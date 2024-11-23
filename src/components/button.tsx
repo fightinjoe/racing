@@ -34,7 +34,7 @@ function Cancel(props: ButtonProps) {
 }
 
 function Primary(props: ButtonProps) {
-  return <Base {...props} className={buttonStyles.primary+' '+props.className} />
+  return <Base {...props} className={'bg-ocean-400 hover:bg-ocean-500 '+props.className+' '+buttonStyles.primary} />
 }
 
 function Secondary(props: ButtonProps) {

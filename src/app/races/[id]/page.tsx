@@ -192,6 +192,8 @@ function RacePage({_race}: {_race: RaceSchema}) {
 function FinishersPartial({race}: {race:Race}) {
   if (!race.hasFinishers) return
 
+  const [unfinishRacer, moveFinisher] = useRaceDayStore(s => [s.unfinishRacer, s.moveFinisher])
+
   const wrapper = useRef(null)
 
   useEffect(() => {
@@ -201,6 +203,8 @@ function FinishersPartial({race}: {race:Race}) {
     elt.scrollLeft = elt.scrollWidth - elt.clientWidth
   },[race])
 
+  const finisherCount = race!.qualifiedFinishers.length
+
   return (
     <section className={styles.finishers}>
 
@@ -208,9 +212,22 @@ function FinishersPartial({race}: {race:Race}) {
       <div className="overflow-x-scroll scroll-smooth" ref={wrapper}>
         <div className="row-2 mx-4">
           { 
-            race!.qualifiedFinishers.length > 0
-            ? race!.qualifiedFinishers.map( (f,i) => (
-                <FinisherTile key={i} position={i} finisher={ f } />
+            finisherCount > 0
+            ? race!.qualifiedFinishers.map( (finisher,i) => (
+                <ModalTile sailor={ {...finisher, positionOverride: i}}>
+                  <Button.Primary onClick={ () => unfinishRacer(finisher, race._race) } className="bg-red-700 hover:!bg-red-800">
+                    Remove
+                  </Button.Primary>
+                  {
+                    i !== 0 && <Button.Secondary onClick={ () => moveFinisher(finisher, race._race, i-1)}>
+                      Move up
+                    </Button.Secondary>
+                  }
+                  { i !== finisherCount-1 && <Button.Secondary onClick={ () => moveFinisher(finisher, race._race, i+1)}>
+                      Move down
+                    </Button.Secondary>
+                  }
+                </ModalTile>
               ))
             : <Tile title="..." subtitle="No finishers" className="tile-todo" />
           }
