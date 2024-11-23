@@ -167,11 +167,6 @@ function RacePage({_race}: {_race: RaceSchema}) {
   }
 
   // Boolean for determining whether the <FinishersPartial> is shown or not.
-  const showFinishers =
-    raceState !== 'before-start' &&
-    raceState !== 'countdown' &&
-    !!race
-
   return (
     <div className="col-0 h-full">
       <HTML.BackHeader title={`Race ${ _race!.id } ${ _race.fleet ? '' : '(combined)'}`} />
@@ -183,7 +178,7 @@ function RacePage({_race}: {_race: RaceSchema}) {
 
       <div className={ styles.wrapper }>
         {/* Show the finishers once racing starts */}
-        { showFinishers && <FinishersPartial race={race} /> }
+        <FinishersPartial race={race} />
 
         {/* Show the racers that are still racing */}
         <section className="p-4">
@@ -195,6 +190,8 @@ function RacePage({_race}: {_race: RaceSchema}) {
 }
 
 function FinishersPartial({race}: {race:Race}) {
+  if (!race.hasFinishers) return
+
   const wrapper = useRef(null)
 
   useEffect(() => {
