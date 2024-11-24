@@ -190,8 +190,6 @@ function RacePage({_race}: {_race: RaceSchema}) {
 }
 
 function FinishersPartial({race}: {race:Race}) {
-  if (!race.hasFinishers) return
-
   const [unfinishRacer, moveFinisher] = useRaceDayStore(s => [s.unfinishRacer, s.moveFinisher])
 
   const wrapper = useRef(null)
@@ -202,6 +200,9 @@ function FinishersPartial({race}: {race:Race}) {
     const elt = wrapper.current as HTMLDivElement
     elt.scrollLeft = elt.scrollWidth - elt.clientWidth
   },[race])
+
+  // Place after hook calls, since hooks cannot be called conditionally
+  if (!race.hasFinishers) return
 
   const finisherCount = race!.qualifiedFinishers.length
 
