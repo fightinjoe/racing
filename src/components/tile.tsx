@@ -7,7 +7,7 @@ import styles from '@/components/styles/tile.module.css'
 
 interface TileProps {
   title: string | React.ReactNode,
-  subtitle: string | React.ReactNode,
+  subtitle?: string | React.ReactNode,
   className?: string,
   onClick?: () => void,
   children?: React.ReactNode
@@ -29,7 +29,7 @@ export default function Tile({ title, subtitle, className, onClick, children }: 
       <_ClickWrapper onClick={ onClick }>
         <div className="col-2 h-full p-1 justify-center">
           <p className="text-xl font-medium">{ title }</p>
-          <small className="">{ subtitle }</small>
+          { subtitle && <small className="">{ subtitle }</small> }
           {children}
         </div>
       </_ClickWrapper>
@@ -122,8 +122,7 @@ export function FinisherTile({finisher, position, onClick}:{finisher: FinisherSc
   return (
     <Tile
       title={ finisher.sailNumber || '?' }
-      subtitle={ finisher.name }
-      className="bg-white border-gray-300 shrink-0 mt-2 mr-2"
+      className="bg-white border-gray-300 shrink-0 mt-2 mr-2 h-auto py-2"
       onClick={onClick}
     >
       <_Badge text={ pos } />
@@ -135,8 +134,7 @@ export function FailureTile({racer, onClick}:{racer: FinisherSchema, onClick?: (
   return (
     <Tile
       title={ racer.sailNumber || '?' }
-      subtitle={ racer.name }
-      className="bg-white border-gray-300 shrink-0 mt-2 mr-2"
+      className="bg-white border-gray-300 shrink-0 mt-2 mr-2 h-auto py-2"
       onClick={onClick}
     >
       {/* Position badge */}
