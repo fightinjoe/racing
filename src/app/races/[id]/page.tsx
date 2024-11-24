@@ -104,9 +104,12 @@ function RacePage({_race}: {_race: RaceSchema}) {
 
         <small className="flex-auto">{race!.course}</small>
 
-        <button className={`${buttonCSS} px-2 py-1 rounded`} onClick={ onButtonClick }>
-          <small>{ buttonText }</small>
-        </button>
+        {
+          // Only allow the race to be canceled if there are no racers
+          !race.hasFinishers && <button className={`${buttonCSS} px-2 py-1 rounded`} onClick={ onButtonClick }>
+            <small>{ buttonText }</small>
+          </button>
+        }
       </div>
     )
   }
