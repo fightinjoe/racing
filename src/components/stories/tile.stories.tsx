@@ -22,13 +22,6 @@ export default meta
 
 type Story = StoryObj<typeof meta>
 
-export const Racer: Story = {
-  args: {
-    title: '108',
-    subtitle: 'Aaron Wheeler (A fleet)',
-  }
-}
-
 export const Todo: Story = {
   args: {
     title: '+',
