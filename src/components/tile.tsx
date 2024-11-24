@@ -113,6 +113,12 @@ export function FinisherTile({finisher, position, onClick}:{finisher: FinisherSc
     p === 2 ? 'text-white bg-blue-400' :
     'bg-gray-300 text-black'
 
+  const _Badge = ({text}:{text:string}) => (
+    <div className={`absolute top-[-8px] left-[-8px] rounded-full text-xs w-8 h-8 leading-8 border border-white ${bgColor}`}>
+      { text }
+    </div>
+  )
+
   return (
     <Tile
       title={ finisher.sailNumber || '?' }
@@ -120,10 +126,7 @@ export function FinisherTile({finisher, position, onClick}:{finisher: FinisherSc
       className="bg-white border-gray-300 shrink-0 mt-2 mr-2"
       onClick={onClick}
     >
-      {/* Position badge */}
-      <div className={`${styles.position} ${bgColor}`}>
-        { pos }
-      </div>
+      <_Badge text={ pos } />
     </Tile>
   )
 }
