@@ -13,6 +13,10 @@ export function toId(value: string | number | boolean) {
 // Helper function for sorting sail numbers, which are strings that might look like `17A`.
 // Returning -1 indicates sn1 comes first
 export function sortSailNumbers(sn1: string, sn2: string) {
+  // When there is no sail number, "?" is used. These should be sorted last
+  if (sn1 === '?') return 1
+  if (sn2 === '?') return -1
+
   // Regex that will match `17` or `17A`. Will not match `A`
   const regex = /^(\d+)(.*)$/
 
