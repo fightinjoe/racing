@@ -7,6 +7,25 @@ import { capitalize, sortSailNumbers } from "@/lib/string"
 
 import styles from "./useRacerSort.module.css"
 
+/**
+ * Hook that provides a functional component for displaying a set of
+ * tabs used for sorting a list of racers.
+ * @param params.sorts An array of strings that represent the sorting options. Options
+ * are 'added', 'name', 'number', and 'fleet'. The default is ['added', 'name', 'number', 'fleet'].
+ * @returns sort: RacersSort
+ * @returns response.Tabs: React.FC<{darkMode?:boolean}>
+ * @returns response.helpSortRacers: A sorting callback function for Array.sort
+ * 
+ * @example
+ * const {Tabs, helpSortRacers} = useRacerSort()
+ * const racers: RacerSchema[] = ...
+ * 
+ * return (
+ *  <Tabs />
+ *  { racers.sort(helpSortRacers).map( racer => <RacerTile key={racer.id} racer={racer} /> ) }
+ * )
+ * 
+ */
 export function useRacerSort(params: {sorts?:RacersSort[]} = {}) {
   const sorts = params.sorts || ['added', 'name', 'number', 'fleet']
 
