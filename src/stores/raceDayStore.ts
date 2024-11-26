@@ -22,6 +22,7 @@ interface RaceDayState {
   editRacer: (racer: RacerSchema, data: {name:string, sailNumber: string, fleet: FleetSchema}) => void,
   deleteRacer: (racer: RacerSchema) => void,
   clearRacers: () => void,
+  racerRegistered: (racer: RacerSchema | null) => boolean,
 
   createRace: (course:CourseSchema, fleet?:FleetSchema) => RaceSchema,
   startRace: (race: RaceSchema, skipCountdown?: boolean) => void,
@@ -142,6 +143,13 @@ export const useRaceDayStore = create<RaceDayState>()( persist( (set, get) => ({
     if (!confirm(consent)) return
 
     set({ racers: [] })
+  },
+
+  // Returns true if the sailor is registered to race
+  racerRegistered: (sailor) => {
+    if (!sailor) return false
+    
+    return get().racers.some( r => r.id === sailor.id )
   },
 
   /**
