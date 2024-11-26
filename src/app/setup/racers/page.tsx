@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRaceDayStore } from "@/stores/raceDayStore"
 import { useRosterStore } from "@/stores/rosterStore"
-import { useRacerSort } from "@/lib/useRacerSort"
+import { useRacerSort } from "@/components/useRacerSort"
 
 import AddRacer from "./_add"
 import Tile from "@/components/tile"

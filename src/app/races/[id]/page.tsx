@@ -12,7 +12,7 @@ import { ModalTile } from "@/components/tile"
 import HTML from "@/components/html"
 import Button from "@/components/button"
 
-import { useRacerSort } from "@/lib/useRacerSort"
+import { useRacerSort } from "@/components/useRacerSort"
 import { printDuration } from "@/lib/printer"
 import { useRaceState } from "@/components/useRaceState"
 

@@ -5,7 +5,7 @@ import Form from "@/components/form"
 
 import { capitalize, sortSailNumbers } from "@/lib/string"
 
-import styles from "./useRacerSort.module.css"
+import styles from "./styles/useRacerSort.module.css"
 
 /**
  * Hook that provides a functional component for displaying a set of
