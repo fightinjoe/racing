@@ -52,21 +52,22 @@ export default function RacersPage() {
     <div className="col-0 gap-[1px]">
       {
         sailor.suggestedSailNumbers?.map( (sailNumber, i) => (
-          <Button.Secondary
+          <Button.Primary
             key={i}
             onClick={ () => addRacer(sailor.name, sailNumber, sailor.suggestedFleet!) }
+            className="!bg-white !text-ocean-800"
           >
-            {sailNumber}
-          </Button.Secondary>
+            {sailNumber} ({sailor.suggestedFleet})
+          </Button.Primary>
         ))
       }
 
-      <Button.Primary
+      <Button.Secondary
         onClick={ onEditHandler({...sailor, fleet: sailor.suggestedFleet!} as RacerSchema) }
-        className={ styles.editButton }
+        className="!bg-teal-300 !text-ocean-800"
       >
-        Edit
-      </Button.Primary>
+        Customize
+      </Button.Secondary>
     </div>
   )
 
@@ -82,7 +83,7 @@ export default function RacersPage() {
       <Button.Secondary
         onClick={ () => confirm('Do you want to permanently delete this racer?') && deleteRacer(racer) }
       >
-        Delete
+        Remove
       </Button.Secondary>
     </div>
   )
@@ -120,7 +121,6 @@ export default function RacersPage() {
         <div className="row-wrap-2 pb-4 overflow-scroll">
           {
             // ADD RACER tile
-            racers.length === 0 &&
             <Tile className="tile-todo" title="+" subtitle="Add racer" onClick={ () => modal.props.show() } />
           }
           {
