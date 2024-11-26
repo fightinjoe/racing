@@ -31,7 +31,10 @@ export const failureSchema = z.enum(['DSQ', 'DNF', 'DNS', 'TLE', 'Recourse'])
 export const sailorSchema = z.object({
   // Unique ID that can be used to track a sailor across multiple race days
   id: z.string(),
-  name: z.string()
+  name: z.string(),
+
+  suggestedSailNumbers: z.array(z.string()).optional(),
+  suggestedFleet: fleetSchema.optional(),
 })
 
 export const volunteerSchema = sailorSchema.merge(z.object({
