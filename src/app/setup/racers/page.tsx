@@ -2,20 +2,25 @@
 
 import { useState } from "react"
 import { useRaceDayStore } from "@/stores/raceDayStore"
+import { useRosterStore } from "@/stores/rosterStore"
 import { useRacerSort } from "@/lib/useRacerSort"
 
 import AddRacer from "./_add"
 import Tile from "@/components/tile"
 import HTML from "@/components/html"
 import Button from "@/components/button"
-import { ModalTile } from "@/components/tile"
+import { ModalTile, RacerTile } from "@/components/tile"
 import useModalTray from "@/components/useModalTray"
 
 import styles from './page.module.css'
 
 export default function RacersPage() {
-  const [racers, addRacer, editRacer, deleteRacer] =
-    useRaceDayStore(s => [s.racers, s.addRacer, s.editRacer, s.deleteRacer])
+  const [racers, addRacer, editRacer, deleteRacer, racerRegistered] =
+    useRaceDayStore(s => [s.racers, s.addRacer, s.editRacer, s.deleteRacer, s.racerRegistered])
+
+  const racerLookup = new Map(racers.map(r => [r.name, r]))
+
+  const [roster, fetchRoster] = useRosterStore(s => [s.roster, s.fetchRoster])
 
   const {Tabs, helpSortRacers} = useRacerSort()
 
@@ -25,7 +30,7 @@ export default function RacersPage() {
   const [racerToEdit, setRacerToEdit] = useState<RacerSchema | null>(null)
 
   const onSave = (data: RacerFormSchema) => {
-    racerToEdit
+    racerToEdit && racerRegistered(racerToEdit)
     ? editRacer(racerToEdit, data)
     : addRacer(data.name, data.sailNumber, data.fleet)
     
@@ -43,18 +48,58 @@ export default function RacersPage() {
     }
   }
 
+  const _RosterOptions = ({sailor}:{sailor: SailorSchema}) => (
+    <div className="col-0 gap-[1px]">
+      {
+        sailor.suggestedSailNumbers?.map( (sailNumber, i) => (
+          <Button.Secondary
+            key={i}
+            onClick={ () => addRacer(sailor.name, sailNumber, sailor.suggestedFleet!) }
+          >
+            {sailNumber}
+          </Button.Secondary>
+        ))
+      }
+
+      <Button.Primary
+        onClick={ onEditHandler({...sailor, fleet: sailor.suggestedFleet!} as RacerSchema) }
+        className={ styles.editButton }
+      >
+        Edit
+      </Button.Primary>
+    </div>
+  )
+
+  const _RacerOptions = ({racer}:{racer: RacerSchema}) => (
+    <div className="col-0 gap-[1px]">
+      <Button.Primary
+        onClick={ onEditHandler(racer) }
+        className={ styles.editButton }
+      >
+        Edit
+      </Button.Primary>
+      
+      <Button.Secondary
+        onClick={ () => confirm('Do you want to permanently delete this racer?') && deleteRacer(racer) }
+      >
+        Delete
+      </Button.Secondary>
+    </div>
+  )
+
   return (
     <main className="h-full col-0 relative">
       <HTML.BackHeader title="Racers">
-        <button className="button-header" onClick={() => modal.props.show()}>
-          {modal.props.visible ? '' : 'Add' }
+        <button className="button-header" onClick={() => fetchRoster()}>
+          {modal.props.visible ? '' : 'Load roster' }
         </button>
       </HTML.BackHeader>
 
+      {/* ADD RACER modal. May be triggered from the header or a tile */}
       <modal.Tray
         {...modal.props}
         visible={ modal.props.visible || !!racerToEdit }
-        className={ !!racerToEdit ? '!bg-yellow-100' : ''}
+        className={ !!racerRegistered(racerToEdit) ? '!bg-yellow-100' : ''}
       >
         <AddRacer racer={racerToEdit} {...{onSave, onCancel}} />
       </modal.Tray>
@@ -64,32 +109,36 @@ export default function RacersPage() {
 
         <div className="row-wrap-2 pb-4 overflow-scroll">
           {
+            // ADD RACER tile
             racers.length === 0 &&
             <Tile className="tile-todo" title="+" subtitle="Add racer" onClick={ () => modal.props.show() } />
           }
           {
-            racers.sort( helpSortRacers ).map( (racer,i) => (
-              <ModalTile
-                key={i}
-                sailor={racer}
-                className={racerToEdit && racer.id === racerToEdit.id ? 'bg-yellow-100' : 'bg-ocean-200'}
-              >
-                <div className="col-0 gap-[1px]">
-                  <Button.Primary
-                    onClick={ onEditHandler(racer) }
-                    className={ styles.editButton }
-                  >
-                    Edit
-                  </Button.Primary>
-                  
-                  <Button.Secondary
-                    onClick={ () => confirm('Do you want to permanently delete this racer?') && deleteRacer(racer) }
-                  >
-                    Delete
-                  </Button.Secondary>
-                </div>
-              </ModalTile>
-            ))
+            roster.map( (member, i) => {
+              const isRegistered = racerLookup.has(member.name)
+              
+              let sailor: RacerSchema = isRegistered
+              ? racerLookup.get(member.name)!
+              : {
+                ...member,
+                role: 'Racer',
+                isGuest: false,
+                sailNumber: member.suggestedSailNumbers?.[0] || '?',
+                fleet: member.suggestedFleet as FleetSchema
+              }
+
+              let className = isRegistered ? 'bg-ocean-200' : 'tile-todo !bg-clear-100'
+
+              let TileRenderer = RacerTile
+             
+              return (
+                <ModalTile key={i} {...{sailor, className, TileRenderer}}>
+                  { isRegistered
+                    ? <_RacerOptions racer={sailor} />
+                    : <_RosterOptions sailor={member} /> }
+                </ModalTile>
+              )
+            })
           }
         </div>
 
