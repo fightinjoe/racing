@@ -22,7 +22,7 @@ export default function RacersPage() {
 
   const [roster, fetchRoster] = useRosterStore(s => [s.roster, s.fetchRoster])
 
-  const {Tabs, helpSortRacers} = useRacerSort()
+  const {Tabs, helpSortRacers} = useRacerSort({sorts: ['name', 'number', 'fleet']})
 
   const modal = useModalTray({})
   
@@ -87,6 +87,16 @@ export default function RacersPage() {
     </div>
   )
 
+  function inferRacer(sailor: SailorSchema) {
+    return {
+      ...sailor,
+      role: 'Racer',
+      isGuest: false,
+      sailNumber: sailor.suggestedSailNumbers?.[0] || '?',
+      fleet: sailor.suggestedFleet as FleetSchema
+    } as RacerSchema
+  }
+
   return (
     <main className="h-full col-0 relative">
       <HTML.BackHeader title="Racers">
@@ -114,7 +124,10 @@ export default function RacersPage() {
             <Tile className="tile-todo" title="+" subtitle="Add racer" onClick={ () => modal.props.show() } />
           }
           {
-            roster.map( (member, i) => {
+            roster
+            .map( inferRacer )
+            .sort(helpSortRacers)
+            .map( (member, i) => {
               const isRegistered = racerLookup.has(member.name)
               
               let sailor: RacerSchema = isRegistered
