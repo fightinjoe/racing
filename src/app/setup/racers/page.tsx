@@ -100,7 +100,7 @@ export default function RacersPage() {
 
   return (
     <main className="h-full col-0 relative">
-      <HTML.BackHeader title="Racers">
+      <HTML.BackHeader title={ `${racers.length} Racer${racers.length === 1 ? '' : 's'}` }>
         <button className="button-header" onClick={() => fetchRoster()}>
           {modal.props.visible ? '' : 'Load roster' }
         </button>
