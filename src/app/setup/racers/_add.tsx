@@ -9,7 +9,13 @@ import Form from "@/components/form"
 import Button from "@/components/button"
 
 import styles from "./page.module.css"
+import { useRaceDayStore } from "@/stores/raceDayStore"
 
+/**
+ * Modal tray that allows for the adding and editing of a racer
+ * @param param
+ * @returns 
+ */
 export default function AddRacer({ racer, onSave, onCancel }:
   {racer: RacerSchema | null, onSave: (d:RacerFormSchema)=>void, onCancel: ()=>void}) {
   
@@ -17,6 +23,7 @@ export default function AddRacer({ racer, onSave, onCancel }:
     register,
     handleSubmit,
     setValue,
+    trigger,
     formState: { errors }
   } = useForm<RacerFormSchema>({
     resolver: zodResolver(racerFormSchema)
@@ -33,6 +40,9 @@ export default function AddRacer({ racer, onSave, onCancel }:
     setValue('name', racer.name)
     setValue('sailNumber', racer.sailNumber)
     setValue('fleet', racer.fleet)
+
+    // validate the form (e.g. when adding a racer from the roster)
+    trigger('sailNumber')
   }, [racer, setValue])
 
   const onSubmit = (data: RacerFormSchema) => {
