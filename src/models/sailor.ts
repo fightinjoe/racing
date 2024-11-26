@@ -18,22 +18,12 @@ export default class Sailor {
     const sailors = rows.map( row => {
       const [name, suggestedSailNumbers, suggestedFleet] = row.split('\t')
       
-      let sailor: SailorSchema
-
-      try {
-        sailor = schemas.sailorSchema.parse({
-          id: Date.now() + name,
-          name,
-          suggestedSailNumbers: suggestedSailNumbers.split('/'),
-          suggestedFleet
-        })
-        
-      } catch (error) {
-        debugger
-        throw error
-      }
-
-      return sailor
+      return schemas.sailorSchema.parse({
+        id: Date.now() + name,
+        name,
+        suggestedSailNumbers: suggestedSailNumbers.split('/').filter( n => n ),
+        suggestedFleet
+      }) as SailorSchema
     })
 
     return sailors
