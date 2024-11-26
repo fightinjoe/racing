@@ -24,7 +24,7 @@ export default class Sailor {
         sailor = schemas.sailorSchema.parse({
           id: Date.now() + name,
           name,
-          suggestedSailNumbers: suggestedSailNumbers.split(','),
+          suggestedSailNumbers: suggestedSailNumbers.split('/'),
           suggestedFleet
         })
         
