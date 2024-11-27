@@ -5,9 +5,11 @@ import Sailor from '@/models/sailor'
 
 interface RosterState {
   roster: SailorSchema[],
+  timestamp: number,
 
   clearRoster: () => void,
-  fetchRoster: () => void
+  fetchRoster: () => void,
+  printTimestamp: () => string,
 }
 
 /**
@@ -16,11 +18,21 @@ interface RosterState {
  */
 export const useRosterStore = create<RosterState>()( persist( (set, get) => ({
   roster: [],
+  timestamp: Date.now(),
 
-  clearRoster: () => set({roster: []}),
+  clearRoster: () => set({roster: [], timestamp: 0}),
 
   fetchRoster: async () => {
     const roster = await Sailor.fetchRoster()
-    set({roster})
+    const timestamp = Date.now()
+    set({roster, timestamp})
+  },
+
+  printTimestamp: () => {
+    let ts = get().timestamp
+
+    if (ts === 0) return 'Roster not loaded'
+
+    return (new Date(ts)).toLocaleString( 'en-US', {timeZone: 'America/New_York'} )
   }
 }), { name: 'roster-storage' }))

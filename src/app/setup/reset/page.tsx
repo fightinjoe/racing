@@ -1,6 +1,7 @@
 'use client'
 
 import { useRaceDayStore } from "@/stores/raceDayStore"
+import { useRosterStore } from "@/stores/rosterStore"
 import { RACERS } from "@/schemas/CONFIG"
 
 import Button from "@/components/button"
@@ -10,6 +11,9 @@ import HTML from "@/components/html"
 export default function ResetPage() {
   const [races, racers, volunteers, addRacer, clearRaces, clearRacers, clearVolunteers, clearConfig] =
     useRaceDayStore( s=>[s.races, s.racers, s.volunteers, s.addRacer, s.clearRaces, s.clearRacers, s.clearVolunteers, s.clearConfig])
+
+  const [roster, printTimestamp, clearRoster, fetchRoster] =
+    useRosterStore(s => [s.roster, s.printTimestamp, s.clearRoster, s.fetchRoster])
 
   const loadRacers = () => {
     const names = racers.map( r=>r.name )
@@ -39,6 +43,16 @@ export default function ResetPage() {
       
         <HTML.H1 className="text-center !text-black">Race day</HTML.H1>
         <Button.Primary onClick={ clearConfig }>Clear details</Button.Primary>
+
+        <hr /><hr />
+
+        <div>
+          <HTML.H1 className="text-center !text-black">{ roster.length } members</HTML.H1>
+          <small>{ printTimestamp() }</small>
+        </div>
+        <Button.Primary onClick={ fetchRoster }>Load roster</Button.Primary>
+        <br />
+        <Button.Primary onClick={ clearRoster }>Clear roster</Button.Primary>
       </section>
 
     </div>
