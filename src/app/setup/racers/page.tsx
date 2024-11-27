@@ -6,7 +6,8 @@ import { useRosterStore } from "@/stores/rosterStore"
 import { useRacerSort } from "@/components/useRacerSort"
 
 import AddRacer from "./_add"
-import Tile from "@/components/tile"
+import Tile, {TileBadge} from "@/components/tile"
+import type { DefaultTileProps } from "@/components/tile"
 import HTML from "@/components/html"
 import Button from "@/components/button"
 import { ModalTile, RacerTile } from "@/components/tile"
@@ -48,7 +49,7 @@ export default function RacersPage() {
     }
   }
 
-  const _RosterOptions = ({sailor}:{sailor: SailorSchema}) => (
+  const _RosterModalOptions = ({sailor}:{sailor: SailorSchema}) => (
     <div className="col-0 gap-[1px]">
       {
         sailor.suggestedSailNumbers?.map( (sailNumber, i) => (
@@ -71,7 +72,7 @@ export default function RacersPage() {
     </div>
   )
 
-  const _RacerOptions = ({racer}:{racer: RacerSchema}) => (
+  const _RacerModalOptions = ({racer}:{racer: RacerSchema}) => (
     <div className="col-0 gap-[1px]">
       <Button.Primary
         onClick={ onEditHandler(racer) }
@@ -86,6 +87,15 @@ export default function RacersPage() {
         Remove
       </Button.Secondary>
     </div>
+  )
+
+  const _AddRacerTile = () => (
+    <Tile
+      className="tile-todo"
+      title="+"
+      subtitle="Add racer"
+      onClick={ () => modal.props.show() }
+    />
   )
 
   function inferRacer(sailor: SailorSchema) {
@@ -115,14 +125,14 @@ export default function RacersPage() {
         <AddRacer racer={racerToEdit} {...{onSave, onCancel}} />
       </modal.Tray>
 
-      <section className="p-4 pb-0 col-4 shadow-inner shrink overflow-y-hidden">
-        <Tabs darkMode={true} />
+      <section className="py-4 pb-0 col-4 shadow-inner shrink overflow-y-hidden">
+        {/* Sorting tabs */}
+        <div className="px-4"><Tabs darkMode={true} /></div>
 
-        <div className="row-wrap-2 pb-4 overflow-scroll">
-          {
-            // ADD RACER tile
-            <Tile className="tile-todo" title="+" subtitle="Add racer" onClick={ () => modal.props.show() } />
-          }
+        {/* Racers */}
+        <div className="row-wrap-2 px-4 pt-2 pb-4 overflow-scroll">
+          <_AddRacerTile />
+
           {
             roster
             .map( inferRacer )
@@ -142,13 +152,14 @@ export default function RacersPage() {
 
               let className = isRegistered ? 'bg-ocean-200' : 'tile-todo !bg-clear-100'
 
-              let TileRenderer = RacerTile
-             
+              let TileRenderer: React.FC<DefaultTileProps<RacerSchema>> =
+                isRegistered ? RegisteredRacer : UnregisteredSailor
+
               return (
-                <ModalTile key={i} {...{sailor, className, TileRenderer}}>
+                <ModalTile<RacerSchema> key={i} {...{sailor, className, TileRenderer}}>
                   { isRegistered
-                    ? <_RacerOptions racer={sailor} />
-                    : <_RosterOptions sailor={member} /> }
+                    ? <_RacerModalOptions racer={sailor} />
+                    : <_RosterModalOptions sailor={member} /> }
                 </ModalTile>
               )
             })
@@ -159,3 +170,26 @@ export default function RacersPage() {
     </main>
   )
 }
+
+const RegisteredRacer = ({sailor, onClick}: DefaultTileProps) => (
+  <Tile
+    title={sailor.sailNumber}
+    subtitle={sailor.name}
+    className="mb-1 bg-ocean-200"
+    onClick={onClick}
+  >
+    <TileBadge
+      text={sailor.fleet}
+      className={ `text-white ${sailor.fleet === 'A' ? 'bg-ocean-800' : 'bg-ocean-400'}` }
+    />
+  </Tile>
+)
+
+const UnregisteredSailor = ({sailor, onClick}: DefaultTileProps) => (
+  <Tile
+    title={sailor.sailNumber}
+    subtitle={sailor.name}
+    className="mb-1 tile-todo"
+    onClick={onClick}
+  />
+)

@@ -61,7 +61,7 @@ export const NavTile = {
   )
 }
 
-interface DefaultTileProps<SailorType> {
+export interface DefaultTileProps<SailorType = RacerSchema> {
   sailor: SailorType,
   onClick?: () => void,
   className?: string
@@ -119,19 +119,13 @@ export function FinisherTile({sailor, position, onClick}: DefaultTileProps<Finis
     p === 2 ? 'text-white bg-blue-400' :
     'bg-gray-300 text-black'
 
-  const _Badge = ({text}:{text:string}) => (
-    <div className={`absolute top-[-8px] left-[-8px] rounded-full text-xs w-8 h-8 leading-8 border border-white ${bgColor}`}>
-      { text }
-    </div>
-  )
-
   return (
     <Tile
       title={ sailor.sailNumber || '?' }
       className="bg-white border-gray-300 shrink-0 mt-2 mr-2 h-auto py-2"
       onClick={onClick}
     >
-      <_Badge text={ pos } />
+      <TileBadge text={ pos } className={bgColor} />
     </Tile>
   )
 }
@@ -170,12 +164,11 @@ export function SmartSailorTile({sailor, onClick}:SmartSailorTileProps) {
   return <VolunteerTile sailor={sailor as VolunteerSchema} onClick={onClick} />
 }
 
-
-interface ModalTileProps {
-  sailor: RacerSchema | VolunteerSchema | FinisherSchema
+interface ModalTileProps<SailorType> {
+  sailor: SailorType
   children?: React.ReactNode
   className?: string
-  TileRenderer?: typeof RacerTile | typeof VolunteerTile | typeof FinisherTile | typeof FailureTile
+  TileRenderer?: React.FC<DefaultTileProps<SailorType>>
 }
 /**
  * A tile that displays a sailor and opens a contextual modal when clicked
@@ -185,7 +178,7 @@ interface ModalTileProps {
  * @param className Additional classes to apply to the tile
  * @returns 
  */
-export function ModalTile({sailor, children, className, TileRenderer = SmartSailorTile}: ModalTileProps) {
+export function ModalTile<T extends RacerSchema | VolunteerSchema | FinisherSchema>({sailor, children, className, TileRenderer = SmartSailorTile}: ModalTileProps<T>) {
   const dialog = useRef(null)
 
   // Tile onClick handler
@@ -222,6 +215,14 @@ export function ModalTile({sailor, children, className, TileRenderer = SmartSail
       </dialog>
     </div>
   ) 
+}
+
+export function TileBadge({text, className}:{text:string, className?:string}) {
+  return (
+    <div className={`absolute top-[-8px] left-[-8px] rounded-full text-xs w-8 h-8 leading-8 border border-white ${className}`}>
+        { text }
+      </div>
+  )
 }
 
 const Todo = (props: TileProps) => (
