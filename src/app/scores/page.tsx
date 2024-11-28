@@ -8,6 +8,7 @@ import { RaceDay } from "@/models/raceday"
 import HTML from "@/components/html"
 
 import styles from "./scoresPage.module.css"
+import { ResultTile } from "@/components/tile"
 
 export default function ScoresPage() {
   const [races, racers, config] = useRaceDayStore(s=>[s.races, s.racers, s.config])
@@ -23,9 +24,28 @@ export default function ScoresPage() {
       </HTML.BackHeader>
 
       <div className="overflow-y-scroll shrink">
-        { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )}
+        { raceDay.racingFleets.map( (fleet, i) => <FleetResultsPartial {...{fleet, raceDay}} key={i} /> )}
+        {/* { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )} */}
       </div>
     </main>
+  )
+}
+
+function FleetResultsPartial({raceDay, fleet}:{raceDay:RaceDay, fleet:FleetSchema | undefined}) {
+  const allResults = raceDay.results(fleet)
+
+  return (
+    <>
+      <div className="p-4 col-2">
+        <HTML.H2>Fleet { fleet || 'AB' } results</HTML.H2>
+
+        <div className="col-4">
+          { allResults.map( (result, i) => (
+            <ResultTile result={result} key={i} />
+          ))}
+        </div>
+      </div>
+    </>
   )
 }
 

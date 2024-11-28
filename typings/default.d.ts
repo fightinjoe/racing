@@ -32,4 +32,5 @@ declare global {
   type ScoringPositionSchema = z.infer<typeof Schemas.scoringPositionSchema>
   type RacerScoresSchema = z.infer<typeof Schemas.racerScoresSchema>
   type FleetScoresSchema = z.infer<typeof Schemas.fleetScoresSchema>
+  type ResultSchema = z.infer<typeof Schemas.resultSchema>
 }

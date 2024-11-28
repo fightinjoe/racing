@@ -145,6 +145,11 @@ export const scoringPositionSchema = z.object({
   failure: failureSchema.optional()
 })
 
+/**
+ * An object for aggregating all raceDay race finish data for
+ * a single racer. This is an intermediate object that may be used for
+ * calculating the race day results
+ */
 export const racerScoresSchema = z.object({
   racer: racerSchema,
 
@@ -167,4 +172,18 @@ export const racerScoresSchema = z.object({
 export const fleetScoresSchema = z.object({
   fleet: fleetSchema.optional(),
   racerScores: z.array(racerScoresSchema)
+})
+
+/**
+ * Object that is the output of a racer's calculated result for
+ * the full race day
+ */
+export const resultSchema = z.object({
+  racer: racerSchema,
+  
+  position: z.number(),
+  points: z.number(),
+
+  // The number of first place finishes
+  bullets: z.number(),
 })

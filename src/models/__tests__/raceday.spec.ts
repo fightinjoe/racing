@@ -49,6 +49,8 @@ describe('RaceDay', () => {
 
       expect( actualOrder ).toEqual( expectedOrder )
     })
+
+    it.todo('should correctly account for position overrides')
   })
 })
 

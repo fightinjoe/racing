@@ -219,9 +219,44 @@ export function ModalTile<T extends RacerSchema | VolunteerSchema | FinisherSche
 
 export function TileBadge({text, className}:{text:string, className?:string}) {
   return (
-    <div className={`absolute top-[-8px] left-[-8px] rounded-full text-xs w-8 h-8 leading-8 border border-white ${className}`}>
-        { text }
-      </div>
+    <div className={`absolute top-[-8px] left-[-8px] rounded-full text-xs text-center w-8 h-8 leading-8 border border-white ${className}`}>
+      { text }
+    </div>
+  )
+}
+
+export function ResultTile({result}:{result:ResultSchema}) {
+  const _Position = () => {
+    const className =
+      result.position === 1 ? 'bg-blue-800 text-white' :
+      result.position === 2 ? 'bg-blue-600 text-white' :
+      result.position === 3 ? 'bg-blue-400 text-white' :
+      'bg-gray-300 text-black'
+
+    return <TileBadge text={ result.position.toString() } className={className} />
+  }
+
+  const _Bullets = () => {
+    if (!result.bullets) return
+    
+    const className = [
+      'font-mono text-center',
+      'text-ocean-800 bg-teal-300',
+      ' w-[1.5rem] rounded-full'
+    ].join(' ')
+
+    return (<div className={className}>{ result.bullets }</div>)
+  }
+
+  return (
+    <div className="row-2 items-center bg-white relative rounded py-2 pl-6 pr-4">
+      <_Position />
+      <div className="text-lg w-[4rem] text-center">{ result.racer.sailNumber }</div>
+      <div className="text-sm w-[2rem]">{ result.racer.fleet }</div>
+      <div className="grow">{ result.racer.name }</div>
+      <_Bullets />
+      <div className="w-[1em] text-right font-mono ">{ result.points }</div>
+    </div>
   )
 }
 

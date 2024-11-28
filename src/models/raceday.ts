@@ -113,7 +113,7 @@ export class RaceDay {
   }
 
   /**
-   * Calculate the scores for a single given fleet
+   * Calculate the scores for a single given fleet. Returned scores are sorted.
    * @param fleet optional, but must be used if there is more than one fleet 
    */
   scores(fleet?: FleetSchema): FleetScoresSchema {
@@ -126,56 +126,71 @@ export class RaceDay {
     const races = this.finishedRaces(fleet)
     const failurePoints = racers.length+1
 
-    const lookup = new Map<string, RacerScoresSchema>()
+    const defaultRacerScore = {
+      points: 0,
+      positionCounts: Array.from({length:racers.length+1}, _ => 0),
+      positions: []
+    }
+
+    let racerScoreLookup = new Map<string, RacerScoresSchema>()
+
 
     // init lookup map
-    racers.forEach( r =>
-      lookup.set(r.id, {racer:r, points:0, positionCounts: [], positions:[]})
-    )
+    racers.forEach( r => racerScoreLookup.set(r.id, {racer:r, ...defaultRacerScore}) )
 
-    // For each race and each finisher, append finish data to the RacerScores object
+    // For each race and each finisher, append finish data to the racerScoreLookup object.
+    // Converts from [races:[finishers]] to [finishers:[scores]]
     races.map( (race, race_i) => {
+      // incrementing position. Separate from the array iterator so that DSQs may be skipped
       let pos = 1
+
       race.finishers.map( (finisher) => {
         // The accumulated racer's scores
-        let scores = lookup.get(finisher.id)
+        let racerScore = racerScoreLookup.get(finisher.id)
 
-        if (!scores) throw new Error(`Finishing data for unregistered sailor ${finisher.name}`)
+        if (!racerScore) throw new Error(`Finishing data for unregistered sailor ${finisher.name}`)
 
         // Verify that for the Nth race, the racer has finishes
         // for all previous races (i.e. there isn't a race whose
         // finish hasn't been recorded)
-        if (scores.positions.length !== race_i)
+        if (racerScore.positions.length !== race_i)
           throw new Error(`Missing race ${race_i} data for racer ${finisher.name}`)
         
+        // The finisher's scoring position is either the override, their failure, or (default) the
+        // incrementing position
         let position: number | FailureSchema = finisher.positionOverride || (finisher.failure || pos)
-        let points = finisher.failure ? failurePoints : pos
 
-        let counts = [...scores.positionCounts]
-        counts[ points-1 ] = counts[ points-1 ] ? counts[ points-1 ]+1 : 1
+        // The points awarded for the finish
+        let points = finisher.failure ? failurePoints : position as number
 
-        if( !finisher.failure ) pos++
+        // Increment the position index based on the points awarded (or set to 1
+        // if )
+        let pCounts = [...racerScore.positionCounts]
+        pCounts[ points-1 ] = pCounts[ points-1 ] ? pCounts[ points-1 ]+1 : 1
+
+        // Only increment the default position when it's being used for the current finisher
+        if( !finisher.failure && !finisher.positionOverride ) pos++
 
         // The ScoringPosition the the current race
         const score = {points, position, failure: finisher.failure}
 
-        lookup.set(finisher.id, {
-          ...scores,
-          points: scores.points + points,
-          positionCounts: counts,
-          positions: [...scores.positions, score]
+        racerScoreLookup.set(finisher.id, {
+          ...racerScore,
+          points: racerScore.points + points,
+          positionCounts: pCounts,
+          positions: [...racerScore.positions, score]
         })
       })
     })
 
     
-    const racerScores: RacerScoresSchema[] = Array.from(lookup.values())
-      .map( rs => ({...rs, tiebreak: helpCreateTiebreak(rs, lookup.size)}) )
+    const racerScores: RacerScoresSchema[] = Array.from(racerScoreLookup.values())
+      .map( rs => ({...rs, tiebreak: helpCreateTiebreak(rs, racerScoreLookup.size)}) )
       .sort( (a,b) => 
         a.points < b.points ? -1 :
         a.points > b.points ? 1 :
         a.tiebreak > b.tiebreak ? -1 :
-        1
+        -1
       )
 
     return { fleet, racerScores }
@@ -200,6 +215,18 @@ export class RaceDay {
     )).join(";\n")
 
     return out
+  }
+
+  // Tabulate the race day results for a fleet
+  results(fleet?: FleetSchema): ResultSchema[] {
+    const scores = this.scores(fleet)
+
+    return scores.racerScores.map( (rs,i) => ({
+      racer: rs.racer,
+      position: i+1,
+      points: rs.points,
+      bullets: rs.positionCounts[0] || 0
+    }))
   }
 }
 
