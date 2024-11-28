@@ -6,14 +6,19 @@ import { useRaceDayStore } from "@/stores/raceDayStore"
 import { RaceDay } from "@/models/raceday"
 
 import HTML from "@/components/html"
+import { useRacerSort } from "@/components/useRacerSort"
 
 import styles from "./scoresPage.module.css"
 import { ResultTile } from "@/components/tile"
+
+type ScoringView = 'results' | 'finishes'
 
 export default function ScoresPage() {
   const [races, racers, config] = useRaceDayStore(s=>[s.races, s.racers, s.config])
 
   const raceDay = new RaceDay(racers, races, config)
+
+  const {sort: tabs, Tabs} = useRacerSort<ScoringView>({sorts: ['results', 'finishes']})
 
   if( !raceDay.racingFleets ) return (<strong>404: No races found</strong>)
 
@@ -23,9 +28,18 @@ export default function ScoresPage() {
         <ExportLink />
       </HTML.BackHeader>
 
+      <div className="p-4 pb-0">
+        <Tabs darkMode={ true } />
+      </div>
+
       <div className="overflow-y-scroll shrink">
-        { raceDay.racingFleets.map( (fleet, i) => <FleetResultsPartial {...{fleet, raceDay}} key={i} /> )}
-        {/* { raceDay.racingFleets.map( (fleet, i) => <FleetScoresPartial {...{fleet, raceDay}} key={i} /> )} */}
+        { 
+          raceDay.racingFleets.map( (fleet, i) => (
+            tabs === 'results'
+            ? <FleetResultsPartial {...{fleet, raceDay}} key={i} />
+            : <FleetScoresPartial {...{fleet, raceDay}} key={i} />
+          ))
+        }
       </div>
     </main>
   )

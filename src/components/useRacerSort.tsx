@@ -26,10 +26,10 @@ import styles from "./styles/useRacerSort.module.css"
  * )
  * 
  */
-export function useRacerSort(params: {sorts?:RacersSort[]} = {}) {
-  const sorts = params.sorts || ['added', 'name', 'number', 'fleet']
+export function useRacerSort<T = RacersSort>(params: {sorts?:T[]} = {}) {
+  const sorts: T[] = params.sorts || ['added', 'name', 'number', 'fleet'] as T[]
 
-  const [sort, setSort] = useState<RacersSort>( sorts[0] )
+  const [sort, setSort] = useState<T>( sorts[0] )
 
   const helpSortRacers = (r1: RacerSchema, r2: RacerSchema ) => (
     sort === 'added'  ?  (r1.id > r2.id ? -1 : 1) :
@@ -41,7 +41,7 @@ export function useRacerSort(params: {sorts?:RacersSort[]} = {}) {
 
   const Tabs = ({darkMode}: {darkMode?:boolean}) => {
     const handleClick: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-      setSort(e.target.value as RacersSort)
+      setSort(e.target.value as T)
     }
 
     const props = (value:string) => ({
