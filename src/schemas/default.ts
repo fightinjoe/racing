@@ -1,7 +1,7 @@
 import { z } from "zod"
 
 // The possible roles that a sailor can have as a participant in a race day
-export const roleSchema = z.enum(['Racer', 'Race committee', 'Volunteer', 'Crash boat'])
+export const roleSchema = z.enum(['Sailor', 'Racer', 'Race committee', 'Volunteer', 'Crash boat'])
 
 // The different possilble fleets a race might be run for
 export const fleetSchema = z.enum(['A', 'B'])
