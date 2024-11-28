@@ -26,7 +26,7 @@ import styles from "./styles/useRacerSort.module.css"
  * )
  * 
  */
-export function useRacerSort<T = RacersSort>(params: {sorts?:T[]} = {}) {
+export function useRacerSort<T extends string = RacersSort>(params: {sorts?:T[]} = {}) {
   const sorts: T[] = params.sorts || ['added', 'name', 'number', 'fleet'] as T[]
 
   const [sort, setSort] = useState<T>( sorts[0] )
