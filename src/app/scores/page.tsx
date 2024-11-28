@@ -142,7 +142,7 @@ function ExportLink() {
     <>
       <a
         className={ styles.emailButton }
-        href={`mailto:fightinjoe@gmail.com?subject=Scores&body=Paste scores here`}
+        href={`mailto:fightinjoe@gmail.com?subject=Scores&body=Scores are copied in your clipboard. Tap to paste scores here.`}
         onClick={ copyTableToClipboard}
       >
         Email scores
