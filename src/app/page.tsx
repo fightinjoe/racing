@@ -43,8 +43,8 @@ export default function Home() {
           <SetupPartial {...{raceDay, volunteers, conditions}} />
 
           <div className="row-2 p-4">
-          <span className="grow">&nbsp;</span>
-        </div>
+            <span className="grow">&nbsp;</span>
+          </div>
         </div>
       </main>
     </>
