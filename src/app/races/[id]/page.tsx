@@ -6,7 +6,7 @@ import { useRaceDayStore } from "@/stores/raceDayStore"
 
 import { Race } from "@/models/race"
 
-import Tile, { FinisherTile, TileBadge } from "@/components/tile"
+import Tile, { FailureTile, FinisherTile, TileBadge } from "@/components/tile"
 import { Duration, Timer } from "@/components/timer"
 import { ModalTile } from "@/components/tile"
 import HTML from "@/components/html"
@@ -302,6 +302,41 @@ function FinishersPartial({race}: {race:Race}) {
     )
   }
 
+  const _VerboseFailureTile = ({sailor: finisher}: {sailor: FinisherSchema}) => {
+    return (
+      <div className="row-2 items-center bg-white relative rounded py-2 pl-6 pr-4">
+        <TileBadge text={ finisher.failure! } className="bg-red-500 text-white !w-12" />
+        <div className="text-lg w-[4rem] text-center">{ finisher.sailNumber }</div>
+        <div className="grow">{ finisher.name }</div>
+      </div>
+    )
+  }
+
+  const _FailureTiles = () => {
+    if (race!.failedFinishers.length === 0) return
+
+    const wrapperCSS = verbose
+    ? 'col-4 mx-4 pt-2'
+    : 'row-2 mx-4'
+
+    return (<>
+      <HTML.H2 className="px-4 mt-4">Disqualified</HTML.H2>
+      <div className="overflow-x-scroll scroll-smooth">
+        <div className={ wrapperCSS }>
+          { race!.failedFinishers.reverse().map( (finisher,i) => (
+              <ModalTile sailor={ finisher } key={i} TileRenderer={ verbose ? _VerboseFailureTile : FailureTile }>
+                <Button.Primary onClick={ () => unfinishRacer(finisher, race._race) } className="bg-red-700 hover:!bg-red-800">
+                  Remove
+                </Button.Primary>
+              </ModalTile>
+            ))
+          }
+          { !verbose && <div>&nbsp;</div> }
+        </div>
+      </div>
+    </>)
+  }
+
   return (
     <section className={styles.finishers}>
       <div className="px-4 row-2">
@@ -311,25 +346,7 @@ function FinishersPartial({race}: {race:Race}) {
 
       <_FinisherTiles />
 
-      {
-        race!.failedFinishers.length > 0 &&
-        <>
-          <HTML.H2 className="px-4 mt-4">Disqualified</HTML.H2>
-          <div className="overflow-x-scroll scroll-smooth">
-            <div className="row-2 mx-4">
-              { race!.failedFinishers.reverse().map( (finisher,i) => (
-                  <ModalTile sailor={ finisher } key={i}>
-                    <Button.Primary onClick={ () => unfinishRacer(finisher, race._race) } className="bg-red-700 hover:!bg-red-800">
-                      Remove
-                    </Button.Primary>
-                  </ModalTile>
-                ))
-              }
-              <div>&nbsp;</div>
-            </div>
-          </div>
-        </>
-      }
+      <_FailureTiles />
     </section>
   )
 }
