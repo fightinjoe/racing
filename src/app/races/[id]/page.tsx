@@ -130,6 +130,8 @@ function RacePage({_race}: {_race: RaceSchema}) {
   }
 
   function _StillRacing() {
+    if (race!.isFinished) return
+
     const racers = race!.unfinishedRacers.sort( helpSortRacers )
 
     const isBeforeRace =
@@ -140,15 +142,17 @@ function RacePage({_race}: {_race: RaceSchema}) {
       <div className="col-4">
         <Tabs darkMode={true} />
 
-        <div className="row-wrap-2 w-full">
-          {
-            racers.map( r => (
-              isBeforeRace
-              ? <Tile className="tile-todo" key={r.id} title={r.sailNumber} subtitle={r.name} />
-              : <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
-            ))
-          }
-        </div>
+        <section className="p-4">
+          <div className="row-wrap-2 w-full">
+            {
+              racers.map( r => (
+                isBeforeRace
+                ? <Tile className="tile-todo" key={r.id} title={r.sailNumber} subtitle={r.name} />
+                : <StillRacingTile key={r.id} racer={r} race={_race!} finishRacer={finishRacer} />
+              ))
+            }
+          </div>
+        </section>
       </div>
     )
   }
@@ -169,6 +173,14 @@ function RacePage({_race}: {_race: RaceSchema}) {
     return
   }
 
+  function _RaceEndBanner() {
+    if ( !race!.isFinished ) return
+
+    return (
+      <Banner.Alert>Race is complete! <a href="/" className="text-ocean-500 font-medium">Return to dashboard</a></Banner.Alert>
+    )
+  }
+
   // Boolean for determining whether the <FinishersPartial> is shown or not.
   return (
     <div className="col-0 h-full">
@@ -183,10 +195,10 @@ function RacePage({_race}: {_race: RaceSchema}) {
         {/* Show the finishers once racing starts */}
         <FinishersPartial race={race} />
 
+        <_RaceEndBanner />
+
         {/* Show the racers that are still racing */}
-        <section className="p-4">
-          { !race!.isFinished && <_StillRacing /> }
-        </section>
+        <_StillRacing />
       </div>
     </div>
   )
