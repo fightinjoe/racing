@@ -23,6 +23,13 @@ export default function ResetPage() {
       .forEach( r => { addRacer( r.name, r.sailNumber, r.fleet ) })
   }
 
+  const handleLoadRoster = (e:React.MouseEvent<HTMLButtonElement>) => {
+    const elt = e.currentTarget
+
+    elt.classList.add('animate-pulse')
+    fetchRoster( () => elt.classList.remove('animate-pulse') )
+  }
+
   return (
     <div>
       <HTML.BackHeader title="Manage data" />
@@ -50,7 +57,7 @@ export default function ResetPage() {
           <HTML.H1 className="text-center !text-black">{ roster.length } members</HTML.H1>
           <small>{ printTimestamp() }</small>
         </div>
-        <Button.Primary onClick={ () => fetchRoster }>Load roster</Button.Primary>
+        <Button.Primary onClick={ handleLoadRoster }>Load roster</Button.Primary>
         <br />
         <Button.Primary onClick={ clearRoster }>Clear roster</Button.Primary>
       </section>
