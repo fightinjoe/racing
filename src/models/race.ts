@@ -47,12 +47,19 @@ export class Race {
 
   /*== Calculated getters ==*/
 
-  // The time the race finished
-  get finishTime(): number | undefined {
+  // The time the last finisher finished
+  get totalTime(): number | undefined {
     if (!this.isFinished ) return undefined
 
     const lastFinisher = this._race.finishers.at(-1)
     return lastFinisher?.finishedAt
+  }
+
+  // The time the first finisher finished
+  get finishTime(): number | undefined {
+    if (this.finishers.length === 0) return undefined
+
+    return this.finishers[0].finishedAt
   }
 
   // The list of all racers who haven't yet finished the race
@@ -76,7 +83,7 @@ export class Race {
     if (!this._racers.length) throw new Error('For accurate race state, instantiate the Race model with the RaceDay racers')
 
     if (!this.startTime) return { state: 'before-start' }
-    if (this.isFinished) return { state: 'finished', duration: this.finishTime }
+    if (this.isFinished) return { state: 'finished', duration: this.totalTime }
 
     const duration = Date.now() - this.startTime
 

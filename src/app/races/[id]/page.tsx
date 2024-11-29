@@ -6,7 +6,7 @@ import { useRaceDayStore } from "@/stores/raceDayStore"
 
 import { Race } from "@/models/race"
 
-import Tile, { Tiles, FinisherTile, FailureTile } from "@/components/tile"
+import Tile, { FinisherTile, TileBadge } from "@/components/tile"
 import { Duration, Timer } from "@/components/timer"
 import { ModalTile } from "@/components/tile"
 import HTML from "@/components/html"
@@ -123,7 +123,7 @@ function RacePage({_race}: {_race: RaceSchema}) {
         </HTML.H1>
         <small>
           <span>{ race!.course }</span>
-          <span><Duration start={ race!.startTime! } finish={ race!.finishTime! } /></span>
+          <span><Duration start={ race!.startTime! } finish={ race!.totalTime! } /></span>
         </small>
       </div>
     )
@@ -211,6 +211,8 @@ function FinishersPartial({race}: {race:Race}) {
 
   const wrapper = useRef(null)
 
+  const [verbose, setVerbose] = useState<boolean>(false)
+
   useEffect(() => {
     if (!wrapper.current) return
     
@@ -223,35 +225,91 @@ function FinishersPartial({race}: {race:Race}) {
 
   const finisherCount = race!.qualifiedFinishers.length
 
-  return (
-    <section className={styles.finishers}>
+  const _ToggleVerbosityButton = () => (
+    <button className="text-aqua-500" onClick={ () => setVerbose(!verbose) }>
+      <small>{ verbose ? 'Collapse' : 'Expand' }</small>
+    </button>
+  )
 
-      <HTML.H2 className="px-4">Finshers</HTML.H2>
+  const _FinisherTiles = () => {
+
+    const wrapperCSS = verbose
+    ? 'col-4 mx-4 pt-2'
+    : 'row-2 mx-4'
+
+    return (
       <div className="overflow-x-scroll scroll-smooth" ref={wrapper}>
-        <div className="row-2 mx-4">
-          { 
-            finisherCount > 0
-            ? race!.qualifiedFinishers.map( (finisher,i) => (
-                <ModalTile sailor={ {...finisher, positionOverride: i}} key={i}>
-                  <Button.Primary onClick={ () => unfinishRacer(finisher, race._race) } className="bg-red-700 hover:!bg-red-800">
-                    Remove
-                  </Button.Primary>
-                  {
-                    i !== 0 && <Button.Secondary onClick={ () => moveFinisher(finisher, race._race, i-1)}>
-                      Move up
-                    </Button.Secondary>
-                  }
-                  { i !== finisherCount-1 && <Button.Secondary onClick={ () => moveFinisher(finisher, race._race, i+1)}>
-                      Move down
-                    </Button.Secondary>
-                  }
-                </ModalTile>
-              ))
-            : <Tile title="..." subtitle="No finishers" className="tile-todo" />
-          }
-          <div>&nbsp;</div>
+        <div className={ wrapperCSS }>
+          { race!.qualifiedFinishers.map( (finisher,i) => {
+            const sailor = {...finisher, positionOverride: i}
+            return (
+              <ModalTile
+                sailor={sailor}
+                key={i}
+                TileRenderer={ verbose ? _VerboseFinisherTile : FinisherTile }
+              >
+                <_FinisherContextMenu finisher={finisher} i={i} />
+              </ModalTile>
+            )
+          }) }
+          { !verbose && <div>&nbsp;</div> }
         </div>
       </div>
+    )
+  }
+
+  const _FinisherContextMenu = ({finisher, i}: {finisher: RacerSchema, i: number}) => (
+    <>
+    <Button.Primary onClick={ () => unfinishRacer(finisher, race._race) } className="bg-red-700 hover:!bg-red-800">
+      Remove
+    </Button.Primary>
+    {
+      i !== 0 && <Button.Secondary onClick={ () => moveFinisher(finisher, race._race, i-1)}>
+        Move up
+      </Button.Secondary>
+    }
+    { i !== finisherCount-1 && <Button.Secondary onClick={ () => moveFinisher(finisher, race._race, i+1)}>
+        Move down
+      </Button.Secondary>
+    }
+    </>
+  )
+
+  const _VerboseFinisherTile = ({sailor: finisher}: {sailor: FinisherSchema}) => {
+    const pos = finisher.positionOverride !== undefined ? finisher.positionOverride+1 : '?'
+    
+    const _Position = () => {
+      const className =
+        pos === 1 ? 'bg-blue-800 text-white' :
+        pos === 2 ? 'bg-blue-600 text-white' :
+        pos === 3 ? 'bg-blue-400 text-white' :
+        'bg-gray-300 text-black'
+  
+      return <TileBadge text={ pos.toString() } className={className} />
+    }
+  
+    return (
+      <div className="row-2 items-center bg-white relative rounded py-2 pl-6 pr-4">
+        <_Position />
+        <div className="text-lg w-[4rem] text-center">{ finisher.sailNumber }</div>
+        <div className="grow">{ finisher.name }</div>
+        <div className="font-mono text-sm">{
+          pos === 1
+          ? printDuration(race.startTime!, finisher.finishedAt)
+          : '+'+printDuration(race.finishTime!, finisher.finishedAt)
+        }</div>
+      </div>
+    )
+  }
+
+  return (
+    <section className={styles.finishers}>
+      <div className="px-4 row-2">
+        <HTML.H2 className="grow">Finishers</HTML.H2>
+        <_ToggleVerbosityButton />
+      </div>
+
+      <_FinisherTiles />
 
       {
         race!.failedFinishers.length > 0 &&
