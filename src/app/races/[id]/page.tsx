@@ -140,7 +140,9 @@ function RacePage({_race}: {_race: RaceSchema}) {
 
     return (
       <div className="col-4">
-        <Tabs darkMode={true} />
+        <div className="p-4 pb-0">
+          <Tabs darkMode={true} />
+        </div>
 
         <section className="p-4">
           <div className="row-wrap-2 w-full">
