@@ -8,8 +8,9 @@ interface RosterState {
   timestamp: number,
 
   clearRoster: () => void,
-  fetchRoster: () => void,
+  fetchRoster: ( cb?: ()=>void ) => void,
   printTimestamp: () => string,
+  isStale: () => boolean
 }
 
 /**
@@ -22,9 +23,12 @@ export const useRosterStore = create<RosterState>()( persist( (set, get) => ({
 
   clearRoster: () => set({roster: [], timestamp: 0}),
 
-  fetchRoster: async () => {
+  fetchRoster: async (callback?: ()=>void) => {
     const roster = await Sailor.fetchRoster()
     const timestamp = Date.now()
+
+    callback && callback()
+
     set({roster, timestamp})
   },
 
@@ -34,5 +38,14 @@ export const useRosterStore = create<RosterState>()( persist( (set, get) => ({
     if (ts === 0) return 'Roster not loaded'
 
     return (new Date(ts)).toLocaleString( 'en-US', {timeZone: 'America/New_York'} )
+  },
+
+  // The roster is stale if it's older than 3 days
+  isStale: () => {
+    const hourLimit = 3
+    const now = Date.now()
+    const last = get().timestamp
+
+    return now - last > (1000 * 60 * 60 * hourLimit)
   }
 }), { name: 'roster-storage' }))

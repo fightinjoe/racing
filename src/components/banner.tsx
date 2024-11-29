@@ -26,8 +26,8 @@ const GenericBanner: GenericFC = ({ className, children }) => {
   )
 }
 
-const AlertBanner: GenericFC = ({children}) => (
-  <GenericBanner className="bg-yellow-100">{ children }</GenericBanner>
+const AlertBanner: GenericFC = ({className, children}) => (
+  <GenericBanner className={`bg-yellow-100 ${className}`}>{ children }</GenericBanner>
 )
 
 const DefaultBanner: GenericFC = ({children}) => {

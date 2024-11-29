@@ -10,8 +10,9 @@ import Tile, {TileBadge} from "@/components/tile"
 import type { DefaultTileProps } from "@/components/tile"
 import HTML from "@/components/html"
 import Button from "@/components/button"
-import { ModalTile, RacerTile } from "@/components/tile"
+import { ModalTile } from "@/components/tile"
 import useModalTray from "@/components/useModalTray"
+import Banner from "@/components/banner"
 
 import styles from './page.module.css'
 
@@ -19,7 +20,7 @@ export default function RacersPage() {
   const [racers, addRacer, editRacer, deleteRacer, racerRegistered] =
     useRaceDayStore(s => [s.racers, s.addRacer, s.editRacer, s.deleteRacer, s.racerRegistered])
 
-  const roster = useRosterStore(s => s.roster)
+  const [roster, fetchRoster, rosterIsStale] = useRosterStore(s => [s.roster, s.fetchRoster, s.isStale])
   const [showRoster, setShowRoster] = useState<boolean>(true)
 
   const {Tabs, helpSortRacers} = useRacerSort({sorts: ['name', 'number', 'fleet']})
@@ -91,11 +92,60 @@ export default function RacersPage() {
 
   /*== Partials ==*/
 
-  const _ToggleRoster = () => (
-    <button className="button-header" onClick={toggleRoster}>
-      {showRoster ? 'Hide roster' : 'Show roster' }
-    </button>
-  )
+  const _ToggleRoster = () => {
+    if (roster.length === 0) return null
+
+    return (
+      <button className="button-header" onClick={toggleRoster}>
+        {showRoster ? 'Hide roster' : 'Show roster' }
+      </button>
+    )
+  }
+
+  // Show a banner (when appropriate) that displays the status of the roster and allows
+  // for it to be fetched and updated
+  const _RosterBanner = () => {
+    const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+      const button = e.currentTarget
+
+      button.classList.add('animate-pulse')
+      fetchRoster(() => {
+        button.classList.remove('animate-pulse')
+      })
+    }
+
+    // If the roster is empty...
+    if (roster.length === 0) return (
+      <Banner.Alert className="!row-2">
+        <p className="text-left">Load the latest sailor names, sail numbers, and fleet assignments</p>
+
+        <button className="shrink-0 rounded bg-ocean-400 text-white px-4" onClick={ handleClick }>
+          Load roster
+        </button>
+      </Banner.Alert>
+    )
+
+    // If there is a roster, but it's currently hidden...
+    if (!showRoster) return
+
+    // If the roster is shown but is stale...
+    if (rosterIsStale()) return (
+      <Banner.Alert className="!row-2">
+        <p className="text-left">The roster is out of date and may contain incorrect fleet assignments</p>
+
+        <button className="shrink-0 rounded bg-ocean-400 text-white px-4" onClick={ handleClick }>
+          Refresh roster
+        </button>
+      </Banner.Alert>
+    )
+
+    // If the roster is up to date...
+    return (
+      <Banner.Default>
+        The roster is up to date
+      </Banner.Default>
+    )
+  }
 
   const _RosterModalOptions = ({sailor}:{sailor: SailorSchema}) => (
     <div className="col-0 gap-[1px]">
@@ -172,6 +222,8 @@ export default function RacersPage() {
       <HTML.BackHeader title={ `${racers.length} Racer${racers.length === 1 ? '' : 's'}` }>
         <_ToggleRoster />
       </HTML.BackHeader>
+
+      <_RosterBanner />
 
       {/* ADD RACER modal. May be triggered from the header or a tile */}
       <modal.Tray
