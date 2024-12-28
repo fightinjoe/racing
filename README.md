@@ -1,6 +1,8 @@
 # MFA Racing
 This is a web app to track scores for sail races. All data lives in the browser's local storage.
 
+This app is hosted at [https://racing-mfa.vercel.app](https://racing-mfa.vercel.app)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Development
